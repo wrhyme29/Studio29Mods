@@ -1,0 +1,291 @@
+{
+    "name": "Birthday Boy",
+    "kind": "Hero",
+    "expansionIdentifier": "Studio29",
+    "initialCardIdentifiers": [
+        "BirthdayBoyCharacter"
+    ],
+    "cards": [
+        {
+            "identifier": "BirthdayBoyCharacter",
+            "count": 1,
+            "title": "Birthday Boy",
+            "body": "Birthday Blessings",
+            "backgroundColor": "0000FF",
+            "foilBackgroundColor": "0000FF",
+            "hitpointColor": "0000FF",
+            "character": true,
+            "gameplay": "{BirthdayBoy} may never own more than 40 cards.",
+            "powers": [
+                "{BirthdayBoy} may move any hero ongoing, hero equipment, or hero target with max 5hp or fewer in play to your play area. Any card moved this way now belongs to {BirthdayBoy} (when it is destroyed, shuffle into the deck of {BirthdayBoy}). Any card moved this way gains the keyword “Present”."
+            ],
+            "icons": [
+                "HasPower",
+                "Manipulate"
+            ],
+            "hitpoints": 29,
+            "nemesisIdentifiers": [
+                "BirthdayBoy"
+            ],
+            "incapacitatedAbilities": [
+                "Not Implemented 1",
+                "Not implemented 2",
+                "Not implemented 3"
+            ],
+            "flippedIcons": [
+                ""
+            ],
+            "openingLines": {
+                "default": "I'll have my cake and beat you too!"
+            },
+            "complexity": 3
+        },
+        {
+            "identifier": "Blowout",
+            "count": 1,
+            "title": "Blowout",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "RemoveFromGame"
+            ],
+            "body": [
+                "Select a target with a max hp of 5 or fewer that was not in play at the start of the game. Remove that target from the game. ",
+                "Remove this card and one Present in play from the game."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "BirthdayBoy",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "Birthday Boy, Its MY Birthday #29"
+        },
+        {
+            "identifier": "ItsMyParty",
+            "count": 2,
+            "title": "It's My Party",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "Destroy",
+                "DealDamageSonic"
+            ],
+            "body": [
+                "Choose one Present in play. That Present deals one target 3 sonic damage. You may destroy that Present."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "BirthdayBoy",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "Birthday Boy, Its MY Birthday #29"
+        },
+        {
+            "identifier": "TrashTheVenue",
+            "count": 3,
+            "title": "Trash the Venue",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "DestroyEnvironment"
+            ],
+            "body": [
+                "Destroy an environment card."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "BirthdayBoy",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "Birthday Boy, Its MY Birthday #29"
+        },
+        {
+            "identifier": "GiftReceipt",
+            "count": 3,
+            "title": "Gift Receipt",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "Manipulate"
+            ],
+            "body": [
+                "Return 1 Present to the trash of its original owner."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "BirthdayBoy",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "Birthday Boy, Its MY Birthday #29"
+        },
+         {
+            "identifier": "DontGetGreedy",
+            "count": 3,
+            "title": "Don’t Get Greedy",
+            "keywords": [
+                "surprise"
+            ],
+            "icons": [
+                "PlayCardNow",
+                "DealDamagePsychic",
+                "DestroySelf",
+                "DrawCardNow"
+            ],
+            "body": [
+                "When this card is drawn, it immediately enters play.",
+                "All heroes deal Birthday Boy 1 irreducible psychic damage for each present from them currently in play. Then, destroy this card and draw a card."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "BirthdayBoy",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "Birthday Boy, Its MY Birthday #29"
+        },
+        {
+            "identifier": "ItsTheThoughtThatCounts",
+            "count": 2,
+            "title": "It’s The Thought That Counts",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "Manipulate"
+            ],
+            "body": [
+                "Return 1 present to the play area of its original owner. You may move one card from your trash to your hand."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "BirthdayBoy",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "Birthday Boy, Its MY Birthday #29"
+        },
+         {
+            "identifier": "PartyTilDawn",
+            "count": 3  ,
+            "title": "Party 'Til Dawn",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "UsePowerExtra",
+                "DealDamagePsychic"
+            ],
+            "body": [
+                "You may use an additional power this turn.",
+                "{BirthdayBoy} deals up to X targets 1 psychic damage each, where X is the number of presents in his play area."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "BirthdayBoy",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "Birthday Boy, Its MY Birthday #29"
+        },
+        {
+            "identifier": "YoureInvited",
+            "count": 2  ,
+            "title": "You’re Invited!",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "PlayCardNow"
+            ],
+            "body": [
+                "Any hero character card with no presents in play may play an ongoing card, equipment card, or target with no more than a max hp of 5."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "BirthdayBoy",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "Birthday Boy, Its MY Birthday #29"
+        },
+        {
+            "identifier": "SocialLadder",
+            "count": 2,
+            "title": "Social Ladder",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "GainHP",
+                "DealDamagePsychic"
+            ],
+            "body": [
+                "Any hero character card with presents in play from their deck may regain HP equal to the number of their presents in play.",
+                "Any hero character card with no presents in play deals themselves 2 psychic damage."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "BirthdayBoy",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "Birthday Boy, Its MY Birthday #29"
+        },
+        {
+            "identifier": "Mixer",
+            "count": 2,
+            "title": "Mixer",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "Destroy",
+                "Manipulate"
+            ],
+            "body": [
+                "You may destroy any number of presents.",
+                "You may shuffle up to 2 trashes into their deck."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "BirthdayBoy",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "Birthday Boy, Its MY Birthday #29"
+        },
+                {
+            "identifier": "AnotherYearOlder",
+            "count": 1,
+            "title": "Another Year Older",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "DealDamageRadiant",
+                "DrawCardNow",
+                "RemoveFromGame"
+            ],
+            "body": [
+                "If {BirthdayBoy} owns 40 cards, you may deal one target 24 irreducible radiant damage. You may draw a card.",
+                "Remove this card from the game."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "BirthdayBoy",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "Birthday Boy, Its MY Birthday #29"
+        }
+
+    ]
+}

@@ -1,0 +1,429 @@
+{
+    "name": "The Tamer",
+    "kind": "Hero",
+    "expansionIdentifier": "Studio29",
+    "initialCardIdentifiers": [
+        "TheTamerCharacter"
+    ],
+    "cards": [
+        {
+            "identifier": "TheTamerCharacter",
+            "count": 1,
+            "title": "The Tamer",
+            "body": "Nine Lives",
+            "backgroundColor": "FF0000",
+            "foilBackgroundColor": "FF0000",
+            "hitpointColor": "FF0000",
+            "character": true,
+            "powers": [
+                "Until the start of your next turn, the first time a Lion is destroyed, it deals 1 target 3 melee damage. You may return that Lion to your hand."
+            ],
+            "icons": [
+                "HasPower",
+                "DealDamageMelee"
+            ],
+            "hitpoints": 28,
+            "nemesisIdentifiers": [
+                "TheTamer"
+            ],
+            "incapacitatedAbilities": [
+                "One non-character hero target deals 1 target 2 radiant damage.",
+                "Not implemented 2",
+                "Not implemented 3"
+            ],
+            "flippedIcons": [
+                "DealDamageMelee"
+            ],
+            "openingLines": {
+                "default": "default placeholder"
+            },
+            "complexity": 2
+        },
+        {
+            "identifier": "PhileonTheDestroyer",
+            "count": 2,
+            "title": "Phileon the Destroyer",
+            "keywords": [
+                "lion"
+            ],
+            "icons": [
+                "DealDamageMelee"
+            ],
+            "body": "When this card is dealt damage, it deals {TheTamer} 1 melee damage and another target 2 melee damage.",
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29",
+            "hitpoints": 6
+        },
+        {
+            "identifier": "ChairOfConfusion",
+            "count": 2,
+            "title": "Chair of Confusion",
+            "keywords": [
+                "equipment",
+                "limited"
+            ],
+            "icons": [
+                "ReduceDamageTakem"
+            ],
+            "body": "Reduce damage dealt to {TheTamer} by Lions by 1.",
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29"
+        },
+        {
+            "identifier": "ElementalWhip",
+            "count": 3,
+            "title": "Elemental Whip",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "DealDamageEnergy"
+            ],
+            "body": "Deal each Lion card in play 1 energy damage.",
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29"
+        },
+                {
+            "identifier": "TapOut",
+            "count": 3,
+            "title": "Tap Out",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "DestroyTarget",
+                "GainHP"
+            ],
+            "body": "Destroy all Lions in play. {TheTamer} regains 1 HP for each Lion destroyed this way.",
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29"
+        },
+        {
+            "identifier": "GrandFinale",
+            "count": 2,
+            "title": "Grand Finale",
+            "keywords": [
+                "ongoing",
+                "limited"
+            ],
+            "icons": [
+                "DealDamageEnergy"
+            ],
+            "body": "If damage dealt by a Lion would reduce {TheTamer} to 0 HP, {TheTamer} may first deal one non-hero target 10 irreducible energy damage.",
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29"
+        },
+        {
+            "identifier": "HereKittyKitty",
+            "count": 2,
+            "title": "Here Kitty Kitty",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "Search",
+                "PlayCardNow"
+            ],
+            "body": "Search your deck for one Lion and put it into play. You may play a card.",
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29"
+        },
+        {
+            "identifier": "SendInTheClowns",
+            "count": 2,
+            "title": "Send in the Clowns",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "DrawCardNow",
+                "PlayCardNow"
+            ],
+            "body": "Draw 2 cards. You may play a Lion.",
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29"
+        },
+        {
+            "identifier": "LingorthTheLighthearted",
+            "count": 2,
+            "title": "Lingorth the Lighthearted",
+            "keywords": [
+                "lion"
+            ],
+            "icons": [
+                "DealDamageMelee"
+            ],
+            "body": [
+                "When this card is dealt exactly 1 damage, it deals one non-hero target 4 melee damage.",
+                "When this card is dealt more than 1 damage, it deals {TheTamer} 2 melee damage"
+             ],
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29",
+            "hitpoints": 6
+        },
+        {
+            "identifier": "RingOfFire",
+            "count": 3,
+            "title": "Ring of Fire",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "IncreaseDamageDealt"
+            ],
+            "body": "Until the start of your next turn, increase damage dealt by Lions to non-hero targets by 1.",
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29"
+        },
+        {
+            "identifier": "MotherOfThePack",
+            "count": 3,
+            "title": "Mother of the Pack",
+            "keywords": [
+                "lion"
+            ],
+            "icons": [
+                "RedirectDamage"
+            ],
+            "body": "Redirect all Lion damage dealt to {TheTamer} to this card.",
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29",
+            "hitpoints": 5
+        },
+        {
+            "identifier": "GildeasTheGood",
+            "count": 2,
+            "title": "Gildeas the Good",
+            "keywords": [
+                "lion"
+            ],
+            "icons": [
+                "DealDamageMelee",
+                "DrawCardNow"
+            ],
+            "body": "When this card is dealt damage, it deals {TheTamer} 1 melee damage. Then, draw a card.",
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29",
+            "hitpoints": 6
+        },
+        {
+            "identifier": "ThreeRings",
+            "count": 2,
+            "title": "3 Rings",
+            "keywords": [
+                "ongoing",
+                "limited"
+            ],
+            "icons": [
+                "PlayCardNow",
+                "DestroySelf"
+            ],
+            "body": "When a Lion is destroyed you may return it to your hand. You may play a Lion. Destroy this card.",
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29"
+        },
+        {
+            "identifier": "NemeanCoat",
+            "count": 2,
+            "title": "Nemean Coat",
+            "keywords": [
+                "equipment",
+                "limited"
+            ],
+            "icons": [
+                "HasPower",
+                "ImmuneToDamageMelee"
+            ],
+            "powers": [
+                "Until the start of your next turn, {TheTamer} is immune to melee damage."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29"
+        },
+        {
+            "identifier": "Catsnack",
+            "count": 3,
+            "title": "Catsnack",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "Discard",
+                "DealDamageMelee"
+            ],
+            "body": "You may discard a card. If you do, each Lion in play deals 1 target 1 melee damage.",
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29"
+        },
+        {
+            "identifier": "BalancingAct",
+            "count": 3,
+            "title": "Balancing Act",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "DealDamageMelee"
+            ],
+            "body": [
+             "If there are more Lions than villain targets in play, each Lion may deal one target 1 melee damage.",
+             "One target dealt damage this way deals one Lion 2 melee damage."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29"
+        },
+        {
+            "identifier": "KittyGloves",
+            "count": 2,
+            "title": "Kitty Gloves",
+            "keywords": [
+                "ongoing"
+            ],
+            "icons": [
+                "ReduceDamageTakem"
+            ],
+            "body": "Whenever a Lion enters play, reduce damage dealt to that Lion by 1 until the start of your next turn.",
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29"
+        },
+         {
+            "identifier": "WhippingWhiskers",
+            "count": 2,
+            "title": "Whipping Whiskers",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+                "DealDamageMelee",
+                "DealDamageEnergy"
+            ],
+            "body": "One Lion deals one other Lion 2 melee damage. A Lion dealt damage this way deals all non-hero targets 1 energy damage.",
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29"
+        }
+    ],
+    "promoCards": [
+        {
+            "identifier": "TheTamerCharacter",
+            "promoIdentifier": "GrandMasterTamerCharacter",
+            "count": 1,
+            "title": "The Tamer",
+            "promoTitle": "Tamer: The GrandMaster",
+            "shortPromoTitle": "GrandMasterTamer",
+            "body": "Whips of Glory",
+            "backgroundColor": "FF0000",
+            "foilBackgroundColor": "FF0000",
+            "hitpointColor": "FF0000",
+            "character": true,
+            "powers": [
+                "Deal 1 Lion 1 sonic damage. If no damage is dealt this way, draw a card."
+            ],
+            "icons": [
+                "HasPower",
+                "PlayCardNow"
+            ],
+            "hitpoints": 25,
+            "nemesisIdentifiers": [
+                "Necro"
+            ],
+            "incapacitatedAbilities": [
+                "Not Implemented 1",
+                "Not Implemented 1",
+                "Not Implemented 1"
+            ],
+            "flippedIcons": [
+                "DealDamageProjectile",
+                "DrawCardNow"
+            ],
+            "openingLines": {
+                "default": "default placeholder promo"
+            },
+            "complexity": 2
+        }
+    ]
+}
