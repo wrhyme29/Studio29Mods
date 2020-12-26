@@ -1,0 +1,17 @@
+{
+	"title": "Studio29",
+	"author": "wrhyme29",
+	"description": "Homebrew decks to play with!",
+	"namespace": "Studio29",
+	"dll": "Studio29Mods.dll",
+	"decks": {
+		"heroes": [
+			"BirthdayBoy",
+			"TheTamer"
+		],
+		"villains": [
+		],
+		"environments": [
+		]
+	}
+}
