@@ -1,0 +1,79 @@
+{
+    "name": "Dummy Player",
+    "kind": "Hero",
+    "expansionIdentifier": "Studio29",
+    "initialCardIdentifiers": [
+        "DummyPlayerCharacter"
+    ],
+    "cards": [
+        {
+            "identifier": "DummyPlayerCharacter",
+            "count": 1,
+            "title": "Dummy Player",
+            "body": "Standing In",
+            "backgroundColor": "0000FF",
+            "foilBackgroundColor": "0000FF",
+            "hitpointColor": "0000FF",
+            "character": true,
+            "setup": "Flip {DummyPlayer}'s character card.",
+            "hitpoints": 1,
+            "incapacitatedAbilities":[  
+            "One player may play a card.",
+            "One hero may use a power.",
+            "One player may draw a card."
+         ],
+         "flippedIcons":[  
+            "PlayCardNow",
+            "UsePowerNow",
+            "DrawCardNow"
+         ],
+            "openingLines": {
+                "default": "Standing in and standing by!"
+            },
+            "complexity": 1
+        },
+        {
+            "identifier": "DoingNothing",
+            "count": 4,
+            "title": "DoingNothing",
+            "keywords": [
+                "one-shot"
+            ],
+            "icons": [
+            ],
+            "body": [
+                "...nothing happens."
+            ],
+            "flavorText": "..."
+        }
+    ],
+    "promoCards": [
+        {
+            "identifier": "DummyPlayerCharacter",
+            "promoIdentifier": "TestingHelperDummyPlayerCharacter",
+            "count": 1,
+            "title": "Dummy Player",
+            "promoTitle": "Dummy Player: Testing Helper",
+            "shortPromoTitle": "TestingHelper",
+            "body": "Helping Out",
+            "backgroundColor": "FF0000",
+            "foilBackgroundColor": "FF0000",
+            "hitpointColor": "FF0000",
+            "character": true,
+            "setup": "Flip {DummyPlayer}'s character card.",
+            "hitpoints": 1,
+            "incapacitatedAbilities":[  
+            "Select up to {H} villain cards. Put them on the top of their respective decks.",
+            "Select up to {H} hero cards. Add them to their respective player's hand.",
+            "Select up to {H} environment cards. Put them on the top of their respective decks."
+         ],
+         "flippedIcons":[  
+            "Manipulate"
+         ],
+            "openingLines": {
+                "default": "Ready to help..."
+            },
+            "complexity": 1
+        }
+    ]
+}
