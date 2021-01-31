@@ -54,8 +54,7 @@ namespace Studio29Tests
 
             GoToPlayCardPhase(birthday);
 
-            Card card = PlayCard(oneshot);
-            AssertInTrash(card);
+            Card card = GetCard(oneshot);
             AssertCardHasKeyword(card, "one-shot", false);
         }
 
@@ -117,8 +116,8 @@ namespace Studio29Tests
             AssertInPlayArea(birthday, mere);
             AssertCardHasKeyword(mere, "present", false);
 
-            //AssertNotDamageSource(haka.CharacterCard);
-            //AssertNextDecisionMaker(birthday);
+            AssertNotDamageSource(haka.CharacterCard);
+            AssertNextDecisionMaker(birthday);
             bool skipped;
             AssertNextPowerDecisionChoices(included: new Card[] { mere });
             SelectAndUsePower(birthday, out skipped);
@@ -126,6 +125,31 @@ namespace Studio29Tests
             AssertNextPowerDecisionChoices(notIncluded: new Card[] { mere });
             SelectAndUsePower(haka, out skipped);
 
+
+        }
+
+        [Test()]
+        public void TestBlowout()
+        {
+            SetupGameController("BaronBlade", "Studio29.BirthdayBoy", "Haka", "Legacy", "TheVisionary", "Megalopolis");
+            StartGame();
+
+            Card mdp = GetCardInPlay("MobileDefensePlatform");
+            SetHitPoints(mdp, 4);
+            Card battalion = PlayCard("BladeBattalion");
+            PlayCard("DecoyProjection");
+            Card mere = PlayCard("Mere");
+            PlayCard("SurgeOfStrength");
+
+            GoToUsePowerPhase(birthday);
+            DecisionSelectCards = new Card[] { mere, battalion };
+            UsePower(birthday.CharacterCard);
+
+            
+            Card blowout = PlayCard("Blowout");
+            AssertOutOfGame(battalion);
+            AssertOutOfGame(mere);
+            AssertOutOfGame(blowout);
 
         }
 

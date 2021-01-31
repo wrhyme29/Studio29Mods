@@ -14,6 +14,20 @@ namespace Studio29.BirthdayBoy
 
         }
 
+        public override IEnumerator Play()
+        {
+            //Destroy an environment card
+            IEnumerator coroutine = base.GameController.SelectAndDestroyCard(DecisionMaker, new LinqCardCriteria((Card c) => c.IsEnvironment, "environment"), optional: false, cardSource: GetCardSource());
+            if (base.UseUnityCoroutines)
+            {
+                yield return base.GameController.StartCoroutine(coroutine);
+            }
+            else
+            {
+                base.GameController.ExhaustCoroutine(coroutine);
+            }
+        }
+
 
     }
 }

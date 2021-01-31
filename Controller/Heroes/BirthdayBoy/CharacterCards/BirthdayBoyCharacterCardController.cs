@@ -28,7 +28,14 @@ namespace Studio29.BirthdayBoy
 		public override IEnumerator UsePower(int index = 0)
 		{
 			//{BirthdayBoy} may move any hero ongoing, hero equipment, or hero target with max 5hp or fewer in play to your play area. Any card moved this way now belongs to {BirthdayBoy} (when it is destroyed, shuffle into the deck of {BirthdayBoy}). Any card moved this way gains the keyword “Present”.
-			IEnumerator coroutine = MoveCardsToOwnPlayArea();
+			IEnumerator coroutine;
+			if (TurnTaker.GetAllCards().Where(c => !c.IsOffToTheSide && !c.IsOutOfGame).Count() < 41)
+			{
+				coroutine = MoveCardsToOwnPlayArea();
+			} else
+            {
+				coroutine = GameController.SendMessageAction($"{Card.Title} already owns 40 cards! Let's not go overboard with the presents!", Priority.High, GetCardSource(), showCardSource: true);
+            }
 			if (base.UseUnityCoroutines)
 			{
 				yield return base.GameController.StartCoroutine(coroutine);
@@ -60,10 +67,21 @@ namespace Studio29.BirthdayBoy
 				//Any card moved this way now belongs to { BirthdayBoy} (when it is destroyed, shuffle into the deck of { BirthdayBoy}).
 				Card movedCard = GetSelectedCard(storedResults);
 				Log.Debug("Old owner: " + movedCard.Owner.Identifier);
-				movedCard.SetNewOwner(base.TurnTaker);
+				GameController.AddCardPropertyJournalEntry(movedCard, "OverrideTurnTaker", new string[] { movedCard.Owner.QualifiedIdentifier, movedCard.Identifier });
+				GameController.ChangeCardOwnership(movedCard, TurnTaker);
+
 				Log.Debug("New owner: " + movedCard.Owner.Identifier);
 				Log.Debug("Original owner: " + GetOriginalOwner(movedCard).Identifier);
 
+				coroutine = GameController.ModifyKeywords("present", addingOrRemoving: true, affectedCards: movedCard.ToEnumerable().ToList(), cardSource: GetCardSource());
+				if (base.UseUnityCoroutines)
+				{
+					yield return base.GameController.StartCoroutine(coroutine);
+				}
+				else
+				{
+					base.GameController.ExhaustCoroutine(coroutine);
+				}
 				coroutine = GameController.SendMessageAction($"{movedCard.Title} is now a Present belonging to { base.Card.AlternateTitleOrTitle}", Priority.High, GetCardSource());
 				if (base.UseUnityCoroutines)
 				{
@@ -175,6 +193,17 @@ namespace Studio29.BirthdayBoy
 				_checkForReplacements = false;
 			}
 			return null;
+		}
+
+		public override IEnumerable<string> AskForCardAdditionalKeywords(Card card)
+		{
+			if (card.Owner == base.TurnTaker && card.Owner != GetOriginalOwner(card))
+			{
+				string present = "present";
+				return present.ToEnumerable();
+			}
+
+			return base.AskForCardAdditionalKeywords(card);
 		}
 
 
