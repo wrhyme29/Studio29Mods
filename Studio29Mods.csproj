@@ -58,12 +58,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="DeckLists\Heroes\DummyPlayerDeckList.json">
+      <LogicalName>Studio29.DeckLists.%(EmbeddedResource.FileName).json</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Update="DeckLists\Heroes\BirthdayBoyDeckList.json">
+      <LogicalName>Studio29.DeckLists.%(EmbeddedResource.FileName).json</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Update="DeckLists\Heroes\LoreDeckList.json">
       <LogicalName>Studio29.DeckLists.%(EmbeddedResource.FileName).json</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+  </Target>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Sentinels of the Multiverse\mods\Studio29Mods\$(TargetName).dll&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)manifest.json&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Sentinels of the Multiverse\mods\Studio29Mods\manifest.json&quot;" />
   </Target>
 
 </Project>
