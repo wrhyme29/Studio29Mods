@@ -51,7 +51,7 @@ namespace Studio29.BirthdayBoy
                     destination = tt.OutOfGame;
                 }
 
-                coroutine = GameController.MoveCard(TurnTakerController, selectedCard, destination, showMessage: true, cardSource: GetCardSource());
+                coroutine = GameController.MoveCard(TurnTakerController, selectedCard, destination,playCardIfMovingToPlayArea: !selectedCard.Location.IsPlayArea, showMessage: true, cardSource: GetCardSource());;
                 if (base.UseUnityCoroutines)
                 {
                     yield return base.GameController.StartCoroutine(coroutine);
