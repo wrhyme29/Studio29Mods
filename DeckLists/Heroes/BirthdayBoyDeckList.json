@@ -129,7 +129,7 @@
          {
             "identifier": "DontGetGreedy",
             "count": 3,
-            "title": "Don’t Get Greedy",
+            "title": "Don't Get Greedy",
             "keywords": [
                 "surprise"
             ],
@@ -198,7 +198,7 @@
         {
             "identifier": "YoureInvited",
             "count": 2  ,
-            "title": "You’re Invited!",
+            "title": "You're Invited!",
             "keywords": [
                 "one-shot"
             ],
@@ -206,7 +206,7 @@
                 "PlayCardNow"
             ],
             "body": [
-                "Any hero character card with no presents in play may play an ongoing card, equipment card, or target with no more than a max hp of 5."
+                "Any other hero with no presents in play may play an ongoing card, equipment card, or target with no more than a max hp of 5."
             ],
             "flavorQuotes": [
                 {
@@ -228,8 +228,8 @@
                 "DealDamagePsychic"
             ],
             "body": [
-                "Any hero character card with presents in play from their deck may regain HP equal to the number of their presents in play.",
-                "Any hero character card with no presents in play deals themselves 2 psychic damage."
+                "Any other hero with presents in play from their deck gains HP equal to the number of their presents in play.",
+                "Any other hero with no presents in play deals themselves 2 psychic damage."
             ],
             "flavorQuotes": [
                 {
