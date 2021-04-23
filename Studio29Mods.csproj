@@ -58,6 +58,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Update="DeckLists\Heroes\TestPlayerDeckList.json">
+      <LogicalName>Studio29.DeckLists.%(EmbeddedResource.FileName).json</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Update="DeckLists\Heroes\DummyPlayerDeckList.json">
       <LogicalName>Studio29.DeckLists.%(EmbeddedResource.FileName).json</LogicalName>
     </EmbeddedResource>

@@ -4,7 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Studio29.DummyPlayer
+namespace Studio29.TestPlayer
 {
     public class DoingNothingCardController : CardController
     {

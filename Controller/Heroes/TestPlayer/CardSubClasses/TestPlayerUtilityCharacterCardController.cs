@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Studio29.DummyPlayer
+namespace Studio29.TestPlayer
 {
 	public class TestPlayerUtilityCharacterCardController : HeroCharacterCardController
 	{
@@ -14,12 +14,7 @@ namespace Studio29.DummyPlayer
 		{
 		}
 
-        public override void AddTriggers()
-        {
-			AddTrigger((GameAction ga) => Game.HasGameStarted && !Card.IsFlipped, FlipThisCharacterCardResponse, TriggerType.FlipCard, TriggerTiming.Before);
-        }
-
-
+       
 
 	}
 }

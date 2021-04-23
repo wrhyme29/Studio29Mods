@@ -65,7 +65,9 @@
             "incapacitatedAbilities":[  
             "Select up to {H} villain cards. Put them on the top of their respective decks.",
             "Select up to {H} hero cards. Add them to their respective player's hand.",
-            "Select up to {H} environment cards. Put them on the top of their respective decks."
+            "Select up to {H} environment cards. Put them on the top of their respective decks.",
+            "One hero may deal 1 target 10000 radiant damage.",
+            "Put a deck in its trash."
          ],
          "flippedIcons":[  
             "Manipulate"

@@ -1,428 +1,501 @@
 {
-    "name": "Lore",
-    "kind": "Hero",
-    "expansionIdentifier": "Studio29",
-    "initialCardIdentifiers": [
-        "LoreCharacter"
-    ],
-    "cards": [
-        {
-            "identifier": "LoreCharacter",
-            "count": 1,
-            "title": "Lore",
-            "body": "Skip to the End",
-            "backgroundColor": "FF0000",
-            "foilBackgroundColor": "FF0000",
-            "hitpointColor": "FF0000",
-            "character": true,
-            "powers": [
-                "You may discard one Story card to use its effect immediately. Reduce all numbers on the card by 1."
-            ],
-            "icons": [
-                "HasPower",
-                "Discard"
-            ],
-            "hitpoints": 25,
-            "nemesisIdentifiers": [
-                "Lore"
-            ],
-            "incapacitatedAbilities": [
-                "Not implemented 1",
-                "Not implemented 2",
-                "Not implemented 3"
-            ],
-            "flippedIcons": [
-                ""
-            ],
-            "openingLines": {
-                "default": "default placeholder"
-            },
-            "complexity": 2
-        },
-        {
-            "identifier": "AStoryOfTriumph",
-            "count": 1,
-            "title": "A Story of Triumph",
-            "keywords": [
-                "one-shot"
-            ],
-            "icons": [
-                "DealDamageRadiant",
-                "DrawCardNow"
-            ],
-            "body": "Lore deals one target 2 radiant damage. You may draw a card.",
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-        {
-            "identifier": "AStoryOfSpeed",
-            "count": 1,
-            "title": "A Story of Speed",
-            "keywords": [
-                "one-shot"
-            ],
-            "icons": [
-                "DealDamageSonic",
-                "Manipulate"
-            ],
-            "body": "Lore deals one target 2 sonic damage. You may shuffle one trash into its deck.",
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-        {
-            "identifier": "AStoryOfFire",
-            "count": 1,
-            "title": "A Story of Fire",
-            "keywords": [
-                "one-shot"
-            ],
-            "icons": [
-                "DealDamageFire"
-            ],
-            "body": "Lore deals one target 2 fire damage. Lore deals a second target 2 fire damage.",
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-        {
-            "identifier": "AStoryOfIce",
-            "count": 1,
-            "title": "A Story of Ice",
-            "keywords": [
-                "one-shot"
-            ],
-            "icons": [
-                "DealDamageCold",
-                "GainHP"
-            ],
-            "body": "Lore deals one target 2 cold damage. One target regains 2 hp.",
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-        {
-            "identifier": "SaveYourself",
-            "count": 2,
-            "title": "Save Yourself",
-            "keywords": [
-                "story",
-                "action"
-            ],
-            "icons": [
-                "RedirectDamage",
-                "Discard",
-                "DealDamageToxic"
-            ],
-            "body": [
-                "You may never have more than one Story of any given genre in play at a time.",
-                "The first time each turn a hero target would deal itself damage, you may redirect that damage to any target. If you do, discard a card or destroy this card. If this card is destroyed this way, it first deals Lore 2 toxic damage."
-            ],
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-        {
-            "identifier": "Hubris",
-            "count": 2,
-            "title": "Hubris",
-            "keywords": [
-                "one-shot"
-            ],
-            "icons": [
-                "DealDamageEnergy",
-                "DealDamagePsychic"
-            ],
-            "body": "Lore deals one target 3 energy damage and himself 1 psychic damage",
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-        {
-            "identifier": "LoveTriangle",
-            "count": 2,
-            "title": "Love Triangle",
-            "keywords": [
-                "story",
-                "romance"
-            ],
-            "icons": [
-                "DealDamagePsychic",
-                "GainHP"
-            ],
-            "body": "You may never have more than one Story of any given genre in play at a time.",
-            "power": "Lore deals himself 2 psychic damage. 2 character cards other than Lore may regain 2 hp.";
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-        {
-            "identifier": "DoubleAgent",
-            "count": 2,
-            "title": "Double Agent",
-            "keywords": [
-                "one-shot"
-            ],
-            "icons": [
-                "DealDamageMelee"
-            ],
-            "body": "Lore may deal one non-character villian target 2 melee damage. A target dealt damage that way now deals its corresponding character card 2 irreducible melee damage.",
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-        {
-            "identifier": "FourFiftyOne",
-            "count": 2,
-            "title": "451",
-            "keywords": [
-                "ongoing",
-                "epic",
-                "limited"
-            ],
-            "icons": [
-                "DealDamageMelee"
-            ],
-            "powers": "Destroy one Story. You may draw a card.",
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-        {
-            "identifier": "Revengement",
-            "count": 2,
-            "title": "Revengement",
-            "keywords": [
-                "story",
-                "action"
-            ],
-            "icons": [
-                "RedirectDamage",
-                "DealDamageCold"
-            ],
-            "body": [
-                "You may never have more than one Story of any given genre in play at a time.",
-                "Whenever a hero target with fewer than 10 hp is dealt damage, Lore may deal one target 1 cold damage."
-            ],
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-        {
-            "identifier": "Whirlwinding",
-            "count": 2,
-            "title": "Whirlwinding",
-            "keywords": [
-                "story",
-                "romance"
-            ],
-            "icons": [
-                "DealDamagePsychic",
-                "GainHP"
-            ],
-            "body": "You may never have more than one Story of any given genre in play at a time.",
-            "powers": "Select one hero character card. Until the start of your next turn, whenever that hero is dealt damage, Lore regains 1 hp and deals one target 2 psychic damage.",
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-        {
-            "identifier": "PageTurner",
-            "count": 2,
-            "title": "Page Turner",
-            "keywords": [
-                "story",
-                "mystery"
-            ],
-            "icons": [
-                "RedirectDamage",
-                "DealDamageCold"
-            ],
-            "body": [
-                "You may never have more than one Story of any given genre in play at a time.",
-                "At the end of your turn, you may reveal the top cards of 2 decks. Discard or replace them."
-            ],
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-         {
-            "identifier": "Callback",
-            "count": 2,
-            "title": "Callback",
-            "keywords": [
-                "story",
-                "mystery"
-            ],
-            "icons": [
-                "Manipulate",
-                "DrawCardNow"
-            ],
-            "body":  "You may never have more than one Story of any given genre in play at a time.",
-            "power": "One player other than Lore may take a card from their trash and put on top of their deck. One player may draw a card.",
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-        {
-            "identifier": "SpeedReader",
-            "count": 2,
-            "title": "SpeedReader",
-            "keywords": [
-                "ongoing",
-                "epic",
-                "limited"
-            ],
-            "icons": [
-                "DealDamageMelee"
-            ],
-            "body": "At the end of your turn, Lore may destroy one Story and play one Story. If a Story is destroyed this way, Lore deals himself one sonic damage. If a Story is played this way, Lore deals himself one irreducible sonic damage. You may then play another Story. If you do, destroy this card.",
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-        {
-            "identifier": "DeweyTheDecimal",
-            "count": 3,
-            "title": "Dewey The Decimal",
-            "keywords": [
-                "one-shot"
-            ],
-            "icons": [
-                "Search",
-                "DrawCardNow"
-            ],
-            "body": "Search your deck for a Story and put it into your hand. You may draw a card.",
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-        {
-            "identifier": "BlessingOfTheFifteenthStone",
-            "count": 2,
-            "title": "Blessing of the Fifteenth Stone",
-            "keywords": [
-                "story",
-                "myth"
-            ],
-            "icons": [
-                "Indestructible"
-            ],
-            "body": [
-                "You may never have more than one Story of any given genre in play at a time.",
-                "At the end of your turn, select one target with 5 or fewer hp. Until the start of your next turn, that target is indestructible. "
-            ],
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-        {
-            "identifier": "Epilogue",
-            "count": 2,
-            "title": "Epilogue",
-            "keywords": [
-                "story",
-                "myth"
-            ],
-            "icons": [
-                "Search"
-            ],
-            "body":  "You may never have more than one Story of any given genre in play at a time.",
-            "power": " Select a trash. You may search that trash for a target and put that target into play.    ",
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-        {
-            "identifier": "RhetoricalBoost",
-            "count": 3,
-            "title": "Rhetorical Boost",
-            "keywords": [
-                "editor"
-            ],
-            "icons": [
-                "DealDamagePsychic"
-            ],
-            "body": [
-                "When a Story text is activated, increase one number in the text by 1. ",
-                "Whenever a story text is activated, this card deals Lore and itself 1 psychic damage."
-            ],
-            "flavorQuotes": [
-                {
-                    "identifier": "Lore",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "Lore, Fact or Fiction #29",
-        },
-    ]
+	"name": "Lore",
+	"kind": "Hero",
+	"expansionIdentifier": "Studio29",
+	"initialCardIdentifiers": [
+		"LoreCharacter"
+	],
+	"cards": [{
+			"identifier": "LoreCharacter",
+			"count": 1,
+			"title": "Lore",
+			"body": "Checkout More Books!",
+			"backgroundColor": "3aaeda",
+			"foilBackgroundColor": "3aaeda",
+			"hitpointColor": "3aaeda",
+			"character": true,
+			"powers": [
+				"Reveal cards from the top of {Lore}'s deck until a Story card is revealed. Put that card into play. Shuffle the other revealed cards into {Lore}'s deck."
+			],
+			"icons": [
+				"HasPower",
+				"Discard"
+			],
+			"hitpoints": 25,
+			"nemesisIdentifiers": [
+				"Lore"
+			],
+			"incapacitatedAbilities": [
+				"Not implemented 1",
+				"Not implemented 2",
+				"Not implemented 3"
+			],
+			"flippedIcons": [
+				""
+			],
+			"openingLines": {
+				"default": "Lore placeholder"
+			},
+			"complexity": 2
+		},
+		{
+			"identifier": "AStoryOfTriumph",
+			"count": 1,
+			"title": "A Story of Triumph",
+			"keywords": [
+				"one-shot"
+			],
+			"icons": [
+				"DealDamageRadiant",
+				"DrawCardNow"
+			],
+			"body": "{Lore} deals one target 2 radiant damage. You may draw a card.",
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "AStoryOfSpeed",
+			"count": 1,
+			"title": "A Story of Speed",
+			"keywords": [
+				"one-shot"
+			],
+			"icons": [
+				"DealDamageSonic",
+				"Manipulate"
+			],
+			"body": "{Lore} deals one target 2 sonic damage. You may shuffle one trash into its deck.",
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "AStoryOfFire",
+			"count": 1,
+			"title": "A Story of Fire",
+			"keywords": [
+				"one-shot"
+			],
+			"icons": [
+				"DealDamageFire"
+			],
+			"body": "{Lore} deals one target 2 fire damage. Lore deals a second target 2 fire damage.",
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "AStoryOfIce",
+			"count": 1,
+			"title": "A Story of Ice",
+			"keywords": [
+				"one-shot"
+			],
+			"icons": [
+				"DealDamageCold",
+				"GainHP"
+			],
+			"body": "{Lore} deals one target 2 cold damage. One target regains 2 hp.",
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "SaveYourself",
+			"count": 2,
+			"title": "Save Yourself",
+			"keywords": [
+				"story",
+				"action"
+			],
+			"icons": [
+				"RedirectDamage",
+				"Discard",
+				"DealDamageToxic"
+			],
+			"body": [
+				"Return all other action cards in play to your hand.",
+				"The first time each turn a hero target would deal itself damage, you may redirect that damage to any target. If you do, discard a card or destroy this card. If this card would be destroyed this way, {Lore} first deals himself 2 toxic damage."
+			],
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "Hubris",
+			"count": 2,
+			"title": "Hubris",
+			"keywords": [
+				"one-shot"
+			],
+			"icons": [
+				"DealDamageEnergy",
+				"DealDamagePsychic"
+			],
+			"body": "{Lore} deals one target 4 energy damage and himself 1 psychic damage.",
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "LoveTriangle",
+			"count": 2,
+			"title": "Love Triangle",
+			"keywords": [
+				"story",
+				"romance"
+			],
+			"icons": [
+				"DealDamagePsychic",
+				"GainHP"
+			],
+			"body": "Return all other romance cards in play to your hand.",
+			"powers": "{Lore} deals himself 2 psychic damage. Two character cards other than {Lore} regain 2 hp.",
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "DoubleAgent",
+			"count": 2,
+			"title": "Double Agent",
+			"keywords": [
+				"one-shot"
+			],
+			"icons": [
+				"DealDamagePsychic",
+				"DealDamageMelee"
+			],
+			"body": "{Lore} may deal one non-character villain target 2 psychic damage. A target dealt damage that way now deals a character card in its play area 2 irreducible melee damage.",
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "FourFiftyOne",
+			"count": 2,
+			"title": "451",
+			"keywords": [
+				"ongoing",
+				"epic"
+			],
+			"icons": [
+				"DealDamageMelee"
+			],
+			"body": "Return all other epic cards in play to your hand.",
+			"powers": "Destroy any number of Story cards. Draw X cards, where X is the number of cards destroyed this way plus 1.",
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "Revengement",
+			"count": 2,
+			"title": "Revengement",
+			"keywords": [
+				"story",
+				"action"
+			],
+			"icons": [
+				"DealDamageCold"
+			],
+			"body": [
+				"Return all other action cards in play to your hand.",
+				"Whenever a hero target with fewer than 10 hp is dealt damage, Lore may deal one target 1 cold damage."
+			],
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "Whirlwinding",
+			"count": 2,
+			"title": "Whirlwinding",
+			"keywords": [
+				"story",
+				"romance"
+			],
+			"icons": [
+				"DealDamagePsychic",
+				"GainHP"
+			],
+			"body": "Return all other romance cards in play to your hand.",
+			"powers": "Select one hero character card. Until the start of your next turn, whenever that hero is dealt damage, Lore regains 1 hp and deals one target 2 psychic damage.",
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "PageTurner",
+			"count": 2,
+			"title": "Page Turner",
+			"keywords": [
+				"story",
+				"mystery"
+			],
+			"icons": [
+				"Manipulate"
+			],
+			"body": [
+				"Return all other mystery cards in play to your hand.",
+				"At the end of your turn, reveal the top cards of 2 decks. You may replace or discard each card."
+			],
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "Callback",
+			"count": 2,
+			"title": "Callback",
+			"keywords": [
+				"story",
+				"mystery"
+			],
+			"icons": [
+				"Manipulate",
+				"DrawCardNow"
+			],
+			"body": "Return all other mystery cards in play to your hand.",
+			"powers": "One player other than Lore may take a card from their trash and put on top of their deck. One player may draw a card.",
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "SpeedReader",
+			"count": 2,
+			"title": "SpeedReader",
+			"keywords": [
+				"ongoing",
+				"epic"
+			],
+			"icons": [
+				"Destroy",
+				"PlayCardNow",
+				"DealDamageSonic"
+			],
+			"body": [
+			"Return all other epic cards in play to your hand.",
+			"At the end of your turn, you may destroy one Story and play one Story. If a Story is destroyed this way, {Lore} deals one target 1 sonic damage. If a Story is played this way, {Lore} deals himself 1 irreducible sonic damage. You may then play another Story. If you do, destroy this card."
+			],
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "DeweyTheDecimal",
+			"count": 3,
+			"title": "Dewey The Decimal",
+			"keywords": [
+				"one-shot"
+			],
+			"icons": [
+				"Search",
+				"DrawCardNow"
+			],
+			"body": "Search your deck for a Story and put it into your hand. Shuffle your deck. You may draw a card.",
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "BlessingOfTheFifteenthStone",
+			"count": 2,
+			"title": "Blessing of the Fifteenth Stone",
+			"keywords": [
+				"story",
+				"myth"
+			],
+			"icons": [
+				"Indestructible"
+			],
+			"body": [
+				"Return all other myth cards in play to your hand.",
+				"At the end of your turn, select one target other than {Lore} with 5 or fewer hp. Until the start of your next turn, that target is indestructible. "
+			],
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "Epilogue",
+			"count": 2,
+			"title": "Epilogue",
+			"keywords": [
+				"story",
+				"myth"
+			],
+			"icons": [
+				"Search"
+			],
+			"body": "Return all other myth cards in play to your hand.",
+			"powers": "Select a trash. You may search that trash for a target and put that target into play.",
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "RhetoricalBoost",
+			"count": 3,
+			"title": "Rhetorical Boost",
+			"keywords": [
+				"editor"
+			],
+			"icons": [
+				"IncreaseDamageDealt",
+				"DrawCardNow"
+			],
+			"body": [
+				"Increase damage dealt by {Lore} by 1.",
+				"Whenever a story card enters play, draw a card."
+			],
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29",
+			"hitpoints": 4
+		},
+		{
+			"identifier": "Cliffhanger",
+			"count": 2,
+			"title": "Cliffhanger",
+			"keywords": [
+				"one-shot"
+			],
+			"icons": [
+				"DestroyEnvironment",
+				"PlayCardNow"
+			],
+			"body": [
+				"You may destroy one Environment card.",
+				"Play the top card of the environment deck."
+			],
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "RedHerring",
+			"count": 1,
+			"title": "Red Herring",
+			"keywords": [
+				"one-shot"
+			],
+			"icons": [
+				"RedirectDamage",
+				"DrawCardNow"
+			],
+			"body": [
+				"If there is a mystery card in play, select a target. Redirect all damage dealt to that target to the environment target with the lowest hp until the start of your next turn.",
+				"If there is not a mystery card in play, draw a card."
+			],
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "RallyingCry",
+			"count": 1,
+			"title": "Rallying Cry",
+			"keywords": [
+				"one-shot"
+			],
+			"icons": [
+				"IncreaseDamageDealt",
+				"DrawCardNow"
+			],
+			"body": [
+				"If there is an action card in play, increase damage dealt by hero targets by 1 until the start of your next turn.",
+				"If there is not an action card in play, draw a card."
+			],
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "Honeymoon",
+			"count": 1,
+			"title": "Honeymoon",
+			"keywords": [
+				"one-shot"
+			],
+			"icons": [
+				"ImmuneToDamage",
+				"DrawCardNow"
+			],
+			"body": [
+				"If there is a romance card in play, select a target. Prevent the first damage dealt to that target each turn until the start of your next turn.",
+				"If there is not a romance card in play, draw a card."	
+				],
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		},
+		{
+			"identifier": "EvenTheScore",
+			"count": 1,
+			"title": "Even the Score",
+			"keywords": [
+				"one-shot"
+			],
+			"icons": [
+				"GainHP",
+				"DrawCardNow"
+			],
+			"body": [
+				"If there is a myth card in play, any hero with an odd number of HP regains 1 hp.",
+				"If there is not a myth card in play, draw a card."
+			],
+			"flavorQuotes": [{
+				"identifier": "Lore",
+				"text": "-"
+			}],
+			"flavorReference": "Lore, Fact or Fiction #29"
+		}
+	]
 }
