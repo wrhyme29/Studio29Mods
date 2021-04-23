@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Studio29.DummyPlayer
 {
-	public class DummyPlayerCharacterCardController : DummyPlayerUtilityCharacterCardController
+	public class DummyPlayerCharacterCardController : TestPlayerUtilityCharacterCardController
 	{
 		public DummyPlayerCharacterCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
 		{

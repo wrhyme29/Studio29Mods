@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace Studio29.DummyPlayer
 {
-	public class TestingHelperDummyPlayerCharacterCardController : DummyPlayerUtilityCharacterCardController
+	public class TestingHelperDummyPlayerCharacterCardController : TestPlayerUtilityCharacterCardController
 	{
 		public TestingHelperDummyPlayerCharacterCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
 		{
@@ -51,7 +51,7 @@ namespace Studio29.DummyPlayer
 				case 1:
 					{
 						List<SelectCardsDecision> selectedCards = new List<SelectCardsDecision>();
-                        IEnumerator coroutine2 = base.GameController.SelectCardsAndStoreResults(DecisionMaker, SelectionType.MoveCardToHand, (Card c) => c.IsHero && (c.IsInDeck || c.IsInTrash), Game.H, storedResults: selectedCards, false, requiredDecisions: 0, cardSource: GetCardSource());
+                        IEnumerator coroutine2 = base.GameController.SelectCardsAndStoreResults(DecisionMaker, SelectionType.MoveCardToHand, (Card c) => c.IsHero && (c.IsInDeck || c.IsInTrash), Game.H, storedResults: selectedCards, false, requiredDecisions: 0, cardSource: GetCardSource(), ignoreBattleZone: true);
 
 						if (base.UseUnityCoroutines)
 						{
@@ -106,6 +106,47 @@ namespace Studio29.DummyPlayer
 						}
 						break;
 					}
+				case 3:
+                    {
+						IEnumerator coroutine = GameController.SelectHeroToSelectTargetAndDealDamage(DecisionMaker, 10000, DamageType.Radiant, cardSource: GetCardSource());
+						if (base.UseUnityCoroutines)
+						{
+							yield return base.GameController.StartCoroutine(coroutine);
+						}
+						else
+						{
+							base.GameController.ExhaustCoroutine(coroutine);
+						}
+						break;
+                    }
+				case 4:
+                    {
+						List<SelectTurnTakerDecision> storedResults3 = new List<SelectTurnTakerDecision>();
+						IEnumerator coroutine4 = base.GameController.SelectTurnTaker(DecisionMaker, SelectionType.MoveDeckToTrash, storedResults3, optional: false, allowAutoDecide: false, null, null, null, checkExtraTurnTakersInstead: false, canBeCancelled: true, ignoreBattleZone: false, GetCardSource());
+						if (base.UseUnityCoroutines)
+						{
+							yield return base.GameController.StartCoroutine(coroutine4);
+						}
+						else
+						{
+							base.GameController.ExhaustCoroutine(coroutine4);
+						}
+						SelectTurnTakerDecision selectTurnTakerDecision2 = storedResults3.FirstOrDefault();
+						if (selectTurnTakerDecision2 != null)
+						{
+							coroutine4 = base.GameController.BulkMoveCards(base.TurnTakerController, selectTurnTakerDecision2.SelectedTurnTaker.Deck.Cards, selectTurnTakerDecision2.SelectedTurnTaker.Trash, toBottom: false, performBeforeDestroyActions: true, DecisionMaker.TurnTaker, isDiscard: false, GetCardSource());
+							if (base.UseUnityCoroutines)
+							{
+								yield return base.GameController.StartCoroutine(coroutine4);
+							}
+							else
+							{
+								base.GameController.ExhaustCoroutine(coroutine4);
+							}
+						}
+						break;
+					}
+
 			}
 		}
 

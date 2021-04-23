@@ -9,35 +9,31 @@ using System.Linq;
 namespace Studio29Tests
 {
     [TestFixture()]
-    public class DummyPlayerTests : BaseTest
+    public class TestPlayerTests : BaseTest
     {
-        #region BirthdayBoyHelperFunctions
-        protected HeroTurnTakerController dummy { get { return FindHero("DummyPlayer"); } }
-       
-
-        protected void AddImmuneToDamageTrigger(TurnTakerController ttc, bool heroesImmune, bool villainsImmune, bool charactersImmune)
-        {
-            ImmuneToDamageStatusEffect immuneToDamageStatusEffect = new ImmuneToDamageStatusEffect();
-            immuneToDamageStatusEffect.TargetCriteria.IsHero = new bool?(heroesImmune);
-            immuneToDamageStatusEffect.TargetCriteria.IsCharacter = new bool?(charactersImmune);
-            immuneToDamageStatusEffect.TargetCriteria.IsVillain = new bool?(villainsImmune);
-            immuneToDamageStatusEffect.UntilStartOfNextTurn(ttc.TurnTaker);
-            this.RunCoroutine(this.GameController.AddStatusEffect(immuneToDamageStatusEffect, true, new CardSource(ttc.CharacterCardController)));
-        }
+        #region TestPlayerHelperFunctions
+        protected HeroTurnTakerController tester { get { return FindHero("TestPlayer"); } }
+      
 
 
         #endregion
 
         [Test()]
-        public void TestDummyPlayerLoads()
+        public void TestTestPlayerPower()
         {
-            SetupGameController("BaronBlade", "Studio29.DummyPlayer", "Haka", "Ra", "Megalopolis");
+            SetupGameController("BaronBlade", "Studio29.TestPlayer", "Haka/XtremePrimeWardensHakaCharacter", "Ra", "Megalopolis");
             StartGame();
-            Assert.AreEqual(5, this.GameController.TurnTakerControllers.Count());
 
-            Assert.IsNotNull(dummy);
+            UsePower(tester);
 
-            AssertIncapacitated(dummy);
+            QuickHPStorage(baron, tester, haka, ra);
+            DealDamage(baron, haka, 3, DamageType.Fire);
+            QuickHPCheck(0, -1, 0, 0);
+            QuickHPUpdate();
+            DealDamage(baron, haka, 3, DamageType.Fire);
+            QuickHPCheck(0, 0, -3, 0);
+            PrintTriggers();
+
         }
 
         

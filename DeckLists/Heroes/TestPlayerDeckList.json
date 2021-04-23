@@ -1,0 +1,45 @@
+{
+	"name": "Test Player",
+	"kind": "Hero",
+	"expansionIdentifier": "Studio29",
+	"initialCardIdentifiers": [
+		"TestPlayerCharacter"
+	],
+	"cards": [{
+			"identifier": "TestPlayerCharacter",
+			"count": 1,
+			"title": "Test Player",
+			"body": "Test Power",
+			"backgroundColor": "0000FF",
+			"foilBackgroundColor": "0000FF",
+			"hitpointColor": "0000FF",
+			"character": true,
+			"hitpoints": 30,
+			"incapacitatedAbilities": [
+				"-",
+				"-",
+				"-"
+			],
+			"powers": [
+				"A power to test will be coded here."
+			],
+			"openingLines": {
+				"default": "Testing, testing, 1 2 3..."
+			},
+			"complexity": 1
+		},
+		{
+			"identifier": "DoingNothing",
+			"count": 4,
+			"title": "DoingNothing",
+			"keywords": [
+				"one-shot"
+			],
+			"icons": [],
+			"body": [
+				"...nothing happens."
+			],
+			"flavorText": "..."
+		}
+	]
+}
