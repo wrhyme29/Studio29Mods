@@ -62,18 +62,21 @@ namespace Studio29.Lore
             }
 
             //If a Story is played this way, {Lore} deals himself 1 irreducible sonic damage. 
-            if(DidPlayCards(storedFirstPlay))
+            if (!DidPlayCards(storedFirstPlay))
             {
-                coroutine = DealDamage(CharacterCard, CharacterCard, 1, DamageType.Sonic, isIrreducible: true, cardSource: GetCardSource());
-                if (base.UseUnityCoroutines)
-                {
-                    yield return base.GameController.StartCoroutine(coroutine);
-                }
-                else
-                {
-                    base.GameController.ExhaustCoroutine(coroutine);
-                }
+                yield break;
+
             }
+            coroutine = DealDamage(CharacterCard, CharacterCard, 1, DamageType.Sonic, isIrreducible: true, cardSource: GetCardSource());
+            if (base.UseUnityCoroutines)
+            {
+                yield return base.GameController.StartCoroutine(coroutine);
+            }
+            else
+            {
+                base.GameController.ExhaustCoroutine(coroutine);
+            }
+            
 
             //You may then play another Story. 
             List<PlayCardAction> storedSecondPlay = new List<PlayCardAction>();
