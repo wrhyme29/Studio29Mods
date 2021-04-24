@@ -26,9 +26,9 @@
 				"Lore"
 			],
 			"incapacitatedAbilities": [
-				"Not implemented 1",
-				"Not implemented 2",
-				"Not implemented 3"
+				"One player discards a card. Each other player may draw a card.",
+				"One player discards a card. Move two cards with a matching keyword from a trash into their owner's hand.",
+				"One player discards a card. Reveal cards from the top of their deck until a card with a matching keyword is revealed. Put that card into play. Shuffle the other revealed cards back into the deck."
 			],
 			"flippedIcons": [
 				""
@@ -383,7 +383,8 @@
 			],
 			"body": [
 				"Increase damage dealt by {Lore} by 1.",
-				"Whenever a story card enters play, draw a card."
+				"Whenever a story card enters play, draw a card.",
+				"If this card has negative HP, reduce damage dealt to {Lore} by 1 for each HP below zero."
 			],
 			"flavorQuotes": [{
 				"identifier": "Lore",

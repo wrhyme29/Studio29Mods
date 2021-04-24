@@ -22,7 +22,9 @@ namespace Studio29.Lore
 			//Whenever a story card enters play, draw a card
 			AddTrigger((CardEntersPlayAction cep) => IsStory(cep.CardEnteringPlay) && cep.IsSuccessful, DrawCardResponse, TriggerType.DrawCard, TriggerTiming.After);
 
-        }
+			//If this card has negative HP, reduce damage dealt to {Lore} by 1 for each HP below zero.
+			AddReduceDamageTrigger((DealDamageAction dd) => Card.HitPoints.Value < 0 && dd.Target == CharacterCard, dd => -1 * Card.HitPoints.Value);
+		}
 
 
 		private IEnumerator DrawCardResponse(CardEntersPlayAction cep)
