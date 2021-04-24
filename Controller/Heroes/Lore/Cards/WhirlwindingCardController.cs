@@ -65,6 +65,11 @@ namespace Studio29.Lore
 
         public IEnumerator DealDamageAndGainHPResponse(DealDamageAction dd, HeroTurnTaker hero, StatusEffect effect, int[] powerNumerals = null)
         {
+			if(!dd.DidDealDamage)
+            {
+				yield break;
+            }
+
 			int? hpGain = null;
 			int? damage = null;
 			if (powerNumerals != null)

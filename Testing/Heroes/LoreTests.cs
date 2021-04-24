@@ -60,6 +60,66 @@ namespace Studio29Tests
         }
 
         [Test()]
+        public void TestLoreIncap1()
+        {
+            SetupGameController("BaronBlade", "Studio29.Lore", "Ra", "Haka", "Legacy", "Megalopolis");
+            StartGame();
+            DestroyNonCharacterVillainCards();
+
+            SetupIncap(baron);
+            AssertIncapacitated(lore);
+            GoToUseIncapacitatedAbilityPhase(lore);
+            Card discardCard = GetRandomCardFromHand(haka);
+
+            //One player discards a card. Each other player may draw a card.
+            DecisionSelectTurnTakers = new TurnTaker[] { haka.TurnTaker };
+            DecisionSelectCards = new Card[] { discardCard };
+            QuickHandStorage(haka, ra, legacy);
+            UseIncapacitatedAbility(lore, 0);
+            QuickHandCheck(-1, 1, 1);
+        }
+
+        [Test()]
+        public void TestLoreIncap2()
+        {
+            SetupGameController("BaronBlade", "Studio29.Lore", "Ra", "Haka", "Legacy", "Megalopolis");
+            StartGame();
+            DestroyNonCharacterVillainCards();
+
+            SetupIncap(baron);
+            AssertIncapacitated(lore);
+            GoToUseIncapacitatedAbilityPhase(lore);
+            Card mere = PutInHand("Mere");
+            Card ring = PutInTrash("TheLegacyRing");
+            Card staff = PutInTrash("TheStaffOfRa");
+            Card taiaha = PutInTrash("Taiaha");
+            Card solar = PutInTrash("SolarFlare");
+
+
+            //One player discards a card. Move two cards with a matching keyword from a trash into their owner's hand.
+            DecisionSelectTurnTakers = new TurnTaker[] { haka.TurnTaker };
+            DecisionSelectCards = new Card[] { mere, ring, staff };
+            UseIncapacitatedAbility(lore, 1);
+            AssertInHand(ring, staff);
+            AssertInTrash(taiaha, mere, solar);
+        }
+
+        [Test()]
+        public void TestLoreIncap3()
+        {
+            SetupGameController("BaronBlade", "Studio29.Lore", "Ra", "Haka", "Megalopolis");
+            StartGame();
+            DestroyNonCharacterVillainCards();
+
+            SetupIncap(baron);
+            AssertIncapacitated(lore);
+            GoToUseIncapacitatedAbilityPhase(lore);
+
+            //One player discards a card. Reveal cards from the top of their deck until a card with a matching keyword is revealed. Put that card into play. Shuffle the other revealed cards back into the deck.
+            UseIncapacitatedAbility(lore, 2);
+        }
+
+        [Test()]
         public void TestAStoryOfFire()
         {
             SetupGameController("BaronBlade", "Studio29.Lore", "Ra", "Haka", "Megalopolis");
@@ -777,6 +837,38 @@ namespace Studio29Tests
             //use power to discover a story
             UsePower(lore);
             QuickHandCheck(1);
+
+        }
+
+        [Test()]
+        public void TestRhetoricalBoost_ReduceWhenNegative()
+        {
+            SetupGameController("BaronBlade", "Studio29.Lore", "Ra", "Haka", "Megalopolis");
+            StartGame();
+            DestroyNonCharacterVillainCards();
+
+            GoToPlayCardPhase(lore);
+            PrintSeparator("Playing Rhetorical Boost");
+            Card rhetorical = PlayCard("RhetoricalBoost");
+
+            PlayCard("BlessingOfTheFifteenthStone");
+
+            DecisionSelectCards = new Card[] { rhetorical };
+            GoToEndOfTurn(lore);
+
+            //If this card has negative HP, reduce damage dealt to {Lore} by 1 for each HP below zero.
+            DealDamage(baron, rhetorical, 5, DamageType.Fire);
+            AssertHitPoints(rhetorical, -1);
+            QuickHPStorage(lore);
+            DealDamage(baron, lore, 4, DamageType.Melee);
+            QuickHPCheck(-3);
+
+            DealDamage(baron, rhetorical, 2, DamageType.Fire);
+            AssertHitPoints(rhetorical, -3);
+            QuickHPStorage(lore);
+            DealDamage(baron, lore, 4, DamageType.Melee);
+            QuickHPCheck(-1);
+
 
         }
 
