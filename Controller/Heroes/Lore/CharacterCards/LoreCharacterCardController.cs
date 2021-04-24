@@ -35,17 +35,98 @@ namespace Studio29.Lore
 			{
 				case 0:
 					{
-						
+						//One player discards a card. Each other player may draw a card.
+						List<SelectTurnTakerDecision> storedResults = new List<SelectTurnTakerDecision>();
+						IEnumerator coroutine = GameController.SelectHeroToDiscardCard(DecisionMaker, storedResultsTurnTaker: storedResults, cardSource: GetCardSource());
+						if (base.UseUnityCoroutines)
+						{
+							yield return base.GameController.StartCoroutine(coroutine);
+						}
+						else
+						{
+							base.GameController.ExhaustCoroutine(coroutine);
+						}
+
+						if(!DidSelectTurnTaker(storedResults))
+                        {
+							yield break;
+                        }
+
+						TurnTaker discardTurnTaker = GetSelectedTurnTaker(storedResults);
+						coroutine = EachPlayerDrawsACard((HeroTurnTaker tt) => tt != discardTurnTaker.ToHero());
+						if (base.UseUnityCoroutines)
+						{
+							yield return base.GameController.StartCoroutine(coroutine);
+						}
+						else
+						{
+							base.GameController.ExhaustCoroutine(coroutine);
+						}
+
 						break;
 					}
 				case 1:
 					{
-						
+						//One player discards a card. Move two cards with a matching keyword from a trash into their owner's hand.
+						List<DiscardCardAction> storedResults = new List<DiscardCardAction>();
+						IEnumerator coroutine = GameController.SelectHeroToDiscardCard(DecisionMaker, storedResultsDiscard: storedResults, cardSource: GetCardSource());
+						if (base.UseUnityCoroutines)
+						{
+							yield return base.GameController.StartCoroutine(coroutine);
+						}
+						else
+						{
+							base.GameController.ExhaustCoroutine(coroutine);
+						}
+
+						if (!DidDiscardCards(storedResults))
+						{
+							yield break;
+						}
+
+						Card discardedCard = storedResults.First().CardToDiscard;
+						IEnumerable<string> keywords = discardedCard.GetKeywords();
+						coroutine = GameController.MoveCards(DecisionMaker, new LinqCardCriteria(c => c.IsInTrash && GameController.IsCardVisibleToCardSource(c, GetCardSource()) && c.GetKeywords().Intersect(keywords).Any(), keywords.ToRecursiveString()), c => c.Owner.ToHero().Hand, numberOfCards: 2, cardSource: GetCardSource());
+						if (base.UseUnityCoroutines)
+						{
+							yield return base.GameController.StartCoroutine(coroutine);
+						}
+						else
+						{
+							base.GameController.ExhaustCoroutine(coroutine);
+						}
 						break;
 					}
 				case 2:
 					{
-						
+						//One player discards a card. Reveal cards from the top of their deck until a card with a matching keyword is revealed. Put that card into play. Shuffle the other revealed cards back into the deck.
+						List<DiscardCardAction> storedResults = new List<DiscardCardAction>();
+						IEnumerator coroutine = GameController.SelectHeroToDiscardCard(DecisionMaker, storedResultsDiscard: storedResults, cardSource: GetCardSource());
+						if (base.UseUnityCoroutines)
+						{
+							yield return base.GameController.StartCoroutine(coroutine);
+						}
+						else
+						{
+							base.GameController.ExhaustCoroutine(coroutine);
+						}
+
+						if (!DidDiscardCards(storedResults))
+						{
+							yield break;
+						}
+
+						Card discardedCard = storedResults.First().CardToDiscard;
+						IEnumerable<string> keywords = discardedCard.GetKeywords();
+						coroutine = RevealCards_MoveMatching_ReturnNonMatchingCards(FindTurnTakerController(discardedCard.Owner), discardedCard.Owner.Deck, playMatchingCards: true, putMatchingCardsIntoPlay: true, moveMatchingCardsToHand: false, cardCriteria: new LinqCardCriteria(c => c.GetKeywords().Intersect(keywords).Any()), numberOfMatches: 1);
+						if (base.UseUnityCoroutines)
+						{
+							yield return base.GameController.StartCoroutine(coroutine);
+						}
+						else
+						{
+							base.GameController.ExhaustCoroutine(coroutine);
+						}
 						break;
 					}
 			}
