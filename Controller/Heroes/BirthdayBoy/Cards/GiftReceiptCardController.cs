@@ -62,6 +62,18 @@ namespace Studio29.BirthdayBoy
                 }
 
             }
+
+            //Gain 4 HP
+
+            coroutine = GameController.GainHP(CharacterCard, 4, cardSource: GetCardSource());
+            if (base.UseUnityCoroutines)
+            {
+                yield return base.GameController.StartCoroutine(coroutine);
+            }
+            else
+            {
+                base.GameController.ExhaustCoroutine(coroutine);
+            }
         }
 
 

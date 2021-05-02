@@ -14,10 +14,13 @@ namespace Studio29.BirthdayBoy
 
         }
 
+		private int NumberOfPowerUsesForCustomDecision = 1;
+
         public override IEnumerator Play()
         {
             //You may destroy any number of presents.
-            IEnumerator coroutine = base.GameController.SelectAndDestroyCards(HeroTurnTakerController, new LinqCardCriteria((Card c) => IsPresent(c), "present"), null,  requiredDecisions: 0, cardSource: GetCardSource());
+            List<DestroyCardAction> storedDestroyResults = new List<DestroyCardAction>();
+            IEnumerator coroutine = base.GameController.SelectAndDestroyCards(HeroTurnTakerController, new LinqCardCriteria((Card c) => IsPresent(c), "present"), null,  requiredDecisions: 0, storedResultsAction: storedDestroyResults, cardSource: GetCardSource());
             if (base.UseUnityCoroutines)
             {
                 yield return base.GameController.StartCoroutine(coroutine);
@@ -26,14 +29,24 @@ namespace Studio29.BirthdayBoy
             {
                 base.GameController.ExhaustCoroutine(coroutine);
             }
-            //You may shuffle up to 2 trashes into their deck.
-            List<Location> selectedTrashes = new List<Location>();
-            for(int i = 0; i < 2; i++)
-            {
-                IEnumerable<LocationChoice> choices = FindLocationsWhere(loc => loc.IsTrash && !loc.OwnerTurnTaker.IsIncapacitatedOrOutOfGame && GameController.IsLocationVisibleToSource(loc, GetCardSource()) && !selectedTrashes.Contains(loc)).Select(loc => new LocationChoice(loc));
 
-                List<SelectLocationDecision> storedResults = new List<SelectLocationDecision>();
-                coroutine = GameController.SelectLocation(HeroTurnTakerController, choices, SelectionType.ShuffleTrashIntoDeck, storedResults, optional: true, cardSource: GetCardSource());
+            if(!DidDestroyCards(storedDestroyResults))
+            {
+                yield break;
+            }
+
+            //You may use {BirthdayBoy}'s innate power X + 1 times this turn, where X is the number of presents destroyed this way.
+            int X = GetNumberOfCardsDestroyed(storedDestroyResults);
+			NumberOfPowerUsesForCustomDecision = X + 1;
+            if (base.GameController.ActiveTurnTaker == base.TurnTaker)
+            {
+                AllowSetNumberOfPowerUseStatusEffect allowSetNumberOfPowerUseStatusEffect = new AllowSetNumberOfPowerUseStatusEffect(X + 1);
+                allowSetNumberOfPowerUseStatusEffect.UsePowerCriteria.IsSpecificCard = base.CharacterCard;
+                allowSetNumberOfPowerUseStatusEffect.UsePowerCriteria.CardSource = base.CharacterCard;
+                allowSetNumberOfPowerUseStatusEffect.UntilThisTurnIsOver(base.GameController.Game);
+                allowSetNumberOfPowerUseStatusEffect.CardDestroyedExpiryCriteria.Card = base.CharacterCard;
+                allowSetNumberOfPowerUseStatusEffect.NumberOfUses = 1;
+                coroutine = AddStatusEffect(allowSetNumberOfPowerUseStatusEffect);
                 if (base.UseUnityCoroutines)
                 {
                     yield return base.GameController.StartCoroutine(coroutine);
@@ -42,28 +55,67 @@ namespace Studio29.BirthdayBoy
                 {
                     base.GameController.ExhaustCoroutine(coroutine);
                 }
-                if (DidSelectLocation(storedResults))
-                {
-                    Location selectedLocation = GetSelectedLocation(storedResults);
-                    selectedTrashes.Add(selectedLocation);
-                    coroutine = GameController.ShuffleTrashIntoDeck(FindTurnTakerController(selectedLocation.OwnerTurnTaker), cardSource: GetCardSource());
-                    if (base.UseUnityCoroutines)
-                    {
-                        yield return base.GameController.StartCoroutine(coroutine);
-                    }
-                    else
-                    {
-                        base.GameController.ExhaustCoroutine(coroutine);
-                    }
-                }
-                else
-                {
-                    yield break;
-                }
-            }
-           
-        }
+            } 
+
+			int timesUsed = (from e in base.Journal.UsePowerEntriesThisTurn()
+							 where e.CardWithPower == base.CharacterCard
+							 select e).Count();
+			if (timesUsed < X + 1)
+			{
+				List<YesNoCardDecision> storedResults = new List<YesNoCardDecision>();
+				SelectionType type = SelectionType.Custom;
+				if (timesUsed > 0)
+				{
+					type = SelectionType.UsePowerAgain;
+				}
+				IEnumerator coroutine2 = base.GameController.MakeYesNoCardDecision(base.HeroTurnTakerController, type, base.CharacterCard, storedResults: storedResults, cardSource: GetCardSource());
+				if (base.UseUnityCoroutines)
+				{
+					yield return base.GameController.StartCoroutine(coroutine2);
+				}
+				else
+				{
+					base.GameController.ExhaustCoroutine(coroutine2);
+				}
+				if (!DidPlayerAnswerYes(storedResults))
+				{
+					yield break;
+				}
+				for (int i = 0; i < X + 1 - timesUsed; i++)
+				{
+					coroutine2 = UsePowerOnOtherCard(base.CharacterCard);
+					if (base.UseUnityCoroutines)
+					{
+						yield return base.GameController.StartCoroutine(coroutine2);
+					}
+					else
+					{
+						base.GameController.ExhaustCoroutine(coroutine2);
+					}
+				}
+			}
+			else
+			{
+				IEnumerator coroutine3 = base.GameController.SendMessageAction($"{base.TurnTaker.Name} has already used {base.CharacterCard.Definition.Body.First()} {X + 1} times this turn.", Priority.High, GetCardSource(), showCardSource: true);
+				if (base.UseUnityCoroutines)
+				{
+					yield return base.GameController.StartCoroutine(coroutine3);
+				}
+				else
+				{
+					base.GameController.ExhaustCoroutine(coroutine3);
+				}
+			}
+
+		}
+
+		public override CustomDecisionText GetCustomDecisionText(IDecision decision)
+		{
+
+			return new CustomDecisionText($"Do you want to use Birthday Boy's innate power {NumberOfPowerUsesForCustomDecision} times?", $"Should they use Birthday Boy's innate power {NumberOfPowerUsesForCustomDecision} times?", $"Vote for if they should use Birthday Boy's innate  power {NumberOfPowerUsesForCustomDecision} times?", $"use Birthday Boy's innate power {NumberOfPowerUsesForCustomDecision} times");
+
+		}
 
 
-    }
+	}
 }

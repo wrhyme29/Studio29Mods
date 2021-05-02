@@ -12,6 +12,7 @@ namespace Studio29.BirthdayBoy
 	{
 		public override bool AllowFastCoroutinesDuringPretend => false;
 		public override bool UseDecisionMakerAsCardOwner => true;
+		private string IncapAdjectiveForCustomDecisionText = "";
 
 		private bool _checkForReplacements = false;
 		public BirthdayBoyCharacterCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
@@ -116,17 +117,44 @@ namespace Studio29.BirthdayBoy
 			{
 				case 0:
 					{
-
+						IncapAdjectiveForCustomDecisionText = "first";
+						IEnumerator coroutine = SelectHeroAndUseIncapitatedAbility(0);
+						if (UseUnityCoroutines)
+						{
+							yield return GameController.StartCoroutine(coroutine);
+						}
+						else
+						{
+							GameController.ExhaustCoroutine(coroutine);
+						}
 						break;
 					}
 				case 1:
 					{
-						
+						IncapAdjectiveForCustomDecisionText = "second";
+						IEnumerator coroutine = SelectHeroAndUseIncapitatedAbility(1);
+						if (UseUnityCoroutines)
+						{
+							yield return GameController.StartCoroutine(coroutine);
+						}
+						else
+						{
+							GameController.ExhaustCoroutine(coroutine);
+						}
 						break;
 					}
 				case 2:
 					{
-						
+						IncapAdjectiveForCustomDecisionText = "third";
+						IEnumerator coroutine = SelectHeroAndUseIncapitatedAbility(2);
+						if (UseUnityCoroutines)
+						{
+							yield return GameController.StartCoroutine(coroutine);
+						}
+						else
+						{
+							GameController.ExhaustCoroutine(coroutine);
+						}
 						break;
 					}
 			}
@@ -206,7 +234,40 @@ namespace Studio29.BirthdayBoy
 			return base.AskForCardAdditionalKeywords(card);
 		}
 
+		private IEnumerator SelectHeroAndUseIncapitatedAbility(int abilityIndex)
+        {
+            List<SelectTurnTakerDecision> storedResults = new List<SelectTurnTakerDecision>();
+            IEnumerator coroutine = GameController.SelectHeroTurnTaker(DecisionMaker, SelectionType.Custom,  optional: false, allowAutoDecide: false, storedResults: storedResults, heroCriteria: new LinqTurnTakerCriteria(tt => tt !=TurnTaker),  allowIncapacitatedHeroes: true,cardSource: GetCardSource());
+			if (UseUnityCoroutines)
+			{
+				yield return GameController.StartCoroutine(coroutine);
+			}
+			else
+			{
+				GameController.ExhaustCoroutine(coroutine);
+			}
+			TurnTaker selectedTurnTaker = GetSelectedTurnTaker(storedResults);
+			if (selectedTurnTaker == null)
+			{
+				yield break;
+			}
+			HeroTurnTakerController selectedHero = FindTurnTakerController(selectedTurnTaker).ToHero();
+			coroutine = GameController.UseIncapacitatedAbility(selectedHero, abilityIndex);
+			if (UseUnityCoroutines)
+			{
+				yield return GameController.StartCoroutine(coroutine);
+			}
+			else
+			{
+				GameController.ExhaustCoroutine(coroutine);
+			}
+		}
 
+		public override CustomDecisionText GetCustomDecisionText(IDecision decision)
+		{
+			return new CustomDecisionText($"Select a hero to use the {IncapAdjectiveForCustomDecisionText} incapitated ability of.", $"Select a hero to use the {IncapAdjectiveForCustomDecisionText} incapitated ability of.", $"Vote for the hero to use the {IncapAdjectiveForCustomDecisionText} incapitated ability of.", $"hero to use the {IncapAdjectiveForCustomDecisionText} incapitated ability of");
+
+		}
 
 	}
 }
