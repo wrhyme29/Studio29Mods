@@ -23,7 +23,7 @@ namespace Studio29.Lore
             if (mysteryCardInPlay)
             {
                 List<SelectCardDecision> storedResults = new List<SelectCardDecision>();
-                coroutine = GameController.SelectCardAndStoreResults(DecisionMaker, SelectionType.PreventFirstDamageEachTurn, new LinqCardCriteria(c => c.IsInPlayAndHasGameText && c.IsTarget && GameController.IsCardVisibleToCardSource(c, GetCardSource())), storedResults, false, cardSource: GetCardSource());
+                coroutine = GameController.SelectCardAndStoreResults(DecisionMaker, SelectionType.Custom, new LinqCardCriteria(c => c.IsInPlayAndHasGameText && c.IsTarget && GameController.IsCardVisibleToCardSource(c, GetCardSource())), storedResults, false, cardSource: GetCardSource());
                 if (base.UseUnityCoroutines)
                 {
                     yield return base.GameController.StartCoroutine(coroutine);
@@ -92,6 +92,13 @@ namespace Studio29.Lore
                 base.GameController.ExhaustCoroutine(coroutine);
             }
             yield break;
+        }
+
+        public override CustomDecisionText GetCustomDecisionText(IDecision decision)
+        {
+
+            return new CustomDecisionText("Select a target to have all damage dealt to them redirected to the environment target with the lowest HP.", "Select a target to have all damage dealt to them redirected to the environment target with the lowest HP.", "Vote for which target to have all damage dealt to them redirected to the environment target with the lowest HP.", "target to have all damage dealt to them redirected to the environment target with the lowest HP.");
+
         }
 
     }

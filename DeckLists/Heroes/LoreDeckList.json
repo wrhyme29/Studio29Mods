@@ -19,7 +19,7 @@
 			],
 			"icons": [
 				"HasPower",
-				"Discard"
+				"Manipulate"
 			],
 			"hitpoints": 25,
 			"nemesisIdentifiers": [

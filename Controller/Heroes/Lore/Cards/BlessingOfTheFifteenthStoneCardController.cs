@@ -61,7 +61,7 @@ namespace Studio29.Lore
         public override CustomDecisionText GetCustomDecisionText(IDecision decision)
         {
 
-            return new CustomDecisionText("Select a target to make indestructible until the start of your next turn.", "Select a target to make indestructible until the start of their next turn.?", "Vote for which target to make indestructible until the start of the their next turn?", "target to become indestructible");
+            return new CustomDecisionText("Select a target to make indestructible until the start of your next turn.", "Select a target to make indestructible until the start of their next turn.", "Vote for which target to make indestructible until the start of the their next turn?", "target to become indestructible");
 
         }
     }
