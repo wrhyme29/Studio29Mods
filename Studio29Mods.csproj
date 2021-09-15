@@ -50,10 +50,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controller\Environments\" />
     <Folder Include="Controller\Villains\" />
     <Folder Include="DeckLists\Villain\" />
-    <Folder Include="Testing\Environments\" />
     <Folder Include="Testing\Villains\" />
   </ItemGroup>
 
