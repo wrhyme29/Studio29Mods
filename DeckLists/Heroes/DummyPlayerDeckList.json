@@ -67,7 +67,11 @@
             "Select up to {H} hero cards. Add them to their respective player's hand.",
             "Select up to {H} environment cards. Put them on the top of their respective decks.",
             "One hero may deal 1 target 10000 radiant damage.",
-            "Put a deck in its trash."
+            "Put a deck in its trash.",
+            "Remove an environment from the game and replace it with a new environment. Repeat this effect as many times as you want.",
+            "Select a deck. Play all cards in that deck.",
+            "Select a card. That card deals 1 target 2 melee damage.",
+            "Discard the top 5 cards of every deck."
          ],
          "flippedIcons":[  
             "Manipulate"
