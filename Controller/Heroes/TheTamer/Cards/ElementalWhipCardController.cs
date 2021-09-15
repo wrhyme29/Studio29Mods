@@ -3,6 +3,7 @@ using Handelabra.Sentinels.Engine.Model;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Studio29.TheTamer
 {
@@ -17,7 +18,9 @@ namespace Studio29.TheTamer
         public override IEnumerator Play()
         {
             //Deal each Lion card in play 1 energy damage.
-            IEnumerator coroutine = DealDamage(base.CharacterCard, (Card c) => IsLion(c) && c.IsInPlayAndHasGameText, 1, DamageType.Energy);
+
+            List<DealDamageAction> storedResults = new List<DealDamageAction>();
+            IEnumerator coroutine = DealDamage(base.CharacterCard, (Card c) => IsLion(c) && c.IsInPlayAndHasGameText, 1, DamageType.Energy, storedResults: storedResults);
             if (UseUnityCoroutines)
             {
                 yield return GameController.StartCoroutine(coroutine);
@@ -27,7 +30,31 @@ namespace Studio29.TheTamer
                 GameController.ExhaustCoroutine(coroutine);
             }
 
-            yield break;
+            //If no lions were dealt damage this way, {Tamer} deals himself 1 energy damage and draws 2 cards.
+            if(DidDealDamage(storedResults) && storedResults.Any(dd => IsLion(dd.Target) && dd.DidDealDamage))
+            {
+                yield break;
+            }
+
+            coroutine = DealDamage(CharacterCard, CharacterCard, 1, DamageType.Energy, cardSource: GetCardSource());
+            if (UseUnityCoroutines)
+            {
+                yield return GameController.StartCoroutine(coroutine);
+            }
+            else
+            {
+                GameController.ExhaustCoroutine(coroutine);
+            }
+
+            coroutine = DrawCards(HeroTurnTakerController, 2);
+            if (UseUnityCoroutines)
+            {
+                yield return GameController.StartCoroutine(coroutine);
+            }
+            else
+            {
+                GameController.ExhaustCoroutine(coroutine);
+            }
         }
 
     }

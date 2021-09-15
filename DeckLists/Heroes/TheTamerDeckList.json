@@ -89,7 +89,7 @@
             "icons": [
                 "DealDamageEnergy"
             ],
-            "body": "Deal each Lion card in play 1 energy damage.",
+            "body": "Deal each Lion card in play 1 energy damage. If no lions were dealt damage this way, {TheTamer} deals himself 1 energy damage and draws 2 cards.",
             "flavorQuotes": [
                 {
                     "identifier": "TheTamer",
@@ -109,7 +109,7 @@
                 "DestroyTarget",
                 "GainHP"
             ],
-            "body": "Destroy all Lions in play. {TheTamer} regains 1 HP for each Lion destroyed this way.",
+            "body": "Destroy all Lions in play. {TheTamer} regains 2 HP for each Lion destroyed this way.",
             "flavorQuotes": [
                 {
                     "identifier": "TheTamer",
@@ -409,7 +409,44 @@
             ],
             "hitpoints": 25,
             "nemesisIdentifiers": [
-                "Necro"
+                "Studio29.TheTamer"
+            ],
+            "incapacitatedAbilities": [
+                "Not Implemented 1",
+                "Not Implemented 1",
+                "Not Implemented 1"
+            ],
+            "flippedIcons": [
+                "DealDamageProjectile",
+                "DrawCardNow"
+            ],
+            "openingLines": {
+                "default": "default placeholder promo"
+            },
+            "complexity": 2
+        },
+        {
+            "identifier": "TheTamerCharacter",
+            "promoIdentifier": "RoadShowTamerCharacter",
+            "count": 1,
+            "title": "The Tamer",
+            "promoTitle": "Tamer: On the Road",
+            "shortPromoTitle": "RoadShowTamerCharacter",
+            "body": "Bring the Show to You!",
+            "backgroundColor": "FF0000",
+            "foilBackgroundColor": "FF0000",
+            "hitpointColor": "FF0000",
+            "character": true,
+            "powers": [
+				"Reveal cards from the top of {TheTamer}'s deck until a Lion card is revealed. Put that card into play. Shuffle the other revealed cards into {TheTamer}'s deck."
+            ],
+            "icons": [
+                "HasPower",
+                "Manipulate"
+            ],
+            "hitpoints": 24,
+            "nemesisIdentifiers": [
+                "Studio29.TheTamer"
             ],
             "incapacitatedAbilities": [
                 "Not Implemented 1",

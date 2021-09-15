@@ -47,7 +47,7 @@ namespace Studio29Tests
 
         [Test()]
         [Sequential]
-        public void DecklistTestOneShot_IsOneShot([Values("AnotherYearOlder", "Blowout", "GiftReceipt", "ItsMyParty", "ItsTheThoughtThatCounts", "Mixer", "PartyTilDawn", "SocialLadder", "TrashTheVenue", "YoureInvited")] string oneshot)
+        public void DecklistTestOneShot_IsOneShot([Values("AnotherYearOlder", "Blowout", "GiftReceipt", "ItsTheThoughtThatCounts", "Mixer", "PartyTilDawn", "SocialLadder", "TrashTheVenue", "YoureInvited")] string oneshot)
         {
             SetupGameController("BaronBlade", "Studio29.BirthdayBoy", "Megalopolis");
             StartGame();
@@ -150,6 +150,32 @@ namespace Studio29Tests
             AssertOutOfGame(battalion);
             AssertOutOfGame(mere);
             AssertOutOfGame(blowout);
+
+        }
+
+        [Test()]
+        public void TestTrashTheVenue()
+        {
+            SetupGameController("BaronBlade", "Studio29.BirthdayBoy", "Haka", "Legacy", "TheVisionary", "Megalopolis");
+            StartGame();
+
+
+            Card env1 = PlayCard("PoliceBackup");
+            Card env2 = PlayCard("TrafficPileup");
+
+            Card present1 = PlayCard("TheLegacyRing");
+            Card present2 = PlayCard("Mere");
+
+            //Destroy up to 2 environment cards. 
+            //For each card destroyed this way, move 1 hero ongoing, hero equipment, or hero target with max 5 HP or fewer belonging to another hero in play to your hand.
+            DecisionSelectCards = new Card[] { env1, env2, present1, present2 };
+
+            PlayCard("TrashTheVenue");
+
+            AssertInTrash(env1, env2);
+            AssertInHand(birthday, present1);
+            AssertInHand(birthday, present2);
+
 
         }
 

@@ -989,5 +989,72 @@ namespace Studio29Tests
             QuickHPCheck(0, 0, -3, 0);
 
         }
+
+        [Test()]
+        public void TestReadingGlasses()
+        {
+            SetupGameController("BaronBlade", "Studio29.Lore", "Ra", "Haka", "Unity", "Megalopolis");
+            StartGame();
+            DestroyNonCharacterVillainCards();
+
+            Card epilogue = PlayCard("Epilogue");
+            Card callback = PutOnDeck("Callback");
+
+            Card stealthBot = PutInTrash("StealthBot");
+            Card raptorBot = PutInTrash("RaptorBot");
+
+            GoToPlayCardPhase(lore);
+            PrintSeparator("Playing Reading Glasses");
+            PlayCard("ReadingGlasses");
+
+            //an additional power this power phase
+            GoToUsePowerPhase(lore);
+            AssertPhaseActionCount(2);
+            DecisionSelectPowers = new Card[] { epilogue, lore.CharacterCard };
+            DecisionSelectLocations = new LocationChoice[] { new LocationChoice(unity.TurnTaker.Trash) };
+            DecisionSelectCards = new Card[] { stealthBot };
+            RunActiveTurnPhase();
+            AssertInPlayArea(lore, callback);
+            AssertInPlayArea(unity, stealthBot);
+
+
+        }
+
+        [Test()]
+        public void TestDefenderLoreLoads()
+        {
+            SetupGameController("BaronBlade", "Studio29.Lore/DefenderLoreCharacter", "Megalopolis");
+            Assert.AreEqual(3, this.GameController.TurnTakerControllers.Count());
+
+            Assert.IsNotNull(lore);
+            Assert.IsInstanceOf(typeof(DefenderLoreCharacterCardController), lore.CharacterCardController);
+
+            Assert.AreEqual(27, lore.CharacterCard.HitPoints);
+
+            StartGame();
+
+        }
+
+        [Test()]
+        [Sequential()]
+        public void TestDefenderLoreInnatePower([Values(0,1,2,3)] int numStories)
+        {
+            SetupGameController("BaronBlade", "Studio29.Lore/DefenderLoreCharacter", "Ra", "Haka", "Megalopolis");
+            StartGame();
+
+            IEnumerable<Card> allStories = FindCardsWhere((Card c) => c.DoKeywordsContain("story"));
+            IEnumerable<Card> stories = allStories.Where(c => c.GetKeywords() != null).GroupBy(c => c.GetKeywords().Where(s => s != "story").FirstOrDefault()).Select(grp => grp.FirstOrDefault()).Take(numStories);
+            PlayCards(stories);
+            DestroyNonCharacterVillainCards();
+
+            GoToUsePowerPhase(lore);
+
+            //{Lore} deals 1 target X projectile damage, where x = the number of your story cards in play plus 1.
+            DecisionSelectTargets = new Card[] { baron.CharacterCard };
+            QuickHPStorage(baron);
+            UsePower(lore);
+            QuickHPCheck(-numStories - 1);
+
+        }
     }
 }

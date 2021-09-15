@@ -11,7 +11,7 @@ namespace Studio29.BirthdayBoy
 
         public PartyTilDawnCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
         {
-
+            SpecialStringMaker.ShowNumberOfCardsInPlay(new LinqCardCriteria(c => IsPresent(c), "present"));
         }
 
         public override IEnumerator Play()
@@ -32,7 +32,7 @@ namespace Studio29.BirthdayBoy
             }
 
             //{BirthdayBoy} deals up to X targets 1 psychic damage each, where X is the number of presents in his play area."
-            coroutine = GameController.SelectTargetsAndDealDamage(HeroTurnTakerController, new DamageSource(GameController, CharacterCard), 1, DamageType.Psychic, GetPresentsInPlay().Count(), false, 0, cardSource: GetCardSource());
+            coroutine = GameController.SelectTargetsAndDealDamage(HeroTurnTakerController, new DamageSource(GameController, CharacterCard), 1, DamageType.Psychic, GetPresentsInPlay().Count() + 1, false, 0, cardSource: GetCardSource());
             if (base.UseUnityCoroutines)
             {
                 yield return base.GameController.StartCoroutine(coroutine);

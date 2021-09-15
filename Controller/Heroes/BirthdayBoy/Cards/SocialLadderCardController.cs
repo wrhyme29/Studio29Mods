@@ -19,11 +19,13 @@ namespace Studio29.BirthdayBoy
             IEnumerable<TurnTaker> heroesWithPresents = GameController.TurnTakerControllers.Where(ttc => ttc.TurnTaker.IsHero && ttc.TurnTaker != TurnTaker && !ttc.TurnTaker.IsIncapacitatedOrOutOfGame && GetPresentsInPlay().Any(c => GetOriginalOwner(c) == ttc.TurnTaker && GameController.IsTurnTakerVisibleToCardSource(ttc.TurnTaker, GetCardSource()))).Select(ttc => ttc.TurnTaker);
             IEnumerable<TurnTaker> heroesWithNoPresents = GameController.TurnTakerControllers.Where(ttc => ttc.TurnTaker.IsHero && ttc.TurnTaker != TurnTaker && !ttc.TurnTaker.IsIncapacitatedOrOutOfGame && !GetPresentsInPlay().Any(c => GetOriginalOwner(c) == ttc.TurnTaker && GameController.IsTurnTakerVisibleToCardSource(ttc.TurnTaker, GetCardSource()))).Select(ttc => ttc.TurnTaker);
 
-            //Any other hero with presents in play from their deck gains HP equal to the number of their presents in play.
+            //Any other hero with presents in play from their deck draws X cards, where X is equal to the number of their presents in play 
             IEnumerator coroutine;
+            int X;
             foreach(TurnTaker tt in heroesWithPresents)
             {
-                coroutine = GameController.GainHP(HeroTurnTakerController, (Card c) => c.IsCharacter && c.IsInPlayAndHasGameText && c.Owner == tt, (Card c) => GetPresentsInPlay().Count(present => GetOriginalOwner(present) == tt), cardSource: GetCardSource());
+                X = GetPresentsInPlay().Count(present => GetOriginalOwner(present) == tt);
+                coroutine = GameController.DrawCards(FindHeroTurnTakerController(tt.ToHero()), X, cardSource: GetCardSource());
                 if (base.UseUnityCoroutines)
                 {
                     yield return base.GameController.StartCoroutine(coroutine);
