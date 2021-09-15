@@ -11,16 +11,9 @@ namespace Studio29.BirthdayBoy
     public class TrashTheVenueCardController : BirthdayBoyCardController
     {
 
-        public override bool AllowFastCoroutinesDuringPretend => false;
-        public override bool UseDecisionMakerAsCardOwner => true;
-        private bool _checkForReplacements = false;
-
         public TrashTheVenueCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
         {
             AddThisCardControllerToList(CardControllerListType.ModifiesKeywords);
-            AddThisCardControllerToList(CardControllerListType.ReplacesCards);
-            AddThisCardControllerToList(CardControllerListType.ReplacesTurnTakerController);
-            AddTrigger((GameAction ga) => ga.CardSource != null && IsPresent(ga.CardSource.Card), AddThisAsAssociatedCardSource, TriggerType.Hidden, TriggerTiming.Before);
         }
 
         public override IEnumerator Play()
@@ -126,78 +119,7 @@ namespace Studio29.BirthdayBoy
 			}
 		}
 
-		public override bool AskIfCardContainsKeyword(Card card, string keyword, bool evenIfUnderCard = false, bool evenIfFaceDown = false)
-		{
-			if (card.Owner == base.TurnTaker && card.Owner != GetOriginalOwner(card) && keyword == "present")
-			{
-				return true;
-			}
-			return base.AskIfCardContainsKeyword(card, keyword, evenIfUnderCard, evenIfFaceDown);
-		}
 
-		private IEnumerator AddThisAsAssociatedCardSource(GameAction ga)
-		{
-			ga.CardSource.AddAssociatedCardSource(GetCardSource());
-			yield return null;
-		}
-
-		public override Card AskIfCardIsReplaced(Card card, CardSource cardSource)
-		{
-			if (!_checkForReplacements && cardSource != null && cardSource.AllowReplacements)
-			{
-				_checkForReplacements = true;
-				Card cardWithoutReplacements = cardSource.CardController.CardWithoutReplacements;
-				if (cardWithoutReplacements != null && IsPresent(cardWithoutReplacements) && GetOriginalOwner(cardWithoutReplacements).CharacterCards.Contains(card))
-				{
-					Card result = base.CharacterCard;
-					_checkForReplacements = false;
-					return result;
-				}
-				_checkForReplacements = false;
-
-			}
-			return null;
-		}
-
-		public override TurnTakerController AskIfTurnTakerControllerIsReplaced(TurnTakerController ttc, CardSource cardSource)
-		{
-			if (!_checkForReplacements && cardSource != null && cardSource.Card.Owner != base.Card.Owner && cardSource.AllowReplacements)
-			{
-				_checkForReplacements = true;
-				Card cardWithoutReplacements = cardSource.CardController.CardWithoutReplacements;
-				HeroTurnTakerController heroTurnTakerController = cardSource.FindMostRecentDecisionMaker();
-				bool flag = heroTurnTakerController == null || heroTurnTakerController == base.TurnTakerControllerWithoutReplacements;
-				if (cardWithoutReplacements != null && ttc.TurnTaker == GetOriginalOwner(cardWithoutReplacements) && flag)
-				{
-					if (IsPresent(cardWithoutReplacements))
-					{
-						TurnTakerController result = base.TurnTakerController;
-						_checkForReplacements = false;
-						return base.TurnTakerController;
-					}
-					if (cardSource.CardSourceChain.Any((CardSource cs) => cs.CardController == this))
-					{
-						TurnTakerController result = base.TurnTakerController;
-						_checkForReplacements = false;
-						return base.TurnTakerController;
-					}
-				}
-
-				_checkForReplacements = false;
-			}
-			return null;
-		}
-
-		public override IEnumerable<string> AskForCardAdditionalKeywords(Card card)
-		{
-			if (card.Owner == base.TurnTaker && card.Owner != GetOriginalOwner(card))
-			{
-				string present = "present";
-				return present.ToEnumerable();
-			}
-
-			return base.AskForCardAdditionalKeywords(card);
-		}
 
 	}
 }
