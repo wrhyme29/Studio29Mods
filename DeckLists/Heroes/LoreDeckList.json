@@ -5,7 +5,8 @@
 	"initialCardIdentifiers": [
 		"LoreCharacter"
 	],
-	"cards": [{
+	"cards": [
+		{
 			"identifier": "LoreCharacter",
 			"count": 1,
 			"title": "Lore",
@@ -34,7 +35,7 @@
 				""
 			],
 			"openingLines": {
-				"default": "Lore placeholder"
+				"default": "Hang on... I know just the book!"
 			},
 			"complexity": 2
 		},
@@ -190,7 +191,7 @@
 		},
 		{
 			"identifier": "FourFiftyOne",
-			"count": 2,
+			"count": 1,
 			"title": "451",
 			"keywords": [
 				"ongoing",
@@ -291,7 +292,7 @@
 		},
 		{
 			"identifier": "SpeedReader",
-			"count": 2,
+			"count": 1,
 			"title": "SpeedReader",
 			"keywords": [
 				"ongoing",
@@ -497,6 +498,63 @@
 				"text": "-"
 			}],
 			"flavorReference": "Lore, Fact or Fiction #29"
-		}
+		},
+		{
+         "identifier":"ReadingGlasses",
+         "count":2,
+         "title":"Reading Glasses",
+         "keywords":[
+            "equipment",
+            "limited"
+         ],
+         "body":"You may use an additional power during your power phase.",
+         "icons":[
+            "UsePowerExtra"
+         ],
+		"flavorQuotes": [{
+			"identifier": "Lore",
+			"text": "-"
+		}],
+		"flavorReference": "Lore, Fact or Fiction #29"
+      }
+	],
+	"promoCards": [
+	{
+            "identifier": "LoreCharacter",
+            "promoIdentifier": "DefenderLoreCharacter",
+            "count": 1,
+            "title": "Lore",
+            "promoTitle": "Lore: Defender of the Books",
+            "shortPromoTitle": "DefenderLore",
+            "body": "Not on my Watch!",
+            "backgroundColor": "3aaeda",
+            "foilBackgroundColor": "3aaeda",
+            "hitpointColor": "3aaeda",
+            "character": true,
+            "powers": [
+                "{Lore} deals 1 target X projectile damage, where x = the number of your story cards in play plus 1."
+            ],
+            "icons": [
+                "HasPower",
+                "DealDamageProjectile"
+            ],
+            "hitpoints": 27,
+            "nemesisIdentifiers": [
+                "Studio29.Lore"
+            ],
+            "incapacitatedAbilities": [
+                "Not Implemented 1",
+                "Not Implemented 1",
+                "Not Implemented 1"
+            ],
+            "flippedIcons": [
+                "DealDamageProjectile",
+                "DrawCardNow"
+            ],
+            "openingLines": {
+                "default": "Hands off the books!"
+            },
+            "complexity": 2
+        }
 	]
 }

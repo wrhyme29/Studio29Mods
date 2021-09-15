@@ -1,18 +1,66 @@
 ﻿using Handelabra;
 using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Studio29.Lore
 {
-	public class LoreCharacterCardController : HeroCharacterCardController
+	public class LoreCharacterCardController : LoreSubCharacterCardController
 	{
 		public LoreCharacterCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
 		{
 		}
-		public override IEnumerator UsePower(int index = 0)
+
+		public DefenderLorePromoCardUnlockController DefenderLorePromo { get; private set; }
+
+        public override void AddTriggers()
+        {
+			
+			DefenderLorePromo = new DefenderLorePromoCardUnlockController(GameController);
+
+			Log.Debug("Flag is set to: " + DefenderLorePromo.PrintFlag());
+
+			if (DefenderLorePromo.IsUnlockPossibleThisGame())
+			{
+				AddTrigger((GameAction action) => !DefenderLorePromo.IsUnlocked, CheckForDefenderLoreUnlock, TriggerType.Hidden, TriggerTiming.Before, outOfPlayTrigger: true);
+				Log.Debug(LogName.PromoCards, "Defender Lore is unlockable this game.");
+			}
+			if (DefenderLorePromo.IsFlagPossibleThisGame())
+			{
+				DefenderLorePromo.ContinueCheckingForFlags = true;
+				Log.Debug(LogName.PromoCards, "Defender Lore flag can be met this game.");
+				AddTrigger((GameAction action) => DefenderLorePromo.ContinueCheckingForFlags, CheckForDefenderLoreFlag, TriggerType.Hidden, TriggerTiming.Before, outOfPlayTrigger: true);
+			}
+        }
+
+        private IEnumerator CheckForDefenderLoreFlag(GameAction action)
+        {
+			DefenderLorePromo.CheckForFlags(action);
+			yield return null;
+        }
+
+        private IEnumerator CheckForDefenderLoreUnlock(GameAction action)
+        {
+            if (DefenderLorePromo.CheckForUnlock(action))
+            {
+				UnlockPromoCardAction unlockPromoCard = new UnlockPromoCardAction(GameController, DefenderLorePromo);
+				IEnumerator coroutine = DoAction(unlockPromoCard);
+				if (base.UseUnityCoroutines)
+				{
+					yield return base.GameController.StartCoroutine(coroutine);
+				}
+				else
+				{
+					base.GameController.ExhaustCoroutine(coroutine);
+				}
+			}
+			yield return null;
+        }
+
+        public override IEnumerator UsePower(int index = 0)
 		{
 			//Reveal cards from the top of {Lore}'s deck until a Story card is revealed. Put that card into play. Shuffle the other revealed cards into {Lore}'s deck."
 
@@ -28,7 +76,7 @@ namespace Studio29.Lore
 			yield break;
 		}
 
-		
+
 		public override IEnumerator UseIncapacitatedAbility(int index)
 		{
 			switch (index)
@@ -47,10 +95,10 @@ namespace Studio29.Lore
 							base.GameController.ExhaustCoroutine(coroutine);
 						}
 
-						if(!DidSelectTurnTaker(storedResults))
-                        {
+						if (!DidSelectTurnTaker(storedResults))
+						{
 							yield break;
-                        }
+						}
 
 						TurnTaker discardTurnTaker = GetSelectedTurnTaker(storedResults);
 						coroutine = EachPlayerDrawsACard((HeroTurnTaker tt) => tt != discardTurnTaker.ToHero());
@@ -133,14 +181,5 @@ namespace Studio29.Lore
 			yield break;
 		}
 
-		public static readonly string StoryKeyword = "story";
-	
-
-		protected bool IsStory(Card card)
-		{
-			return card.DoKeywordsContain(StoryKeyword);
-		}
-
-		
 	}
 }
