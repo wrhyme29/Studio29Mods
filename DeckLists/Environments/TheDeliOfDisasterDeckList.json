@@ -1,0 +1,278 @@
+{
+    "name": "The Deli of Disaster",
+    "kind": "Environment",
+    "backgroundColor": "CDE3EB",
+    "difficulty": 1,
+    "cards": [
+        {
+            "identifier": "EssGezunt",
+            "count": 1,
+            "title": "Ess Gezunt",
+            "keywords": [
+            ],
+            "icons": [
+                "EndOfTurnAction",
+                "GainHP"
+            ],
+            "body": [
+                "At the end of the environment turn, each target regains 1 HP."
+            ],
+            "flavorText": "Order Up! #11"
+        },
+        {
+            "identifier": "Gornish",
+            "count": 1,
+            "title": "Gornish",
+            "keywords": [
+            ],
+            "icons": [
+                "Manipulate",
+                "StartAndEndOfTurnAction"
+            ],
+            "body": [
+                "At the start of the environment turn, discard the top card of each deck.",
+                "At the end of the environment turn, shuffle each trash into its deck."
+            ],
+            "flavorText": "Order Up! #3"
+        },
+        {
+            "identifier": "LoxxedUp",
+            "count": 1,
+            "title": "Loxxed Up",
+            "keywords": [
+                "dish"
+            ],
+            "icons": [
+                "StartAndEndOfTurnAction",
+                "DealDamageEnergy",
+                "DealDamageToxic"
+            ],
+            "body": [
+                "At the start of the environment turn, the villain target with the lowest HP deals the hero target with the highest HP 2 toxic damage.",
+                "At the end of the environment turn, the hero target with the lowest HP deals the villain target with the highest HP 2 energy damage."
+            ],
+            "flavorText": "Order Up! #7"
+        },
+        {
+            "identifier": "MindlessMishiga",
+            "count": 1,
+            "title": "Mindless Mishiga",
+            "keywords": [
+            ],
+            "icons": [
+                "GainHP",
+                "DrawCardNow",
+                "Manipulate",
+                "DealDamageFire"
+            ],
+            "body": [
+                "The villain and hero target with the lowest HP regains 1 HP.",
+                "One player draws a card.",
+                "Shuffle the Villain trash and reveal cards from the top until a Target is revealed. Put it into play. Put the other revealed cards back into the Villain Trash.",
+                "The villain target with the lowest HP deals the villain target with the highest HP 3 fire damage."
+            ],
+            "flavorText": "Order Up! #14"
+        },
+        {
+            "identifier": "InComesThePutz",
+            "count": 1,
+            "title": "In Comes the Putz",
+            "keywords": [
+                "diner"
+            ],
+            "icons": [
+                "Destroy",
+                "DealDamageFire",
+                "DealDamageSonic",
+                "PlayCardNow"
+            ],
+            "body": [
+                "When this card enters play, destroy 1 dish card. If no dish cards are destroyed this way, this card deals each target 1 fire damage.",
+                "At the end of the environment turn, this card deals the villain target with the highest HP 4 sonic damage. If damage is taken this way, play the top card of the villain deck and restore this card to its max hp."
+            ],
+            "flavorText": "Order Up! #2",
+            "hitpoints": 10
+        },
+        {
+            "identifier": "SchmaltzStorm",
+            "count": 1,
+            "title": "Schmaltz Storm",
+            "keywords": [
+                "dish"
+            ],
+            "icons": [
+                "ReduceDamageDealt",
+                "ReduceGainHP",
+                "Discard",
+                "DestroySelf"
+            ],
+            "body": [
+                "Reduce all damage by 1.",
+                "Reduce all hp recovery by 1.",
+                "At the start of the environment turn, each player may discard 1 card to destroy this card."
+            ],
+            "flavorText": "Order Up! #23"
+        },
+        {
+            "identifier": "SchmearCampaign",
+            "count": 1,
+            "title": "Schmear Campaign",
+            "keywords": [
+                "dish"
+            ],
+            "icons": [
+                "Discard",
+                "Manipulate",
+                "DealDamageEnergy",
+                "DestroySelf"
+            ],
+            "body": [
+                "At the start of the villain turn, one player may discard a card to reveal the top card of the villain deck. They may discard or replace the revealed card.",
+                "At the start of the environment turn, this card deals one hero character card 3 energy damage. If no damage is taken this way, destroy this card."
+            ],
+            "flavorText": "Order Up! #81"
+        },
+        {
+            "identifier": "YoureSmokedMeat",
+            "count": 1,
+            "title": "You're Smoked Meat",
+            "keywords": [
+            ],
+            "icons": [
+                "IncreaseDamageDealtFire",
+                "EndOfTurnAction",
+                "DealDamageFire"
+            ],
+            "body": [
+                "Increase all fire damage by 2.",
+                "At the end of the environment turn, this card deals each target 1 fire damage."
+            ],
+            "flavorText": "Order Up! #81"
+        },
+        {
+            "identifier": "StuckleAndNosher",
+            "count": 1,
+            "title": "Stuckle & Nosher",
+            "keywords": [
+                "diner"
+            ],
+            "icons": [
+                "Destroy",
+                "DealDamageFire",
+                "GainHP",
+                "DestroySelf"
+            ],
+            "body": [
+                "When this card enters play, destroy 1 dish card. If no dish cards are destroyed this way, this card deals each target 1 fire damage.",
+                "At the end of the environment turn, each character card gains 2 hp. Each player may discard 1 card. If fewer than {H - 1} cards are discarded this way, destroy this card."
+            ],
+            "flavorText": "Order Up! #62",
+            "hitpoints": 7
+        },
+        {
+            "identifier": "RamblingYenta",
+            "count": 1,
+            "title": "Rambling Yenta",
+            "keywords": [
+                "diner"
+            ],
+            "icons": [
+                "Destroy",
+                "DealDamageFire",
+                "DealDamageSonic",
+                "DestroyOngoing"
+            ],
+            "body": [
+                "When this card enters play, destroy 1 dish card. If no dish cards are destroyed this way, this card deals each target 1 fire damage.",
+                "At the end of the environment turn, this card deals 2 sonic damage to any hero with ongoing cards in play. Each player dealt damage this way may destroy an ongoing card. If they do not, this card deals them an additional 2 sonic damage."
+            ],
+            "flavorText": "Order Up! #54",
+            "hitpoints": 7
+        },
+        {
+            "identifier": "KugelConundrum",
+            "count": 1,
+            "title": "Kugel Conundrum",
+            "keywords": [
+                "dish"
+            ],
+            "icons": [
+                "GainHP",
+                "DealDamageToxic",
+                "Discard"
+            ],
+            "body": [
+                "At the end of the environment turn, each hero character card with an odd number of hp regains 1 hp. Each hero character card with an even number of hp may take 1 toxic damage from this card to deal 2 toxic damage to another target. Each character dealt damage by this card must discard 1 card."
+            ],
+            "flavorText": "Order Up! #35"
+        },
+        {
+            "identifier": "BitOfAPickle",
+            "count": 1,
+            "title": "Bit of a Pickle",
+            "keywords": [
+                "dish"
+            ],
+            "icons": [
+                "Indestructible",
+                "WinTheGame",
+                "LoseTheGame"
+            ],
+            "body": [
+                "This card is indestructible.",
+                "Listed win or loss conditions on cards are not in effect and may not be used to win or lose the game.",
+                "If a player ever has no cards in hand, shuffle this card back into the environment deck, ignoring its indestructability."
+            ],
+            "flavorText": "Order Up! #40"
+        },
+        {
+            "identifier": "ClosingTime",
+            "count": 1,
+            "title": "Closing Time",
+            "keywords": [
+            ],
+            "icons": [
+                "Discard",
+                "DealDamageEnergy",
+                "LoseTheGame"
+            ],
+            "body": [
+                "At the start of the environment turn, each player may discard a card. This card deals any hero character that does not discard a card 2 energy damage."
+            ],
+            "flavorText": "Order Up! #101"
+        },
+        {
+            "identifier": "OrderUp",
+            "count": 1,
+            "title": "Order Up!",
+            "keywords": [
+            ],
+            "icons": [
+                "Search",
+                "DrawCardNow"
+            ],
+            "body": [
+                "At the start of the environment turn, reveal cards from the environment deck until a dish card is revealed. Put the dish card into play. Shuffle the remaining cards back into the environment deck.",
+                "At the end of the environment turn, any player with fewer than 4 cards in their hand may draw a card."
+            ],
+            "flavorText": "Order Up! #11"
+        },
+        {
+            "identifier": "WipeDown",
+            "count": 1,
+            "title": "Wipe Down",
+            "keywords": [
+            ],
+            "icons": [
+                "Destroy",
+                "DealDamageEnergy",
+                "DestroySelf"
+            ],
+            "body": [
+                "When this card enters play, destroy all dish cards. This card deals each target X + 1 energy damage, where X is the number of dishes destroyed this way.",
+                "At the end of the environment turn, destroy this card."
+            ],
+            "flavorText": "Order Up! #55"
+        }
+    ]
+}
