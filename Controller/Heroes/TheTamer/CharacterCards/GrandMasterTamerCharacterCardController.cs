@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Studio29.TheTamer
 {
-	public class GrandMasterTamerCharacterCardController : HeroCharacterCardController
+	public class GrandMasterTamerCharacterCardController : TheTamerSubCharacterCardController
 	{
 		public GrandMasterTamerCharacterCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
 		{
@@ -65,11 +65,6 @@ namespace Studio29.TheTamer
 					}
 			}
 			yield break;
-		}
-
-		protected bool IsLion(Card card)
-		{
-			return card.DoKeywordsContain("lion");
 		}
 	}
 }

@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Studio29.TheTamer
 {
-	public class TheTamerCharacterCardController : HeroCharacterCardController
+	public class TheTamerCharacterCardController : TheTamerSubCharacterCardController
 	{
 		public TheTamerCharacterCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
 		{

@@ -345,7 +345,29 @@ namespace Studio29Tests
             QuickHPStorage(lions.Concat(FindCardsWhere((Card c) => c.IsCharacter && !c.IsIncapacitatedOrOutOfGame)).ToArray());
             PlayCard("ElementalWhip");
             QuickHPCheck(-1, -1, -1, 0, 0, 0, 0);
-           
+
+            //If no lions were dealt damage this way, {Tamer} deals himself 1 energy damage and draws 2 cards.
+
+
+        }
+
+        [Test()]
+        public void TestElementalWhip_NoLionsDealtDamage()
+        {
+            SetupGameController(new string[] { "BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis" });
+            StartGame();
+
+            GoToPlayCardPhase(tamer);
+            Card whip = PutInTrash("ElementalWhip");
+
+            //Deal each Lion card in play 1 energy damage.
+            QuickHPStorage(tamer);
+            QuickHandStorage(tamer);
+            PlayCard(whip);
+
+            //If no lions were dealt damage this way, {Tamer} deals himself 1 energy damage and draws 2 cards.
+            QuickHPCheck(-1);
+            QuickHandCheck(2);
 
         }
 
@@ -375,16 +397,16 @@ namespace Studio29Tests
         {
             SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
             StartGame();
-
-            DestroyCard(GetCardInPlay("MobileDefensePlatform"), baron.CharacterCard);
+            DestroyNonCharacterVillainCards();
 
             int hp = tamer.CharacterCard.HitPoints.Value;
+            Card gildeas = PlayCard("GildeasTheGood");
 
             PlayCard("GrandFinale");
             DecisionYesNo = true;
             DecisionSelectTarget = baron.CharacterCard;
             QuickHPStorage(baron);
-            DealDamage(baron, tamer, hp, DamageType.Fire);
+            DealDamage(gildeas, tamer, hp, DamageType.Fire);
             QuickHPCheck(-10);
 
         }
@@ -684,7 +706,7 @@ namespace Studio29Tests
             //Destroy all Lions in play. {TheTamer} regains 1 HP for each Lion destroyed this way.
             QuickHPStorage(tamer);
             PlayCard("TapOut");
-            QuickHPCheck(3);
+            QuickHPCheck(6);
             AssertInTrash(lions);
         }
 
@@ -864,5 +886,40 @@ namespace Studio29Tests
             QuickHandCheck(1);
         }
 
+        [Test()]
+        public void TestRoadShowTamerLoads()
+        {
+            SetupGameController("BaronBlade", "Studio29.TheTamer/RoadShowTamerCharacter", "Megalopolis");
+
+            Assert.AreEqual(3, this.GameController.TurnTakerControllers.Count());
+
+            Assert.IsNotNull(tamer);
+            Assert.IsInstanceOf(typeof(RoadShowTamerCharacterCardController), tamer.CharacterCardController);
+
+            Assert.AreEqual(24, tamer.CharacterCard.HitPoints);
+        }
+
+        [Test()]
+        public void TestRoadShowTamerInnatePower()
+        {
+            SetupGameController("BaronBlade", "Studio29.TheTamer/RoadShowTamerCharacter", "Haka", "Ra", "Megalopolis");
+            StartGame();
+
+            GoToUsePowerPhase(tamer);
+            Card lion = PutOnDeck("GildeasTheGood");
+            Card nonlion1 = PutOnDeck("BalancingAct");
+            Card nonlion2 = PutOnDeck("Catsnack");
+            Card nonlion3 = PutOnDeck("ElementalWhip");
+            QuickShuffleStorage(tamer.TurnTaker.Deck);
+
+            //Reveal cards from the top of {TheTamer}'s deck until a Lion card is revealed. Put that card into play. Shuffle the other revealed cards into {TheTamer}'s deck."
+            UsePower(tamer.CharacterCard);
+
+            AssertInPlayArea(tamer, lion);
+            AssertInDeck(nonlion1);
+            AssertInDeck(nonlion2);
+            AssertInDeck(nonlion3);
+            QuickShuffleCheck(1);
+        }
     }
 }

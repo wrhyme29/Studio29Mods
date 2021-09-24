@@ -5110,6 +5110,7 @@ namespace Handelabra.Sentinels.UnitTest
             this.RunCoroutine(this.GameController.ActivateAbility(ability, new CardSource(cc)));
         }
 
+
         protected void AssertNotTargets(Func<Card, bool> cardCriteria)
         {
             var cards = FindCardsWhere(cardCriteria).ToList();

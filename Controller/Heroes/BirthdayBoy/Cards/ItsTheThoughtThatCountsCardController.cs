@@ -17,11 +17,11 @@ namespace Studio29.BirthdayBoy
 
         public override IEnumerator Play()
         {
-            //Return 1 present to the play area of its original owner. 
+            //Return any number of presents to the play area of its original owner. 
             IEnumerable<Card> presentsList = GetAllPresents();
 
-            List<SelectCardDecision> storedResults = new List<SelectCardDecision>();
-            IEnumerator coroutine = GameController.SelectCardAndStoreResults(HeroTurnTakerController, SelectionType.MoveCard, presentsList, storedResults, cardSource: GetCardSource());
+            List<SelectCardsDecision> storedResults = new List<SelectCardsDecision>();
+            IEnumerator coroutine = GameController.SelectCardsAndStoreResults(HeroTurnTakerController, SelectionType.MoveCard, c=> presentsList.Contains(c),numberOfCards: presentsList.Count(), storedResults: storedResults, optional: false, requiredDecisions: 0, cardSource: GetCardSource());
             if (base.UseUnityCoroutines)
             {
                 yield return base.GameController.StartCoroutine(coroutine);
@@ -30,43 +30,48 @@ namespace Studio29.BirthdayBoy
             {
                 base.GameController.ExhaustCoroutine(coroutine);
             }
-            if (DidSelectCard(storedResults))
+            if (DidSelectCards(storedResults))
             {
-                Card selectedCard = GetSelectedCard(storedResults);
-                TurnTaker tt = GetOriginalOwner(selectedCard);
-                GameController.ChangeCardOwnership(selectedCard, tt);
-                coroutine = GameController.ModifyKeywords("present", addingOrRemoving: false, affectedCards: selectedCard.ToEnumerable().ToList(), cardSource: GetCardSource());
-                if (base.UseUnityCoroutines)
+                TurnTaker tt;
+                foreach(Card selectedCard in GetSelectedCards(storedResults))
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
-                }
-                else
-                {
-                    base.GameController.ExhaustCoroutine(coroutine);
-                }
+                    tt = GetOriginalOwner(selectedCard);
+                    GameController.ChangeCardOwnership(selectedCard, tt);
+                    coroutine = GameController.ModifyKeywords("present", addingOrRemoving: false, affectedCards: selectedCard.ToEnumerable().ToList(), cardSource: GetCardSource());
+                    if (base.UseUnityCoroutines)
+                    {
+                        yield return base.GameController.StartCoroutine(coroutine);
+                    }
+                    else
+                    {
+                        base.GameController.ExhaustCoroutine(coroutine);
+                    }
 
-                Location destination = tt.PlayArea;
-                if (tt.IsIncapacitatedOrOutOfGame)
-                {
-                    destination = tt.OutOfGame;
-                }
+                    Location destination = tt.PlayArea;
+                    if (tt.IsIncapacitatedOrOutOfGame)
+                    {
+                        destination = tt.OutOfGame;
+                    }
 
-                coroutine = GameController.MoveCard(TurnTakerController, selectedCard, destination,playCardIfMovingToPlayArea: !selectedCard.Location.IsPlayArea, showMessage: true, cardSource: GetCardSource());;
-                if (base.UseUnityCoroutines)
-                {
-                    yield return base.GameController.StartCoroutine(coroutine);
-                }
-                else
-                {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    coroutine = GameController.MoveCard(TurnTakerController, selectedCard, destination, playCardIfMovingToPlayArea: !selectedCard.Location.IsPlayArea, showMessage: true, cardSource: GetCardSource()); ;
+                    if (base.UseUnityCoroutines)
+                    {
+                        yield return base.GameController.StartCoroutine(coroutine);
+                    }
+                    else
+                    {
+                        base.GameController.ExhaustCoroutine(coroutine);
+                    }
                 }
 
             }
-            //You may move one card from your trash to your hand.
-            coroutine = base.GameController.SelectCardFromLocationAndMoveIt(HeroTurnTakerController, TurnTaker.Trash, new LinqCardCriteria((Card c) => true), new MoveCardDestination[1]
+            //You may move one card from your trash to your hand for each present moved this way.
+            int X = GetNumberOfCardsSelected(storedResults);
+            List<MoveCardDestination> destinations = new List<MoveCardDestination>()
             {
                 new MoveCardDestination(HeroTurnTaker.Hand)
-            }, optional: true, cardSource: GetCardSource());
+            };
+            coroutine = base.GameController.SelectCardsFromLocationAndMoveThem(HeroTurnTakerController, TurnTaker.Trash, 0, X, new LinqCardCriteria((Card c) => true), destinations, cardSource: GetCardSource());
             if (base.UseUnityCoroutines)
             {
                 yield return base.GameController.StartCoroutine(coroutine);

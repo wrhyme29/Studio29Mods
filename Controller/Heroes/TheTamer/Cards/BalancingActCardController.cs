@@ -58,7 +58,7 @@ namespace Studio29.TheTamer
 
                     List<SelectCardDecision> selectCards = new List<SelectCardDecision>();
                     List<DealDamageAction> storedDamage = new List<DealDamageAction>();
-                    coroutine = base.GameController.SelectTargetsAndDealDamage(this.DecisionMaker, new DamageSource(GameController, lionSource), 1, DamageType.Melee, 1, true, 1,
+                    coroutine = base.GameController.SelectTargetsAndDealDamage(this.DecisionMaker, new DamageSource(GameController, lionSource), 1, DamageType.Melee, 1, false, 0,
                         additionalCriteria: c => c.IsTarget && c.IsInPlayAndHasGameText,
                         storedResultsDecisions: selectCards,
                         storedResultsDamage: storedDamage,

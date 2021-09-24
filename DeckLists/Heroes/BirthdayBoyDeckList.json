@@ -17,7 +17,7 @@
             "character": true,
             "gameplay": "{BirthdayBoy} may never own more than 40 cards.",
             "powers": [
-                "{BirthdayBoy} may move any hero ongoing, hero equipment, or hero target with max 5hp or fewer in play to your play area. Any card moved this way now belongs to {BirthdayBoy} (when it is destroyed, shuffle into the deck of {BirthdayBoy}). Any card moved this way gains the keyword “Present”."
+                "{BirthdayBoy} may move any hero ongoing, hero equipment, or hero target with max 5 HP or fewer in play to your play area. Any card moved this way now belongs to {BirthdayBoy} (when it is destroyed, shuffle into the deck of {BirthdayBoy}). Any card moved this way gains the keyword “Present”."
             ],
             "icons": [
                 "HasPower",
@@ -28,9 +28,9 @@
                 "BirthdayBoy"
             ],
             "incapacitatedAbilities": [
-                "Not Implemented 1",
-                "Not implemented 2",
-                "Not implemented 3"
+                "Select a hero. Use the first listed incapicitated ability on that character card.",
+                "Select a hero. Use the second listed incapicitated ability on that character card.",
+                "Select a hero. Use the third listed incapicitated ability on that character card."
             ],
             "flippedIcons": [
                 ""
@@ -63,18 +63,18 @@
             "flavorReference": "Birthday Boy, Its MY Birthday #29"
         },
         {
-            "identifier": "ItsMyParty",
+            "identifier": "GiftCertificate",
             "count": 2,
-            "title": "It's My Party",
+            "title": "Gift Certificate",
             "keywords": [
-                "one-shot"
+                "ongoing"
             ],
             "icons": [
-                "Destroy",
-                "DealDamageSonic"
+                "HasPower",
+                "Manipulate"
             ],
-            "body": [
-                "Choose one Present in play. That Present deals one target 3 sonic damage. You may destroy that Present."
+            "powers": [
+                "{BirthdayBoy} may move any hero ongoing, hero equipment, or hero target with max 5 HP or fewer in another player's hand to your hand. Any card moved this way now belongs to {BirthdayBoy} (when it is destroyed, shuffle into the deck of {BirthdayBoy}). Any card moved this way gains the keyword “Present”."
             ],
             "flavorQuotes": [
                 {
@@ -95,7 +95,7 @@
                 "DestroyEnvironment"
             ],
             "body": [
-                "Destroy an environment card."
+                "Destroy up to 2 environment cards. For each card destroyed this way, move 1 hero ongoing, hero equipment, or hero target with max 5 HP or fewer belonging to another hero in play to your hand. "
             ],
             "flavorQuotes": [
                 {
@@ -116,7 +116,7 @@
                 "Manipulate"
             ],
             "body": [
-                "Return 1 Present to the trash of its original owner."
+                "Return 1 Present to the trash of its original owner. Gain 4 HP."
             ],
             "flavorQuotes": [
                 {
@@ -162,7 +162,7 @@
                 "Manipulate"
             ],
             "body": [
-                "Return 1 present to the play area of its original owner. You may move one card from your trash to your hand."
+                "Return any number of present cards in play to the play area of its original owner. You may move one card from your trash to your hand for each present returned this way."
             ],
             "flavorQuotes": [
                 {
@@ -185,7 +185,7 @@
             ],
             "body": [
                 "You may use an additional power this turn.",
-                "{BirthdayBoy} deals up to X targets 1 psychic damage each, where X is the number of presents in his play area."
+                "{BirthdayBoy} deals up to X+1 targets 1 psychic damage each, where X is the number of presents in his play area."
             ],
             "flavorQuotes": [
                 {
@@ -224,11 +224,11 @@
                 "one-shot"
             ],
             "icons": [
-                "GainHP",
+                "DrawCardNow",
                 "DealDamagePsychic"
             ],
             "body": [
-                "Any other hero with presents in play from their deck gains HP equal to the number of their presents in play.",
+                "Any other hero with presents in play from their deck draws X cards, where X is equal to the number of their presents in play.",
                 "Any other hero with no presents in play deals themselves 2 psychic damage."
             ],
             "flavorQuotes": [
@@ -248,11 +248,11 @@
             ],
             "icons": [
                 "Destroy",
-                "Manipulate"
+                "UsePowerExtra"
             ],
             "body": [
                 "You may destroy any number of presents.",
-                "You may shuffle up to 2 trashes into their deck."
+                "You may use {BirthdayBoy}'s innate power X+1 times this turn, where X is the number of presents destroyed this way."
             ],
             "flavorQuotes": [
                 {
