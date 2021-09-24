@@ -127,8 +127,8 @@
                 "DestroySelf"
             ],
             "body": [
-                "At the start of the villain turn, one player may discard a card to reveal the top card of the villain deck. They may discard or replace the revealed card. ",
-                "At the start of the environment turn, this card deals one hero character card 3 energy damage. If no damage is taken this way, destroy this card. "
+                "At the start of the villain turn, one player may discard a card to reveal the top card of the villain deck. They may discard or replace the revealed card.",
+                "At the start of the environment turn, this card deals one hero character card 3 energy damage. If no damage is taken this way, destroy this card."
             ],
             "flavorText": "Order Up! #81"
         },
@@ -164,7 +164,7 @@
             ],
             "body": [
                 "When this card enters play, destroy 1 dish card. If no dish cards are destroyed this way, this card deals each target 1 fire damage.",
-                "At the end of the environment turn, each character may gain 2 hp. Each player may discard 1 card. If fewer than {H - 1} cards are discarded this way, destroy this card."
+                "At the end of the environment turn, each character card gains 2 hp. Each player may discard 1 card. If fewer than {H - 1} cards are discarded this way, destroy this card."
             ],
             "flavorText": "Order Up! #62",
             "hitpoints": 7
@@ -269,7 +269,7 @@
                 "DestroySelf"
             ],
             "body": [
-                "When this card enters play, destroy all dish cards. This card deals each target X energy damage, where X is the number of dishes destroyed this way.",
+                "When this card enters play, destroy all dish cards. This card deals each target X + 1 energy damage, where X is the number of dishes destroyed this way.",
                 "At the end of the environment turn, destroy this card."
             ],
             "flavorText": "Order Up! #55"
