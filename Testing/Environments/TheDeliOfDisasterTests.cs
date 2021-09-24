@@ -5,11 +5,12 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using Studio29.TheDeliOfDisaster;
+using System;
 
 namespace Studio29Tests
 {
     [TestFixture()]
-    public class TheDeliOfDisasterTests : BaseTest
+    public class TheDeliOfDisasterTests : CustomBaseTest
     {
 
         #region TheDeliOfDisasterHelperFunctions
@@ -279,6 +280,458 @@ namespace Studio29Tests
             GoToEndOfTurn(deli);
             QuickHandCheck(0, 0, -1);
             QuickHPCheck(-2, 1, 0, -1);
+
+        }
+
+        [Test()]
+        public void TestLoxxedUp()
+        {
+            SetupGameController("BaronBlade", "Ra", "Tachyon", "Haka", "Studio29.TheDeliOfDisaster");
+            StartGame();
+            DestroyNonCharacterVillainCards();
+
+            GoToEndOfTurn(haka);
+            Card battalion = PlayCard("BladeBattalion");
+            Card loxxedUp = PlayCard("LoxxedUp");
+
+            //At the start of the environment turn, the villain target with the lowest HP deals the hero target with the highest HP 2 toxic damage.
+            //lowest battalion, highest haka
+            QuickHPStorage(baron.CharacterCard, battalion, ra.CharacterCard, tachyon.CharacterCard, haka.CharacterCard);
+            AssertNextDamageSource(battalion);
+            PrintSpecialStringsForCard(loxxedUp);
+            GoToStartOfTurn(deli);
+            QuickHPCheck(0, 0, 0, 0, -2);
+
+            //At the end of the environment turn, the hero target with the lowest HP deals the villain target with the highest HP 2 energy damage.
+            //lowest tachyon, highest baron
+            QuickHPUpdate();
+            AssertNextDamageSource(tachyon.CharacterCard);
+            GoToEndOfTurn(deli);
+            QuickHPCheck(-2, 0, 0, 0, 0);
+        }
+
+        [Test()]
+        public void TestMindlessMishiga()
+        {
+            SetupGameController("BaronBlade", "Ra", "Tachyon", "Haka", "Studio29.TheDeliOfDisaster");
+            StartGame();
+
+            Card mdp = GetCardInPlay("MobileDefensePlatform");
+
+            DestroyNonCharacterVillainCards();
+
+            GoToPlayCardPhase(deli);
+            Card battalion = PlayCard("BladeBattalion");
+            Card poweredRemoteTurret = MoveCard(baron, "PoweredRemoteTurret", baron.TurnTaker.Trash);
+            SetHitPoints(battalion, 2);
+            SetHitPoints(tachyon.CharacterCard, 10);
+            DecisionSelectTurnTaker = ra.TurnTaker;
+
+            QuickHPStorage(baron.CharacterCard, battalion, ra.CharacterCard, tachyon.CharacterCard, haka.CharacterCard);
+            QuickHandStorage(ra, tachyon, haka);
+            QuickShuffleStorage(baron.TurnTaker.Trash);
+            AssertNextDamageSource(battalion);
+
+            PlayCard("MindlessMishiga");
+
+            //"The villain and hero target with the lowest HP regains 1 HP.",
+            //"One player draws a card.",
+            //"Shuffle the Villain trash and reveal cards from the top until a Target is revealed. Put it into play. Put the other revealed cards back into the Villain Trash.",
+            //"The villain target with the lowest HP deals the villain target with the highest HP 3 fire damage."
+            int baronDamage = mdp.IsInPlayAndHasGameText ? 0 : -3;
+            QuickHPCheck(baronDamage, 1, 0, 1, 0);
+            QuickHandCheck(1, 0, 0);
+            QuickShuffleCheck(1);
+            AssertAnyInPlayArea(baron, new Card[] { poweredRemoteTurret, mdp });
+
+        }
+
+        [Test()]
+        public void TestOrderUp()
+        {
+            SetupGameController("BaronBlade", "Ra", "Tachyon", "Haka", "Studio29.TheDeliOfDisaster");
+            StartGame();
+
+            DestroyNonCharacterVillainCards();
+
+            GoToEndOfTurn(haka);
+
+            DiscardAllCards(ra, tachyon);
+
+            Card dishCard = MoveCard(deli, "LoxxedUp", deli.TurnTaker.Deck);
+            Card nonDishCard = MoveCard(deli, "MindlessMishiga", deli.TurnTaker.Deck);
+
+            PlayCard("OrderUp");
+
+            //At the start of the environment turn, reveal cards from the environment deck until a dish card is revealed. Put the dish card into play. Shuffle the remaining cards back into the environment deck.
+            QuickShuffleStorage(deli.TurnTaker.Deck);
+            GoToStartOfTurn(deli);
+            AssertInPlayArea(deli, dishCard);
+            AssertInDeck(deli, nonDishCard);
+            AssertNumberOfCardsInRevealed(deli, 0);
+            QuickShuffleCheck(1);
+
+            //At the end of the environment turn, any player with fewer than 4 cards in their hand may draw a card.
+            QuickHandStorage(ra, tachyon, haka);
+            GoToEndOfTurn(deli);
+            QuickHandCheck(1, 1, 0);
+        }
+
+        [Test()]
+        public void TestRamblingYenta_DestroysDish()
+        {
+            SetupGameController("BaronBlade", "Ra", "Tachyon", "Haka", "Studio29.TheDeliOfDisaster");
+            StartGame();
+
+            DestroyNonCharacterVillainCards();
+
+            GoToEndOfTurn(haka);
+
+            Card dishCard = PlayCard(deli, "LoxxedUp");
+
+            GoToPlayCardPhase(deli);
+
+            //When this card enters play, destroy 1 dish card. If no dish cards are destroyed this way, this card deals each target 1 fire damage.
+            QuickHPStorage(baron, ra, tachyon, haka);
+            Card ramblingYenta = PlayCard("RamblingYenta");
+            QuickHPCheckZero();
+            AssertInTrash(dishCard);
+
+
+            Card pushTheLimits = PlayCard("PushingTheLimits");
+            Card dominion = PlayCard("Dominion");
+            DecisionSelectCards = new Card[] { pushTheLimits, null };
+            DecisionAutoDecideIfAble = true;
+
+            //At the end of the environment turn, this card deals 2 sonic damage to any hero with ongoing cards in play.
+            //Each player dealt damage this way may destroy an ongoing card. 
+            //If they do not, this card deals them an additional 2 sonic damage.
+            QuickHPStorage(ra, tachyon, haka);
+            GoToEndOfTurn(deli);
+            QuickHPCheck(0, -2, -4);
+            AssertInTrash(pushTheLimits);
+            AssertInPlayArea(haka, dominion);
+
+        }
+
+        [Test()]
+        public void TestRamblingYenta_NoDishDestroyed()
+        {
+            SetupGameController("BaronBlade", "Ra", "Tachyon", "Haka", "Studio29.TheDeliOfDisaster");
+            StartGame();
+
+            DestroyNonCharacterVillainCards();
+
+            GoToEndOfTurn(haka);
+
+            GoToPlayCardPhase(deli);
+
+            //When this card enters play, destroy 1 dish card. If no dish cards are destroyed this way, this card deals each target 1 fire damage.
+            QuickHPStorage(baron, ra, tachyon, haka);
+            Card ramblingYenta = GetCard("RamblingYenta");
+            AssertNextDamageSource(ramblingYenta);
+            AssertNextDamageType(DamageType.Fire);
+            PlayCard(ramblingYenta);
+            QuickHPCheck(-1,-1,-1,-1);
+
+
+            Card pushTheLimits = PlayCard("PushingTheLimits");
+            Card dominion = PlayCard("Dominion");
+            DecisionSelectCards = new Card[] { pushTheLimits, null};
+            DecisionAutoDecideIfAble = true;
+
+            //At the end of the environment turn, this card deals 2 sonic damage to any hero with ongoing cards in play. Each player dealt damage this way may destroy an ongoing card. If they do not, this card deals them an additional 2 sonic damage.
+            QuickHPStorage(ra, tachyon, haka);
+            GoToEndOfTurn(deli);
+            QuickHPCheck(0, -2, -4);
+            AssertInTrash(pushTheLimits);
+            AssertInPlayArea(haka, dominion);
+        }
+
+        [Test()]
+        public void TestRamblingYenta_Sentinels()
+        {
+            SetupGameController("BaronBlade", "Ra", "TheSentinels", "Haka", "Studio29.TheDeliOfDisaster");
+            StartGame();
+
+            DestroyNonCharacterVillainCards();
+
+            GoToEndOfTurn(haka);
+
+            GoToPlayCardPhase(deli);
+
+            PlayCard("RamblingYenta");
+
+            Card sentinelTactics = PlayCard("SentinelTactics");
+            Card dominion = PlayCard("Dominion");
+            DecisionSelectTurnTakers = new TurnTaker[] { haka.TurnTaker, null };
+            DecisionSelectCards = new Card[] { dominion, null,  idealist };
+            DecisionAutoDecideIfAble = true;
+
+            //At the end of the environment turn, this card deals 2 sonic damage to any hero with ongoing cards in play. Each player dealt damage this way may destroy an ongoing card. If they do not, this card deals them an additional 2 sonic damage.
+            QuickHPStorage(ra.CharacterCard, medico, idealist, mainstay, writhe, haka.CharacterCard);
+            GoToEndOfTurn(deli);
+            QuickHPCheck(0, -2, -4,-2,-2,-2);
+            AssertInTrash(dominion);
+            AssertInPlayArea(sentinels, sentinelTactics);
+        }
+
+        [Test()]
+        public void TestSchmaltzStorm_EveryoneDiscards()
+        {
+            SetupGameController("BaronBlade", "Ra", "Tachyon", "Haka", "Studio29.TheDeliOfDisaster");
+            StartGame();
+
+            DestroyNonCharacterVillainCards();
+
+            GoToEndOfTurn(haka);
+
+            Card schmaltzStorm = PlayCard("SchmaltzStorm");
+
+            //Reduce all damage by 1.
+            QuickHPStorage(baron, ra, tachyon, haka);
+            DealDamage(baron, c => c.IsHeroCharacterCard, 5, DamageType.Projectile);
+            DealDamage(ra, baron, 5, DamageType.Fire);
+            QuickHPCheck(-4,-4,-4,-4);
+
+            //Reduce all hp recovery by 1.
+            QuickHPUpdate();
+            foreach(Card card in GameController.TurnTakerControllers.Where(ttc => ttc.IsHero || ttc.IsVillain).Select(ttc => ttc.CharacterCard))
+            {
+                GainHP(card, 3, card);
+            }
+            QuickHPCheck(2,2,2,2);
+
+            //At the start of the environment turn, each player may discard 1 card to destroy this card.
+            DecisionYesNo = true;
+            QuickHandStorage(ra, tachyon, haka);
+            GoToStartOfTurn(deli);
+            QuickHandCheck(-1, -1, -1);
+            AssertInTrash(schmaltzStorm);
+        }
+
+        [Test()]
+        public void TestSchmaltzStorm_NoDiscards()
+        {
+            SetupGameController("BaronBlade", "Ra", "Tachyon", "Haka", "Studio29.TheDeliOfDisaster");
+            StartGame();
+
+            DestroyNonCharacterVillainCards();
+
+            GoToEndOfTurn(haka);
+
+            Card schmaltzStorm = PlayCard("SchmaltzStorm");
+
+            //Reduce all damage by 1.
+            QuickHPStorage(baron, ra, tachyon, haka);
+            DealDamage(baron, c => c.IsHeroCharacterCard, 5, DamageType.Projectile);
+            DealDamage(ra, baron, 5, DamageType.Fire);
+            QuickHPCheck(-4,-4,-4,-4);
+
+            //Reduce all hp recovery by 1.
+            QuickHPUpdate();
+            foreach (Card card in GameController.TurnTakerControllers.Where(ttc => ttc.IsHero || ttc.IsVillain).Select(ttc => ttc.CharacterCard))
+            {
+                GainHP(card, 3, card);
+            }
+            QuickHPCheck(2,2,2,2);
+
+            //At the start of the environment turn, each player may discard 1 card to destroy this card.
+            DecisionYesNo = false;
+            QuickHandStorage(ra, tachyon, haka);
+            GoToStartOfTurn(deli);
+            QuickHandCheckZero();
+            AssertInPlayArea(deli, schmaltzStorm);
+        }
+
+        [Test()]
+        public void TestSchmearCampaign_DealsInitialDamage()
+        {
+            SetupGameController("BaronBlade", "Ra", "Tachyon", "Haka", "Studio29.TheDeliOfDisaster");
+            StartGame();
+
+            DestroyNonCharacterVillainCards();
+
+            GoToEndOfTurn(haka);
+
+            Card schmearCampaign = PlayCard("SchmearCampaign");
+
+            Card cardToDiscard = GetRandomCardFromHand(haka);
+
+            DecisionSelectCards = new Card[] { tachyon.CharacterCard, cardToDiscard };
+            DecisionSelectTurnTakers = new TurnTaker[] { haka.TurnTaker };
+            DecisionMoveCardDestinations = new MoveCardDestination[] { new MoveCardDestination(baron.TurnTaker.Deck) };
+
+
+            //At the start of the environment turn, this card deals one hero character card 3 energy damage. If no damage is taken this way, destroy this card.
+            QuickHPStorage(ra, tachyon, haka);
+            AssertNextDamageSource(schmearCampaign);
+            AssertNextDamageType(DamageType.Energy);
+            GoToStartOfTurn(deli);
+            QuickHPCheck(0, -3, 0);
+            AssertInPlayArea(deli, schmearCampaign);
+
+            //At the start of the villain turn, one player may discard a card to reveal the top card of the villain deck. They may discard or replace the revealed card.
+            Card topCard = baron.TurnTaker.Deck.TopCard;
+            GoToStartOfTurn(baron);
+            AssertInTrash(cardToDiscard);
+            AssertOnTopOfDeck(baron, topCard);
+        }
+
+        [Test()]
+        public void TestSchmearCampaign_DestroysItself()
+        {
+            SetupGameController("BaronBlade", "Ra", "Tachyon", "Haka", "Studio29.TheDeliOfDisaster");
+            StartGame();
+
+            DestroyNonCharacterVillainCards();
+
+            GoToEndOfTurn(haka);
+
+            Card schmearCampaign = PlayCard("SchmearCampaign");
+            Card cardToDiscard = GetRandomCardFromHand(haka);
+
+            DecisionSelectCards = new Card[] { tachyon.CharacterCard, cardToDiscard };
+            DecisionSelectTurnTakers = new TurnTaker[] { haka.TurnTaker };
+            DecisionMoveCardDestinations = new MoveCardDestination[] { new MoveCardDestination(baron.TurnTaker.Trash) };
+
+            AddImmuneToDamageTrigger(tachyon, heroesImmune: true, villainsImmune: false);
+
+            //At the start of the environment turn, this card deals one hero character card 3 energy damage. If no damage is taken this way, destroy this card.
+
+            QuickHPStorage(ra, tachyon, haka);
+            GoToStartOfTurn(deli);
+            QuickHPCheckZero();
+            AssertInTrash(deli, schmearCampaign);
+
+            GoToPlayCardPhase(deli);
+            PlayCard(schmearCampaign);
+
+            //At the start of the villain turn, one player may discard a card to reveal the top card of the villain deck. They may discard or replace the revealed card.
+            Card topCard = baron.TurnTaker.Deck.TopCard;
+            GoToStartOfTurn(baron);
+            AssertInTrash(cardToDiscard);
+            AssertInTrash(topCard);
+        }
+
+        [Test()]
+        public void TestStuckleAndNosher_DiscardsSufficientCount()
+        {
+            SetupGameController("BaronBlade", "Ra", "Tachyon", "Haka", "Studio29.TheDeliOfDisaster");
+            StartGame();
+
+            DestroyNonCharacterVillainCards();
+
+            GoToEndOfTurn(haka);
+
+            Card battalion = PlayCard("BladeBattalion");
+
+            SetHitPoints(baron.CharacterCard, 10);
+            SetHitPoints(battalion, 2);
+            SetHitPoints(ra.CharacterCard, 10);
+            SetHitPoints(tachyon.CharacterCard, 10);
+            SetHitPoints(haka.CharacterCard, 10);
+
+            GoToPlayCardPhase(deli);
+            Card stuckleAndNosher = PlayCard("StuckleAndNosher");
+
+            //At the end of the environment turn, each character card gains 2 hp.
+            //Each player may discard 1 card. If fewer than {H - 1} cards are discarded this way, destroy this card.
+            DecisionSelectTurnTakers = new TurnTaker[] { ra.TurnTaker, haka.TurnTaker, null };
+            DecisionSelectCards = new Card[] { GetRandomCardFromHand(ra), GetRandomCardFromHand(haka) };
+
+            QuickHPStorage(baron.CharacterCard, battalion, ra.CharacterCard, tachyon.CharacterCard, haka.CharacterCard);
+            GoToEndOfTurn(deli);
+            QuickHPCheck(2, 0, 2, 2, 2);
+            AssertInPlayArea(deli, stuckleAndNosher);
+        }
+
+        [Test()]
+        public void TestStuckleAndNosher_DestroyItself()
+        {
+            SetupGameController("BaronBlade", "Ra", "Tachyon", "Haka", "Studio29.TheDeliOfDisaster");
+            StartGame();
+
+            DestroyNonCharacterVillainCards();
+
+            GoToEndOfTurn(haka);
+
+            Card battalion = PlayCard("BladeBattalion");
+
+            SetHitPoints(baron.CharacterCard, 10);
+            SetHitPoints(battalion, 2);
+            SetHitPoints(ra.CharacterCard, 10);
+            SetHitPoints(tachyon.CharacterCard, 10);
+            SetHitPoints(haka.CharacterCard, 10);
+
+            GoToPlayCardPhase(deli);
+            Card stuckleAndNosher = PlayCard("StuckleAndNosher");
+
+            //At the end of the environment turn, each character card gains 2 hp.
+            //Each player may discard 1 card. If fewer than {H - 1} cards are discarded this way, destroy this card.
+            DecisionSelectTurnTakers = new TurnTaker[] { ra.TurnTaker, null};
+            DecisionSelectCards = new Card[] { GetRandomCardFromHand(ra) };
+
+            QuickHPStorage(baron.CharacterCard, battalion, ra.CharacterCard, tachyon.CharacterCard, haka.CharacterCard);
+            GoToEndOfTurn(deli);
+            QuickHPCheck(2, 0, 2, 2, 2);
+            AssertInTrash(deli, stuckleAndNosher);
+        }
+
+        [Test()]
+        public void TestWipeDown()
+        {
+            SetupGameController("BaronBlade", "Ra", "Tachyon", "Haka", "Studio29.TheDeliOfDisaster");
+            StartGame();
+
+            DestroyNonCharacterVillainCards();
+
+            GoToPlayCardPhase(deli);
+            Card dish1 = PlayCard("LoxxedUp");
+            Card dish2 = PlayCard("KugelConundrum");
+
+            //When this card enters play, destroy all dish cards. This card deals each target X + 1 energy damage, where X is the number of dishes destroyed this way.
+            QuickHPStorage(baron, ra, tachyon, haka);
+            Card wipeDown = PlayCard("WipeDown");
+            QuickHPCheck(-3, -3, -3, -3);
+            AssertInTrash(dish1);
+            AssertInTrash(dish2);
+
+            //At the end of the environment turn, destroy this card.
+            GoToEndOfTurn(deli);
+            AssertInTrash(wipeDown);
+        }
+
+        [Test()]
+        public void TestYoureSmokedMeat()
+        {
+            SetupGameController("BaronBlade", "Ra", "Tachyon", "Haka", "Studio29.TheDeliOfDisaster");
+            StartGame();
+
+            DestroyNonCharacterVillainCards();
+
+            GoToPlayCardPhase(deli);
+
+            PlayCard("YoureSmokedMeat");
+            //Increase all fire damage by 2.
+            int expectedDamage;
+            foreach (DamageType dt in Enum.GetValues(typeof(DamageType)))
+            {
+                foreach (TurnTakerController ttc in GameController.TurnTakerControllers.Where(ttc => ttc.IsVillain || ttc.IsHero))
+                {
+                    QuickHPStorage(baron);
+                    expectedDamage = dt == DamageType.Fire  ? -3 : -1;
+                    DealDamage(ttc, baron, 1, dt, isIrreducible: true);
+                    QuickHPCheck(expectedDamage);
+                    SetAllTargetsToMaxHP();
+                }
+
+            }
+
+            //At the end of the environment turn, this card deals each target 1 fire damage.
+            QuickHPStorage(baron, ra, tachyon, haka);
+            GoToEndOfTurn(deli);
+            QuickHPCheck(-3, -3, -3, -3);
 
         }
     }

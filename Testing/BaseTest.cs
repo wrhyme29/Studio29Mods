@@ -125,6 +125,9 @@ namespace Handelabra.Sentinels.UnitTest
         private string _expectedDecisionSourceOutput;
 
         private Card _notDamageSource;
+        private Card _nextDamageSource;
+        private DamageType? _nextDamageType;
+
         private SelectionType? _assertDecisionOptional;
 
         protected int NumberOfDecisionsAnswered { get; private set; }
@@ -361,6 +364,8 @@ namespace Handelabra.Sentinels.UnitTest
             _numberOfChoicesInNextDecision = null;
             _numberOfChoicesInNextDecisionSelectionType = null;
             _notDamageSource = null;
+            _nextDamageSource = null;
+            _nextDamageType = null;
             DecisionSelectTargetFriendly = null;
             DecisionMoveCardDestinations = null;
             DecisionMoveCardDestinationsIndex = 0;
@@ -2610,6 +2615,12 @@ namespace Handelabra.Sentinels.UnitTest
             this.RunCoroutine(this.GameController.GainHP(card, amount));
         }
 
+        protected void GainHP(Card card, int amount, Card cardSource)
+        {
+            CardSource cardSourceReal = FindCardController(cardSource).GetCardSource();
+            this.RunCoroutine(this.GameController.GainHP(card, amount, cardSource: cardSourceReal));
+        }
+
         protected void RestoreToMaxHP(TurnTakerController ttc)
         {
             RestoreToMaxHP(ttc.CharacterCard);
@@ -3387,6 +3398,22 @@ namespace Handelabra.Sentinels.UnitTest
         protected void AssertInPlayArea(TurnTakerController ttc, IEnumerable<Card> cards)
         {
             cards.ForEach(c => AssertInPlayArea(ttc, c));
+        }
+
+        protected void AssertAnyInPlayArea(TurnTakerController ttc, IEnumerable<Card> cards)
+        {
+            Func<Card, bool> CheckIfCardIsInPlayArea = (Card c) =>
+            {
+                try
+                {
+                    AssertInPlayArea(ttc, c);
+                    return true;
+                } catch(AssertionException)
+                {
+                    return false;
+                }
+            };
+            cards.Any(c => CheckIfCardIsInPlayArea(c));
         }
 
         protected void AssertNotInPlayArea(TurnTakerController ttc, Card card)
@@ -5025,7 +5052,7 @@ namespace Handelabra.Sentinels.UnitTest
         /// Creates a new game object from an existing one, copying its decision answers so it can be replayed.
         /// </summary>
         /// <param name="game">Game.</param>
-        private Game MakeReplayableGame(Game existingGame)
+        protected Game MakeReplayableGame(Game existingGame)
         {
             // Get the information from the copied game, but not the state of it.
             var turnTakerIds = existingGame.TurnTakers.Select(tt => tt.Identifier);
@@ -5078,7 +5105,8 @@ namespace Handelabra.Sentinels.UnitTest
         protected void ActivateAbility(string key, Card card)
         {
             var cc = this.GameController.FindCardController(card);
-            var ability = new ActivatableAbility(this.GameController.FindTurnTakerController(card.Owner), cc, key, cc.Card.GetActivatableAbilityDescription(key), cc.ActivateAbility(key), 0, null, null, new CardSource(cc));
+            var abilityDef = cc.GetActivatableAbilities(key).Select(a => a.Definition).First(); ;
+            var ability = new ActivatableAbility(this.GameController.FindTurnTakerController(card.Owner), cc, abilityDef, cc.ActivateAbilityEx(abilityDef), 0, null, null, new CardSource(cc));
             this.RunCoroutine(this.GameController.ActivateAbility(ability, new CardSource(cc)));
         }
 
@@ -5171,7 +5199,19 @@ namespace Handelabra.Sentinels.UnitTest
 
             if (gameAction is DealDamageAction && _notDamageSource != null)
             {
-                Assert.AreNotEqual(_notDamageSource, (gameAction as DealDamageAction).DamageSource, _notDamageSource.Title + " was not expected to be a damage source.");
+                Assert.AreNotEqual(_notDamageSource, (gameAction as DealDamageAction).DamageSource.Card, _notDamageSource.Title + " was not expected to be a damage source.");
+            }
+
+            if (gameAction is DealDamageAction && _nextDamageSource != null)
+            {
+                Assert.AreEqual(_nextDamageSource, (gameAction as DealDamageAction).DamageSource.Card, _nextDamageSource.Title + " was expected to be a damage source.");
+                _nextDamageSource = null;
+            }
+
+            if (gameAction is DealDamageAction && _nextDamageType != null)
+            {
+                Assert.AreEqual(_nextDamageType.Value, (gameAction as DealDamageAction).DamageType, _nextDamageType + " was expected to be the type of damage.");
+                _nextDamageType = null;
             }
 
             if (_decisionSourceCriteria != null)
@@ -5900,6 +5940,16 @@ namespace Handelabra.Sentinels.UnitTest
         public void AssertNotDamageSource(Card card)
         {
             _notDamageSource = card;
+        }
+
+        public void AssertNextDamageSource(Card card)
+        {
+            _nextDamageSource = card;
+        }
+
+        public void AssertNextDamageType(DamageType damageType)
+        {
+            _nextDamageType = damageType;
         }
 
         public void AssertDecisionIsOptional(SelectionType type)
