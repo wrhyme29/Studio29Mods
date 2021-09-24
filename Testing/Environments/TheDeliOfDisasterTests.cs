@@ -99,11 +99,20 @@ namespace Studio29Tests
 
             MoveAllCards(baron, baron.TurnTaker.Trash, baron.TurnTaker.Deck, leaveSomeCards: 5);
 
-            //At the start of the environment turn, one player may discard their hand to shuffle this card back into the environment deck, ignoring its indestructability.
+            //If a player ever has no cards in hand, shuffle this card back into the environment deck, ignoring its indestructability.
             QuickShuffleStorage(deli.TurnTaker.Deck);
-            GoToStartOfTurn(deli);
+            DiscardAllCards(haka);
             AssertInDeck(aBitOfAPickle);
             QuickShuffleCheck(1);
+
+            Card drawnCard = DrawCard(haka).First();
+
+            PlayCard(aBitOfAPickle);
+            QuickShuffleStorage(deli.TurnTaker.Deck);
+            PlayCard(drawnCard);
+            AssertInDeck(aBitOfAPickle);
+            QuickShuffleCheck(1);
+
             MoveAllCards(baron, baron.TurnTaker.Deck, baron.TurnTaker.Trash, leaveSomeCards: 5);
             GoToStartOfTurn(baron);
             AssertGameOver(EndingResult.AlternateDefeat);
