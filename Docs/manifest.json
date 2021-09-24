@@ -3,7 +3,7 @@
 	"author": "wrhyme29",
 	"description": "Homebrew decks to play with!",
 	"namespace": "Studio29",
-	"version": "v1.0",
+	"version": "v2.0",
 	"color": "35d0e8",
 	"dll": "Studio29Mods.dll",
 	"decks": {
