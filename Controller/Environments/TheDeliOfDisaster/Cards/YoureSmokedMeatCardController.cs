@@ -14,6 +14,14 @@ namespace Studio29.TheDeliOfDisaster
 
         }
 
+        public override void AddTriggers()
+        {
+            //Increase all fire damage by 2.
+            AddIncreaseDamageTrigger(dd => dd.DamageType == DamageType.Fire, 2);
+
+            //At the end of the environment turn, this card deals each target 1 fire damage.
+            AddDealDamageAtEndOfTurnTrigger(TurnTaker, Card, c => c.IsTarget, TargetType.All, 1, DamageType.Fire);
+        }
 
     }
 }

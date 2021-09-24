@@ -1,6 +1,6 @@
 ﻿using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
-using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -11,7 +11,7 @@ namespace Studio29.TheDeliOfDisaster
 
         public DinerCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
         {
-
+            SpecialStringMaker.ShowIfElseSpecialString(() => FindCardsWhere(c => c.IsInPlayAndHasGameText && IsDish(c)).Any(), () => "There is a dish card in play.", () => "There is not a dish card in play.");
         }
 
         public override IEnumerator Play()
