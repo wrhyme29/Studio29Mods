@@ -8,7 +8,7 @@
             "identifier": "DebuggerInstructions",
             "count": 1,
             "title": "Debugger Menu",
-            "body": "The Catacombs",
+            "body": "Debug",
             "backgroundColor": "B6DB9F",
             "foilBackgroundColor": "DAA465",
             "character": true,
