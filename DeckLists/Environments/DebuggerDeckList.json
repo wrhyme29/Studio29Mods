@@ -1,0 +1,130 @@
+{
+    "name": "Debugger",
+    "kind": "Environment",
+    "backgroundColor": "8C7E6E",
+    "difficulty": 1,
+    "cards": [
+        {
+            "identifier": "DebuggerInstructions",
+            "count": 1,
+            "title": "Debugger Menu",
+            "body": "The Catacombs",
+            "backgroundColor": "B6DB9F",
+            "foilBackgroundColor": "DAA465",
+            "character": true,
+            "setup": "At the start of the game, select a card in the environment deck or trash. Put that card into play. You may repeat this effect any number of times.",
+            "gameplay": [
+                "The environment deck may not play cards.",
+                "At the end of the environment turn, select a card in the environment deck or trash. Put that card into play. You may repeat this effect any number of times."
+            ],
+            "icons": [
+                "PlayCardNow"
+            ],
+            "flippedGameplay": [
+                "The environment deck may not play cards.",
+                "At the end of the environment turn, select a card in the environment deck or trash. Put that card into play. You may repeat this effect any number of times."
+            ],
+            "flippedIcons": [
+                "PlayCardNow"
+            ],
+            "isReal": false
+        },
+        {
+            "identifier": "StackADeck",
+            "count": 1,
+            "title": "6. Stack a Deck",
+            "keywords": [
+                "option"
+            ],
+            "icons": [
+                "Manipulate"
+            ],
+            "body": [
+                "Select a deck. Select any number of cards from that deck or trash. Place the selected cards on the top of the deck in any order. If a hero deck was selected, you may also select cards from that hero's hand.",
+                "Destroy this card."
+            ],
+            "flavorText": "-"
+        },
+        {
+            "identifier": "SendToTrash",
+            "count": 1,
+            "title": "4. Send Cards to Trash",
+            "keywords": [
+                "option"
+            ],
+            "icons": [
+                "Manipulate"
+            ],
+            "body": [
+                "Select a deck. Select any number of cards from that deck. Send the selected cards to the appropriate trash. If a hero deck was selected, you may also select cards from that hero's hand.",
+                "Destroy this card."
+            ],
+            "flavorText": "-"
+        },
+        {
+            "identifier": "AddToHand",
+            "count": 1,
+            "title": "1. Add Cards to Hand",
+            "keywords": [
+                "option"
+            ],
+            "icons": [
+                "Search"
+            ],
+            "body": [
+                "Select a hero. Select any number of cards from that hero's deck or trash. Move the selected cards into that hero's hand.",
+                "Destroy this card."
+            ],
+            "flavorText": "-"
+        },
+        {
+            "identifier": "PlayCards",
+            "count": 1,
+            "title": "3. Play Cards",
+            "keywords": [
+                "option"
+            ],
+            "icons": [
+                "PlayCardNow"
+            ],
+            "body": [
+                "Select a deck. Play any number of cards from that deck or trash. If a hero deck was selected, you may also select cards from that hero's hand.",
+                "Destroy this card."
+            ],
+            "flavorText": "-"
+        },
+        {
+            "identifier": "DestroyCards",
+            "count": 1,
+            "title": "2. Destroy Cards",
+            "keywords": [
+                "option"
+            ],
+            "icons": [
+                "Destroy"
+            ],
+            "body": [
+                "Select any number of cards in play. Destroy the selected cards.",
+                "Destroy this card."
+            ],
+            "flavorText": "-"
+        },
+        {
+            "identifier": "SetHitpoints",
+            "count": 1,
+            "title": "5. Set a Target's HP",
+            "keywords": [
+                "option"
+            ],
+            "icons": [
+                "GainHP",
+                "DealDamage"
+            ],
+            "body": [
+                "Select a target in play. Select a value between 0 and that target's maximum HP. Set that target's HP to the selected value.",
+                "Destroy this card."
+            ],
+            "flavorText": "-"
+        }
+    ]
+}
