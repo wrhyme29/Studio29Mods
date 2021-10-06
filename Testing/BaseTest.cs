@@ -1480,7 +1480,17 @@ namespace Handelabra.Sentinels.UnitTest
                     if (this.DecisionSelectWords != null)
                     {
                         var word = this.DecisionSelectWords[this.DecisionSelectWordsIndex];
-                        if (!selectWord.Choices.Contains(word))
+                        if(word is null)
+                        {
+                            //treat like a skip
+                            if (!selectWord.IsOptional)
+                            {
+                                Assert.Fail("The SelectWordDecision is not optional so cannot be skipped.");
+                            }
+
+                            selectWord.Skip();
+                            Log.Debug("Skipping SelectWordDecision");
+                        } else if (!selectWord.Choices.Contains(word))
                         {
                             Assert.Fail("The SelectWordDecision does not contain the word: " + word);
                         }
@@ -1505,6 +1515,7 @@ namespace Handelabra.Sentinels.UnitTest
                         }
 
                         selectWord.Skip();
+                        Log.Debug("Skipping SelectWordDecision");
                     }
                     else
                     {
