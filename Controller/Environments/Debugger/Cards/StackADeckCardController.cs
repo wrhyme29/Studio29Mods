@@ -6,8 +6,8 @@ using System.Collections.Generic;
 
 namespace Studio29.Debugger
 {
-    public class StackADeckCardController : CardController
-    {
+    public class StackADeckCardController : OptionsCardController
+	{
 
         public StackADeckCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
         {
@@ -18,7 +18,7 @@ namespace Studio29.Debugger
         {
 			//Select a deck. Select any number of cards from that deck. Place the selected cards on the top of the deck in any order.
 			List<SelectLocationDecision> storedDeck = new List<SelectLocationDecision>();
-            IEnumerator coroutine = GameController.SelectADeck(DecisionMaker, SelectionType.Custom, loc => loc != TurnTaker.Deck, storedDeck, cardSource: GetCardSource());
+            IEnumerator coroutine = GameController.SelectADeck(DecisionMaker, SelectionType.Custom, loc => loc.IsDeck, storedDeck, cardSource: GetCardSource());
 			if (base.UseUnityCoroutines)
 			{
 				yield return base.GameController.StartCoroutine(coroutine);

@@ -6,8 +6,8 @@ using System.Collections.Generic;
 
 namespace Studio29.Debugger
 {
-    public class PlayCardsCardController : CardController
-    {
+    public class PlayCardsCardController : OptionsCardController
+	{
 
         public PlayCardsCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
         {
@@ -18,7 +18,7 @@ namespace Studio29.Debugger
 		{
 			//Select a deck. Play any number of cards from that deck or trash. If a hero deck was selected, you may also select cards from that hero's hand.
 			List<SelectLocationDecision> storedDeck = new List<SelectLocationDecision>();
-			IEnumerator coroutine = GameController.SelectADeck(DecisionMaker, SelectionType.Custom, loc => loc != TurnTaker.Deck, storedDeck, cardSource: GetCardSource());
+			IEnumerator coroutine = GameController.SelectADeck(DecisionMaker, SelectionType.Custom, loc => loc.IsDeck, storedDeck, cardSource: GetCardSource());
 			if (base.UseUnityCoroutines)
 			{
 				yield return base.GameController.StartCoroutine(coroutine);

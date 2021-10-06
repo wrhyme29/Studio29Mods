@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Studio29.Debugger
 {
-    public class DestroyCardsCardController : CardController
+    public class DestroyCardsCardController : OptionsCardController
     {
 
         public DestroyCardsCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)

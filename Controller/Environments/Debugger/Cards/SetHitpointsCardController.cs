@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Studio29.Debugger
 {
-    public class SetHitpointsCardController : CardController
+    public class SetHitpointsCardController : OptionsCardController
     {
 
         public SetHitpointsCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
