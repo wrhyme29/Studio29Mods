@@ -12,17 +12,15 @@
             "backgroundColor": "B6DB9F",
             "foilBackgroundColor": "DAA465",
             "character": true,
-            "setup": "At the start of the game, select a card in the environment deck or trash. Put that card into play. You may repeat this effect any number of times.",
+            "setup": "At the start of the game, move all option cards from the environment deck underneath this card. Select another environment. Move all cards of the selected environment to the environment deck. You may select a card under this card. Put that card into play. You may repeat this effect any number of times.",
             "gameplay": [
-                "The environment deck may not play cards.",
-                "At the end of the environment turn, select a card in the environment deck or trash. Put that card into play. You may repeat this effect any number of times."
+                "At the end of the environment turn, select a card underneath this card. Put that card into play. You may repeat this effect any number of times."
             ],
             "icons": [
                 "PlayCardNow"
             ],
             "flippedGameplay": [
-                "The environment deck may not play cards.",
-                "At the end of the environment turn, select a card in the environment deck or trash. Put that card into play. You may repeat this effect any number of times."
+                "At the end of the environment turn, select a card underneath this card. Put that card into play. You may repeat this effect any number of times."
             ],
             "flippedIcons": [
                 "PlayCardNow"
