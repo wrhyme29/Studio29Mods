@@ -9,7 +9,7 @@ using System.Linq;
 namespace Studio29Tests
 {
     [TestFixture()]
-    public class DummyPlayerTests : BaseTest
+    public class DummyPlayerTests : CustomBaseTest
     {
         #region BirthdayBoyHelperFunctions
         protected HeroTurnTakerController dummy { get { return FindHero("DummyPlayer"); } }

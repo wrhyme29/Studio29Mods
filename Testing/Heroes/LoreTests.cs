@@ -9,7 +9,7 @@ using System.Linq;
 namespace Studio29Tests
 {
     [TestFixture()]
-    public class LoreTests : BaseTest
+    public class LoreTests : CustomBaseTest
     {
         #region LoreHelperFunctions
         protected HeroTurnTakerController lore { get { return FindHero("Lore"); } }
