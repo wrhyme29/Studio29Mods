@@ -126,22 +126,23 @@
             ],
             "flavorReference": "Birthday Boy, Its MY Birthday #29"
         },
-         {
-            "identifier": "DontGetGreedy",
-            "count": 3,
-            "title": "Don't Get Greedy",
+        {
+            "identifier": "GiftRegistry",
+            "count": 4,
+            "title": "Gift Registry",
             "keywords": [
-                "surprise"
+                "ongoing"
             ],
             "icons": [
+                "Manipulate",
                 "PlayCardNow",
-                "DealDamagePsychic",
                 "DestroySelf",
-                "DrawCardNow"
+                "EndOfTurnAction"
             ],
             "body": [
-                "When this card is drawn, it immediately enters play.",
-                "All heroes deal Birthday Boy 1 irreducible psychic damage for each present from them currently in play. Then, destroy this card and draw a card."
+                "When this card enters play, each other player selects an ongoing, equipment, or target with max 5 HP from their deck. Put the selected cards under this card. Each card now belongs to {BirthdayBoy} and gains the Present keyword.",
+                "At the end of your turn,  put a card from beneath this one into play.",
+                "When there are no cards beneath this one, destroy this card."
             ],
             "flavorQuotes": [
                 {
