@@ -42,17 +42,19 @@
         },
         {
             "identifier": "Blowout",
-            "count": 1,
+            "count": 2,
             "title": "Blowout",
             "keywords": [
                 "one-shot"
             ],
             "icons": [
-                "RemoveFromGame"
+                "DealDamageFire",
+                "Destroy"
             ],
             "body": [
-                "Select a target with a max hp of 5 or fewer that was not in play at the start of the game. Remove that target from the game. ",
-                "Remove this card and one Present in play from the game."
+                "Select a target with a max hp of 5 or fewer.",
+                "{BirthdayBoy} deals another target in the same play area as the selected target 5 - X fire damage, where X is the HP of the selected target.",
+                "Destroy the selected target."
             ],
             "flavorQuotes": [
                 {
@@ -86,7 +88,7 @@
         },
         {
             "identifier": "TrashTheVenue",
-            "count": 3,
+            "count": 2,
             "title": "Trash the Venue",
             "keywords": [
                 "one-shot"
@@ -95,7 +97,7 @@
                 "DestroyEnvironment"
             ],
             "body": [
-                "Destroy up to 2 environment cards. For each card destroyed this way, move 1 hero ongoing, hero equipment, or hero target with max 5 HP or fewer belonging to another hero in play to your hand. "
+                "Destroy up to 2 environment cards. For each card destroyed this way, move 1 hero ongoing, hero equipment, or hero target with max 5 HP or fewer belonging to another hero in play to your hand."
             ],
             "flavorQuotes": [
                 {
