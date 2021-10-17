@@ -231,8 +231,8 @@
                 "DealDamagePsychic"
             ],
             "body": [
-                "Any other hero with presents in play from their deck draws X cards, where X is equal to the number of their presents in play.",
-                "Any other hero with no presents in play deals themselves 2 psychic damage."
+                "Each other hero with presents in play from their deck draws X cards, where X is equal to the number of their presents in play.",
+                "Each other hero with no presents in play deals themselves 2 psychic damage."
             ],
             "flavorQuotes": [
                 {
