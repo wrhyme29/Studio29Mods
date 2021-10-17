@@ -97,7 +97,7 @@
                 "DestroyEnvironment"
             ],
             "body": [
-                "Destroy up to 2 environment cards. For each card destroyed this way, move 1 hero ongoing, hero equipment, or hero target with max 5 HP or fewer belonging to another hero in play to your hand."
+                "Destroy up to 2 environment cards. For each card destroyed this way, move 1 hero ongoing, hero equipment, or hero target with max 5 HP or fewer belonging to another hero in play to your hand. Any card moved this way gains the keyword “Present” and now belongs to {BirthdayBoy}."
             ],
             "flavorQuotes": [
                 {
@@ -142,7 +142,7 @@
                 "EndOfTurnAction"
             ],
             "body": [
-                "When this card enters play, each other player may select an ongoing, equipment, or target with max 5 HP from their deck. Put the selected cards under this card. Each card now belongs to {BirthdayBoy} and gains the Present keyword.",
+                "When this card enters play, each other player may select an ongoing, equipment, or target with max 5 HP or fewer from their deck. Put the selected cards under this card. Each card now belongs to {BirthdayBoy} and gains the Present keyword.",
                 "At the end of your turn,  put a card from beneath this one into play.",
                 "When there are no cards beneath this one, destroy this card."
             ],
