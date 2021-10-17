@@ -1,4 +1,5 @@
-﻿using Handelabra.Sentinels.Engine.Controller;
+﻿using Handelabra;
+using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
 using System.Linq;
 using System.Collections;
@@ -14,32 +15,13 @@ namespace Studio29.BirthdayBoy
 
         }
 
-        public override bool DoNotMoveOneShotToTrash
-        {
-            get
-            {
-                return true;
-            }
-        }
-
         public override IEnumerator Play()
         {
-            //Select a target with a max hp of 5 or fewer that was not in play at the start of the game. Remove that target from the game.
+            //Select a target with a max hp of 5 or fewer.
 
-            IEnumerable<Card> choices = FindCardsWhere(new LinqCardCriteria((Card c) => c.IsInPlayAndHasGameText && c.IsTarget && c.HitPoints.HasValue && c.HitPoints.Value <= 5 && WasNotInPlayAtTheStartOfTheGame(c), "target with 5 or fewer HP that were not in play at the start of the game", useCardsSuffix: false, useCardsPrefix: false, null, "targets with 5 or fewer HP that were not in play at the start of the game")) ;
-            SelectCardDecision selectCardDecision = new SelectCardDecision(GameController, HeroTurnTakerController, SelectionType.RemoveCardFromGame, choices, cardSource: GetCardSource());
-            IEnumerator coroutine = GameController.SelectCardAndDoAction(selectCardDecision, (SelectCardDecision scd) => GameController.MoveCard(TurnTakerController, scd.SelectedCard, scd.SelectedCard.Owner.OutOfGame, showMessage: true, cardSource: GetCardSource()));
-            if (base.UseUnityCoroutines)
-            {
-                yield return base.GameController.StartCoroutine(coroutine);
-            }
-            else
-            {
-                base.GameController.ExhaustCoroutine(coroutine);
-            }
-            //Remove this card and one Present in play from the game.
+            LinqCardCriteria cardCriteria = new LinqCardCriteria((Card c) => c.IsInPlayAndHasGameText && c.IsTarget && c.HitPoints.HasValue && c.HitPoints.Value <= 5, "target with 5 or fewer HP", useCardsSuffix: false, singular: "target with 5 or fewer HP",  plural: "targets with 5 or fewer HP") ;
             List<SelectCardDecision> storedResults = new List<SelectCardDecision>();
-            coroutine = GameController.SelectCardAndStoreResults(HeroTurnTakerController, SelectionType.RemoveCardFromGame, GetPresentsInPlay(), storedResults, false, cardSource: GetCardSource());
+            IEnumerator coroutine = GameController.SelectCardAndStoreResults(HeroTurnTakerController, SelectionType.Custom, cardCriteria, storedResults, false, cardSource: GetCardSource());
             if (base.UseUnityCoroutines)
             {
                 yield return base.GameController.StartCoroutine(coroutine);
@@ -48,13 +30,20 @@ namespace Studio29.BirthdayBoy
             {
                 base.GameController.ExhaustCoroutine(coroutine);
             }
-            List<Card> cardsToRemove = new List<Card>();
-            cardsToRemove.Add(Card);
-            if(DidSelectCard(storedResults))
+
+            if(!DidSelectCard(storedResults))
             {
-                cardsToRemove.Insert(0, GetSelectedCard(storedResults));
+                Log.Debug("A card was not selected for Blowout");
+                yield break;
             }
-            coroutine = GameController.MoveCards(TurnTakerController, cardsToRemove, (Card c) => new MoveCardDestination(TurnTaker.OutOfGame), cardSource: GetCardSource());
+
+            Card selectedCard = GetSelectedCard(storedResults);
+            int X = selectedCard.HitPoints.Value;
+            Location selectedPlayArea = selectedCard.Location;
+
+            //{BirthdayBoy} deals another target in the same play area as the selected target 5 - X fire damage, where X is the HP of the selected target.
+            //TODO: Currently this is giving an error during Damage Preview. Figure out why that is the case
+            coroutine = GameController.SelectTargetsAndDealDamage(HeroTurnTakerController, new DamageSource(GameController, CharacterCard), 5 - X, DamageType.Fire, 1, false, 1, additionalCriteria: c => c.Location == selectedPlayArea && c != selectedCard, cardSource: GetCardSource());
             if (base.UseUnityCoroutines)
             {
                 yield return base.GameController.StartCoroutine(coroutine);
@@ -63,15 +52,28 @@ namespace Studio29.BirthdayBoy
             {
                 base.GameController.ExhaustCoroutine(coroutine);
             }
-            yield break;
+
+            //Destroy the selected target
+            coroutine = GameController.DestroyCard(HeroTurnTakerController, selectedCard, cardSource: GetCardSource());
+            if (base.UseUnityCoroutines)
+            {
+                yield return base.GameController.StartCoroutine(coroutine);
+            }
+            else
+            {
+                base.GameController.ExhaustCoroutine(coroutine);
+            }
+
 
         }
 
-        private bool WasNotInPlayAtTheStartOfTheGame(Card c)
+        public override CustomDecisionText GetCustomDecisionText(IDecision decision)
         {
-            return (from e in Game.Journal.CardEntersPlayEntries()
-                    where e.Card == c && e.Round > 0
-                    select e).Any();
+            return new CustomDecisionText($"Select a card to be destroyed",
+                                            "They are selecting a card to be destroyed",
+                                            "Vote for a card to be destroyed",
+                                            "selecting a card to be destroyed");
+
         }
 
 

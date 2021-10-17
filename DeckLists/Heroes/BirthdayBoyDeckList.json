@@ -42,17 +42,19 @@
         },
         {
             "identifier": "Blowout",
-            "count": 1,
+            "count": 2,
             "title": "Blowout",
             "keywords": [
                 "one-shot"
             ],
             "icons": [
-                "RemoveFromGame"
+                "DealDamageFire",
+                "Destroy"
             ],
             "body": [
-                "Select a target with a max hp of 5 or fewer that was not in play at the start of the game. Remove that target from the game. ",
-                "Remove this card and one Present in play from the game."
+                "Select a target with a max hp of 5 or fewer.",
+                "{BirthdayBoy} deals another target in the same play area as the selected target 5 - X fire damage, where X is the HP of the selected target.",
+                "Destroy the selected target."
             ],
             "flavorQuotes": [
                 {
@@ -86,7 +88,7 @@
         },
         {
             "identifier": "TrashTheVenue",
-            "count": 3,
+            "count": 2,
             "title": "Trash the Venue",
             "keywords": [
                 "one-shot"
@@ -95,7 +97,7 @@
                 "DestroyEnvironment"
             ],
             "body": [
-                "Destroy up to 2 environment cards. For each card destroyed this way, move 1 hero ongoing, hero equipment, or hero target with max 5 HP or fewer belonging to another hero in play to your hand. "
+                "Destroy up to 2 environment cards. For each card destroyed this way, move 1 hero ongoing, hero equipment, or hero target with max 5 HP or fewer belonging to another hero in play to your hand. Any card moved this way gains the keyword “Present” and now belongs to {BirthdayBoy}."
             ],
             "flavorQuotes": [
                 {
@@ -107,7 +109,7 @@
         },
         {
             "identifier": "GiftReceipt",
-            "count": 3,
+            "count": 2,
             "title": "Gift Receipt",
             "keywords": [
                 "one-shot"
@@ -126,22 +128,23 @@
             ],
             "flavorReference": "Birthday Boy, Its MY Birthday #29"
         },
-         {
-            "identifier": "DontGetGreedy",
-            "count": 3,
-            "title": "Don't Get Greedy",
+        {
+            "identifier": "GiftRegistry",
+            "count": 4,
+            "title": "Gift Registry",
             "keywords": [
-                "surprise"
+                "ongoing"
             ],
             "icons": [
+                "Manipulate",
                 "PlayCardNow",
-                "DealDamagePsychic",
                 "DestroySelf",
-                "DrawCardNow"
+                "EndOfTurnAction"
             ],
             "body": [
-                "When this card is drawn, it immediately enters play.",
-                "All heroes deal Birthday Boy 1 irreducible psychic damage for each present from them currently in play. Then, destroy this card and draw a card."
+                "When this card enters play, each other player may select an ongoing, equipment, or target with max 5 HP or fewer from their deck. Put the selected cards under this card. Each card now belongs to {BirthdayBoy} and gains the Present keyword.",
+                "At the end of your turn,  put a card from beneath this one into play.",
+                "When there are no cards beneath this one, destroy this card."
             ],
             "flavorQuotes": [
                 {
@@ -197,7 +200,7 @@
         },
         {
             "identifier": "YoureInvited",
-            "count": 2  ,
+            "count": 3,
             "title": "You're Invited!",
             "keywords": [
                 "one-shot"
@@ -206,7 +209,7 @@
                 "PlayCardNow"
             ],
             "body": [
-                "Any other hero with no presents in play may play an ongoing card, equipment card, or target with no more than a max hp of 5."
+                "Each other hero may play an ongoing card, equipment card, or target with max hp less than or equal to 5."
             ],
             "flavorQuotes": [
                 {
@@ -228,8 +231,8 @@
                 "DealDamagePsychic"
             ],
             "body": [
-                "Any other hero with presents in play from their deck draws X cards, where X is equal to the number of their presents in play.",
-                "Any other hero with no presents in play deals themselves 2 psychic damage."
+                "Each other hero with presents in play from their deck draws X cards, where X is equal to the number of their presents in play.",
+                "Each other hero with no presents in play deals themselves 2 psychic damage."
             ],
             "flavorQuotes": [
                 {
@@ -275,7 +278,7 @@
                 "RemoveFromGame"
             ],
             "body": [
-                "If {BirthdayBoy} owns 40 cards, you may deal one target 24 irreducible radiant damage. You may draw a card.",
+                "If {BirthdayBoy} owns 40 cards, you may deal one target 25 irreducible radiant damage. You may draw a card.",
                 "Remove this card from the game."
             ],
             "flavorQuotes": [

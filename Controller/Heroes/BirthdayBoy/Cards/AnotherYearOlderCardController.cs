@@ -24,12 +24,12 @@ namespace Studio29.BirthdayBoy
 
         public override IEnumerator Play()
         {
-            //If {BirthdayBoy} owns 40 cards, you may deal one target 24 irreducible radiant damage. 
+            //If {BirthdayBoy} owns 40 cards, you may deal one target 25 irreducible radiant damage. 
 
             IEnumerator coroutine;
             if(TurnTaker.GetAllCards().Where(c => !c.IsOffToTheSide && !c.IsOutOfGame).Count() == 41)
             {
-                coroutine = GameController.SelectTargetsAndDealDamage(HeroTurnTakerController, new DamageSource(GameController, CharacterCard), 24, DamageType.Radiant, 1, false, 0, isIrreducible: true, cardSource: GetCardSource());
+                coroutine = GameController.SelectTargetsAndDealDamage(HeroTurnTakerController, new DamageSource(GameController, CharacterCard), 25, DamageType.Radiant, 1, false, 0, isIrreducible: true, cardSource: GetCardSource());
                 if (base.UseUnityCoroutines)
                 {
                     yield return base.GameController.StartCoroutine(coroutine);
