@@ -142,7 +142,7 @@
                 "EndOfTurnAction"
             ],
             "body": [
-                "When this card enters play, each other player may select an ongoing, equipment, or target with max 5 HP or fewer from their deck. Put the selected cards under this card. Each card now belongs to {BirthdayBoy} and gains the Present keyword.",
+                "When this card enters play, each other player may select an ongoing, equipment, or target with max 5 HP or fewer from their deck. Put the selected cards under this card. Each selected card gains the keyword “Present” and now belongs to {BirthdayBoy}.",
                 "At the end of your turn,  put a card from beneath this one into play.",
                 "When there are no cards beneath this one, destroy this card."
             ],
