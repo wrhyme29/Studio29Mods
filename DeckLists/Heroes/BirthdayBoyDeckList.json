@@ -107,7 +107,7 @@
         },
         {
             "identifier": "GiftReceipt",
-            "count": 3,
+            "count": 2,
             "title": "Gift Receipt",
             "keywords": [
                 "one-shot"
@@ -140,7 +140,7 @@
                 "EndOfTurnAction"
             ],
             "body": [
-                "When this card enters play, each other player selects an ongoing, equipment, or target with max 5 HP from their deck. Put the selected cards under this card. Each card now belongs to {BirthdayBoy} and gains the Present keyword.",
+                "When this card enters play, each other player may select an ongoing, equipment, or target with max 5 HP from their deck. Put the selected cards under this card. Each card now belongs to {BirthdayBoy} and gains the Present keyword.",
                 "At the end of your turn,  put a card from beneath this one into play.",
                 "When there are no cards beneath this one, destroy this card."
             ],
@@ -198,7 +198,7 @@
         },
         {
             "identifier": "YoureInvited",
-            "count": 2  ,
+            "count": 3,
             "title": "You're Invited!",
             "keywords": [
                 "one-shot"
@@ -207,7 +207,7 @@
                 "PlayCardNow"
             ],
             "body": [
-                "Any other hero with no presents in play may play an ongoing card, equipment card, or target with no more than a max hp of 5."
+                "Each other hero may play an ongoing card, equipment card, or target with max hp less than or equal to 5."
             ],
             "flavorQuotes": [
                 {
@@ -276,7 +276,7 @@
                 "RemoveFromGame"
             ],
             "body": [
-                "If {BirthdayBoy} owns 40 cards, you may deal one target 24 irreducible radiant damage. You may draw a card.",
+                "If {BirthdayBoy} owns 40 cards, you may deal one target 25 irreducible radiant damage. You may draw a card.",
                 "Remove this card from the game."
             ],
             "flavorQuotes": [
