@@ -1,4 +1,5 @@
-﻿using Handelabra.Sentinels.Engine.Controller;
+﻿using Handelabra;
+using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
 using System.Linq;
 using System.Collections;
@@ -11,14 +12,21 @@ namespace Studio29.BirthdayBoy
 
         public SocialLadderCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
         {
+            SpecialStringMaker.ShowSpecialString(() => $"{heroesWithPresents.Select(tt => tt.NameRespectingVariant).ToCommaList(useWordAnd: true)} {heroesWithPresents.Count().ToString_SingularOrPlural("has", "have")} presents in play.").Condition = () => heroesWithPresents.Any() && heroesWithNoPresents.Any();
+            SpecialStringMaker.ShowSpecialString(() => $"There are no heroes with presents in play.").Condition = () => !heroesWithPresents.Any();
+
+            SpecialStringMaker.ShowSpecialString(() => $"{heroesWithNoPresents.Select(tt => tt.NameRespectingVariant).ToCommaList(useWordAnd: true)} {heroesWithNoPresents.Count().ToString_SingularOrPlural("has", "have")} presents in play.").Condition = () => heroesWithNoPresents.Any() && heroesWithPresents.Any();
+            SpecialStringMaker.ShowSpecialString(() => $"All heroes have presents in play.").Condition = () => !heroesWithNoPresents.Any() ;
 
         }
 
+
+        IEnumerable<TurnTaker> heroesWithPresents => GameController.TurnTakerControllers.Where(ttc => ttc.TurnTaker.IsHero && ttc.TurnTaker != TurnTaker && !ttc.TurnTaker.IsIncapacitatedOrOutOfGame && GetPresentsInPlay().Any(c => GetOriginalOwner(c) == ttc.TurnTaker && GameController.IsTurnTakerVisibleToCardSource(ttc.TurnTaker, GetCardSource()))).Select(ttc => ttc.TurnTaker);
+        IEnumerable<TurnTaker> heroesWithNoPresents => GameController.TurnTakerControllers.Where(ttc => ttc.TurnTaker.IsHero && ttc.TurnTaker != TurnTaker && !ttc.TurnTaker.IsIncapacitatedOrOutOfGame && !GetPresentsInPlay().Any(c => GetOriginalOwner(c) == ttc.TurnTaker && GameController.IsTurnTakerVisibleToCardSource(ttc.TurnTaker, GetCardSource()))).Select(ttc => ttc.TurnTaker);
+
         public override IEnumerator Play()
         {
-            IEnumerable<TurnTaker> heroesWithPresents = GameController.TurnTakerControllers.Where(ttc => ttc.TurnTaker.IsHero && ttc.TurnTaker != TurnTaker && !ttc.TurnTaker.IsIncapacitatedOrOutOfGame && GetPresentsInPlay().Any(c => GetOriginalOwner(c) == ttc.TurnTaker && GameController.IsTurnTakerVisibleToCardSource(ttc.TurnTaker, GetCardSource()))).Select(ttc => ttc.TurnTaker);
-            IEnumerable<TurnTaker> heroesWithNoPresents = GameController.TurnTakerControllers.Where(ttc => ttc.TurnTaker.IsHero && ttc.TurnTaker != TurnTaker && !ttc.TurnTaker.IsIncapacitatedOrOutOfGame && !GetPresentsInPlay().Any(c => GetOriginalOwner(c) == ttc.TurnTaker && GameController.IsTurnTakerVisibleToCardSource(ttc.TurnTaker, GetCardSource()))).Select(ttc => ttc.TurnTaker);
-
+            
             //Any other hero with presents in play from their deck draws X cards, where X is equal to the number of their presents in play 
             IEnumerator coroutine;
             int X;

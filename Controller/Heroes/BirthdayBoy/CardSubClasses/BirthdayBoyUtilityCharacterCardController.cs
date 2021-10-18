@@ -30,5 +30,7 @@ namespace Studio29.BirthdayBoy
 
 			
         }
+		protected int NumberOfCardsBirthdayBoyOwns => TurnTaker.GetAllCards().Where(c => !c.IsOffToTheSide && !c.IsOutOfGame && !c.IsCharacter).Count();
+
 	}
 }

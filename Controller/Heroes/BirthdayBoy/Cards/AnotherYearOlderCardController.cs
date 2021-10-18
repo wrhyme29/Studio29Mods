@@ -11,8 +11,9 @@ namespace Studio29.BirthdayBoy
 
         public AnotherYearOlderCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
         {
-
+            SpecialStringMaker.ShowSpecialString(() => $"{TurnTaker.Name} owns {NumberOfCardsBirthdayBoyOwns} cards.");
         }
+
 
 		public override bool DoNotMoveOneShotToTrash
 		{
@@ -20,14 +21,14 @@ namespace Studio29.BirthdayBoy
 			{
 				return true;
 			}
-		}
+		}       
 
         public override IEnumerator Play()
         {
             //If {BirthdayBoy} owns 40 cards, you may deal one target 25 irreducible radiant damage. 
 
             IEnumerator coroutine;
-            if(TurnTaker.GetAllCards().Where(c => !c.IsOffToTheSide && !c.IsOutOfGame).Count() == 41)
+            if (NumberOfCardsBirthdayBoyOwns == 40)
             {
                 coroutine = GameController.SelectTargetsAndDealDamage(HeroTurnTakerController, new DamageSource(GameController, CharacterCard), 25, DamageType.Radiant, 1, false, 0, isIrreducible: true, cardSource: GetCardSource());
                 if (base.UseUnityCoroutines)
@@ -69,7 +70,6 @@ namespace Studio29.BirthdayBoy
                 base.GameController.ExhaustCoroutine(coroutine);
             }
         }
-
 
     }
 }

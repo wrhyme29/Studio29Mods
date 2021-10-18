@@ -17,6 +17,7 @@ namespace Studio29.BirthdayBoy
 		private bool _checkForReplacements = false;
 		public BirthdayBoyCharacterCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
 		{
+			SpecialStringMaker.ShowSpecialString(() => $"{TurnTaker.Name} owns {NumberOfCardsBirthdayBoyOwns} cards.");
 			AddThisCardControllerToList(CardControllerListType.ModifiesKeywords);
 		}
 
@@ -30,7 +31,7 @@ namespace Studio29.BirthdayBoy
 		{
 			//{BirthdayBoy} may move any hero ongoing, hero equipment, or hero target with max 5hp or fewer in play to your play area. Any card moved this way now belongs to {BirthdayBoy} (when it is destroyed, shuffle into the deck of {BirthdayBoy}). Any card moved this way gains the keyword “Present”.
 			IEnumerator coroutine;
-			if (TurnTaker.GetAllCards().Where(c => !c.IsOffToTheSide && !c.IsOutOfGame).Count() < 41)
+			if (NumberOfCardsBirthdayBoyOwns < 40)
 			{
 				coroutine = MoveCardsToOwnPlayArea();
 			} else
