@@ -18,7 +18,7 @@ namespace Studio29.BirthdayBoy
         public override IEnumerator Play()
         {
             //Return any number of presents to the play area of its original owner. 
-            IEnumerable<Card> presentsList = GetAllPresents();
+            IEnumerable<Card> presentsList = GetPresentsInPlay();
 
             List<SelectCardsDecision> storedResults = new List<SelectCardsDecision>();
             IEnumerator coroutine = GameController.SelectCardsAndStoreResults(HeroTurnTakerController, SelectionType.MoveCard, c=> presentsList.Contains(c),numberOfCards: presentsList.Count(), storedResults: storedResults, optional: false, requiredDecisions: 0, cardSource: GetCardSource());

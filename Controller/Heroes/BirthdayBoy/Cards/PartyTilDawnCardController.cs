@@ -22,31 +22,31 @@ namespace Studio29.BirthdayBoy
             effect.UntilThisTurnIsOver(Game);
             effect.ToTurnPhaseCriteria.TurnTaker = TurnTaker;
             IEnumerator coroutine = AddStatusEffect(effect);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             //{BirthdayBoy} deals up to X targets 1 psychic damage each, where X is the number of presents in his play area."
             coroutine = GameController.SelectTargetsAndDealDamage(HeroTurnTakerController, new DamageSource(GameController, CharacterCard), 1, DamageType.Psychic, GetPresentsInPlay().Count() + 1, false, 0, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 
         private bool ShouldIncreasePhaseActionCount(TurnTaker tt)
         {
             IEnumerable<IncreasePhaseActionCountStatusEffect> source = from sec in GameController.StatusEffectControllers
-                                                                       where sec.StatusEffect.CardSource == base.Card && sec.StatusEffect is IncreasePhaseActionCountStatusEffect
+                                                                       where sec.StatusEffect.CardSource == Card && sec.StatusEffect is IncreasePhaseActionCountStatusEffect
                                                                        select sec.StatusEffect as IncreasePhaseActionCountStatusEffect;
             if (source.Count() > 0)
             {
@@ -57,9 +57,9 @@ namespace Studio29.BirthdayBoy
 
         public override bool AskIfIncreasingCurrentPhaseActionCount()
         {
-            if (base.GameController.ActiveTurnPhase.IsUsePower )
+            if (GameController.ActiveTurnPhase.IsUsePower )
             {
-                return ShouldIncreasePhaseActionCount(base.GameController.ActiveTurnTaker);
+                return ShouldIncreasePhaseActionCount(GameController.ActiveTurnTaker);
             }
             return false;
         }

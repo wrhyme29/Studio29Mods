@@ -14,7 +14,8 @@ namespace Studio29.BirthdayBoy
         public GiftRegistryCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
         {
             SpecialStringMaker.ShowNumberOfCardsUnderCard(Card);
-        }
+			AddThisCardControllerToList(CardControllerListType.ModifiesKeywords);
+		}
 
 		private const string PrimedKey = "Primed";
 

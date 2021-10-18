@@ -26,13 +26,13 @@ namespace Studio29.BirthdayBoy
 		{
 			//{BirthdayBoy} may move any hero ongoing, hero equipment, or hero target with max 5 HP or fewer in another player's hand to your hand. Any card moved this way now belongs to {BirthdayBoy} (when it is destroyed, shuffle into the deck of {BirthdayBoy}). Any card moved this way gains the keyword “Present”
 			IEnumerator coroutine;
-			if (TurnTaker.GetAllCards().Where(c => !c.IsOffToTheSide && !c.IsOutOfGame).Count() < 41)
+			if (NumberOfCardsBirthdayBoyOwns < 40)
 			{
 				coroutine = MoveCardsToOwnHand();
 			}
 			else
 			{
-				coroutine = GameController.SendMessageAction($"{Card.Title} already owns 40 cards! Let's not go overboard with the presents!", Priority.High, GetCardSource(), showCardSource: true);
+				coroutine = GameController.SendMessageAction($"{TurnTaker.Name} already owns 40 cards! Let's not go overboard with the presents!", Priority.High, GetCardSource(), showCardSource: true);
 			}
 			if (base.UseUnityCoroutines)
 			{
