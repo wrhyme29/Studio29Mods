@@ -46,7 +46,7 @@ namespace Studio29.BirthdayBoy
             //Any other hero with no presents in play deals themselves 2 psychic damage."
             foreach(TurnTaker tt in heroesWithNoPresents)
             {
-                IEnumerable<Card> heroCards = tt.CharacterCards.Where(c => c.IsInPlayAndHasGameText);
+                IEnumerable<Card> heroCards = tt.CharacterCards.Where(c => c.IsInPlayAndHasGameText && !c.IsIncapacitatedOrOutOfGame);
                 foreach(Card hero in heroCards)
                 {
                     coroutine = DealDamage(hero, hero, 2, DamageType.Psychic, cardSource: GetCardSource());
