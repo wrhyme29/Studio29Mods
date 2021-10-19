@@ -237,7 +237,7 @@
                 "LoseTheGame"
             ],
             "body": [
-                "At the start of the environment turn, each player may discard a card. This card deals any hero character that does not discard a card 2 energy damage."
+                "At the start of the environment turn, each player may discard a card. This card deals any hero character that does not discard a card 3 energy damage."
             ],
             "flavorText": "Order Up! #101"
         },

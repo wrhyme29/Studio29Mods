@@ -16,7 +16,7 @@ namespace Studio29.TheDeliOfDisaster
 
         public override void AddTriggers()
         {
-            //At the start of the environment turn, each player may discard a card. Deal any character that does not discard a card 2 energy damage.
+            //At the start of the environment turn, each player may discard a card. Deal any character that does not discard a card 3 energy damage.
             AddStartOfTurnTrigger(tt => tt == TurnTaker, StartOfTurnResponse, new TriggerType[] { TriggerType.DiscardCard, TriggerType.DealDamage });
         }
 
@@ -36,8 +36,8 @@ namespace Studio29.TheDeliOfDisaster
 
             IEnumerable<TurnTaker> discardingHeroes = storedResults.Select(dca => dca.HeroTurnTakerController.TurnTaker);
 
-            //This card deals any hero character that does not discard a card 2 energy damage.
-            coroutine = DealDamage(Card, c => c.IsHeroCharacterCard && !discardingHeroes.Contains(c.Owner), 2, DamageType.Energy);
+            //This card deals any hero character that does not discard a card 3 energy damage.
+            coroutine = DealDamage(Card, c => c.IsHeroCharacterCard && !discardingHeroes.Contains(c.Owner), 3, DamageType.Energy);
             if (this.UseUnityCoroutines)
             {
                 yield return this.GameController.StartCoroutine(coroutine);
