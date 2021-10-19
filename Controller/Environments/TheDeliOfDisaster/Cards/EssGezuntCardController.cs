@@ -16,8 +16,8 @@ namespace Studio29.TheDeliOfDisaster
 
         public override void AddTriggers()
         {
-            //At the end of the environment turn, each target regains 1 HP.
-            AddEndOfTurnTrigger(tt => tt == TurnTaker, pca => GameController.GainHP(DecisionMaker, c => c.IsTarget, 1, cardSource: GetCardSource()), TriggerType.GainHP);
+            //At the end of the environment turn, each target regains 2 HP.
+            AddEndOfTurnTrigger(tt => tt == TurnTaker, pca => GameController.GainHP(DecisionMaker, c => c.IsTarget, 2, cardSource: GetCardSource()), TriggerType.GainHP);
         }
 
     }
