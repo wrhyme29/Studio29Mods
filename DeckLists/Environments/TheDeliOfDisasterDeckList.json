@@ -30,8 +30,8 @@
                 "StartAndEndOfTurnAction"
             ],
             "body": [
-                "At the start of the environment turn, discard the top card of each deck.",
-                "At the end of the environment turn, shuffle each trash into its deck."
+                "At the start of a hero's turn, that hero discards 2 cards from their hand.",
+                "At the end of a hero's turn, that hero draws 2 cards."
             ],
             "flavorText": "Order Up! #3"
         },
