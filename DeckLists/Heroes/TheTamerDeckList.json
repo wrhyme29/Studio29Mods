@@ -271,7 +271,7 @@
         },
         {
             "identifier": "MotherOfThePack",
-            "count": 3,
+            "count": 2,
             "title": "Mother of the Pack",
             "keywords": [
                 "lion"
@@ -312,6 +312,30 @@
             ],
             "flavorReference": "The Tamer, Under the Big Top #29",
             "hitpoints": 9
+        },
+        {
+            "identifier": "ChartriceTheElder",
+            "count": 1,
+            "title": "Chartice the Elder",
+            "keywords": [
+                "lion"
+            ],
+            "icons": [
+                "DealDamageMelee",
+                "DrawCardNow"
+            ],
+            "body": [
+                "When this card is dealt exactly 1 damage, you may discard a card to play a card.",
+                "When this card is dealt more than 1 damage, it deals each non-lion target 1 melee damage."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29",
+            "hitpoints": 5
         },
         {
             "identifier": "BorealisTheBrilliant",
