@@ -16,23 +16,25 @@ namespace Studio29.TheDeliOfDisaster
 
         public override void AddTriggers()
         {
-            //At the start of the environment turn, discard the top card of each deck.
-            AddStartOfTurnTrigger(tt => tt == TurnTaker, StartOfTurnResponse, TriggerType.DiscardCard);
+            //At the start of a hero's turn, that hero discards 2 cards from their hand.
+            AddStartOfTurnTrigger(tt => tt.IsHero && GameController.IsTurnTakerVisibleToCardSource(tt, GetCardSource()), StartOfTurnResponse, TriggerType.DiscardCard);
 
-            //At the end of the environment turn, shuffle each trash into its deck.
-            AddEndOfTurnTrigger(tt => tt == TurnTaker, EndOfTurnResponse, TriggerType.ShuffleTrashIntoDeck);
+            //At the end of a hero's turn, that hero draws 2 cards.
+            AddEndOfTurnTrigger(tt => tt.IsHero && GameController.IsTurnTakerVisibleToCardSource(tt, GetCardSource()), EndOfTurnResponse, TriggerType.ShuffleTrashIntoDeck);
         }
 
         private IEnumerator EndOfTurnResponse(PhaseChangeAction pca)
         {
-            //need to adjust criteria to pull from only visible decks for OA correctly and aeon men scion deck when appropriate
-            return GameController.SelectTurnTakersAndDoAction(DecisionMaker, new LinqTurnTakerCriteria((TurnTaker tt) => !tt.IsIncapacitatedOrOutOfGame, ""), SelectionType.ShuffleTrashIntoDeck, (TurnTaker tt) => GameController.ShuffleTrashIntoDeck(GameController.FindTurnTakerController(tt), cardSource: GetCardSource()), allowAutoDecide: true, cardSource: GetCardSource());
+            TurnTaker tt = pca.ToPhase.TurnTaker;
+            HeroTurnTakerController httc = FindHeroTurnTakerController(tt.ToHero());
+            return GameController.SelectAndDiscardCards(httc, 2, false, 2, cardSource: GetCardSource());
         }
 
         private IEnumerator StartOfTurnResponse(PhaseChangeAction pca)
         {
-            //need to adjust criteria to pull from only visible decks for OA correctly and aeon men scion deck when appropriate
-            return GameController.DiscardTopCardsOfDecks(DecisionMaker, (Location l) => !l.OwnerTurnTaker.IsIncapacitatedOrOutOfGame, 1, responsibleTurnTaker: TurnTaker, cardSource: GetCardSource());
+            TurnTaker tt = pca.ToPhase.TurnTaker;
+            HeroTurnTakerController httc = FindHeroTurnTakerController(tt.ToHero());
+            return DrawCards(httc, 2);
         }
     }
 }
