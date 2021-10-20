@@ -145,28 +145,8 @@
             "flavorReference": "The Tamer, Under the Big Top #29"
         },
         {
-            "identifier": "GrandFinale",
-            "count": 2,
-            "title": "Grand Finale",
-            "keywords": [
-                "ongoing",
-                "limited"
-            ],
-            "icons": [
-                "DealDamageEnergy"
-            ],
-            "body": "If damage dealt by a Lion would reduce {TheTamer} to 0 HP, {TheTamer} may first deal one non-hero target 10 irreducible energy damage.",
-            "flavorQuotes": [
-                {
-                    "identifier": "TheTamer",
-                    "text": "-"
-                }
-            ],
-            "flavorReference": "The Tamer, Under the Big Top #29"
-        },
-        {
             "identifier": "HereKittyKitty",
-            "count": 2,
+            "count": 4,
             "title": "Here Kitty Kitty",
             "keywords": [
                 "one-shot"
@@ -175,7 +155,7 @@
                 "Search",
                 "PlayCardNow"
             ],
-            "body": "Search your deck for one Lion and put it into play. You may play a card.",
+            "body": "Search your deck for 1 Lion and put it into your hand. You may play a card.",
             "flavorQuotes": [
                 {
                     "identifier": "TheTamer",
