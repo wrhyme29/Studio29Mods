@@ -41,7 +41,7 @@
         },
         {
             "identifier": "PhileonTheDestroyer",
-            "count": 2,
+            "count": 1,
             "title": "Phileon the Destroyer",
             "keywords": [
                 "lion"
@@ -49,7 +49,10 @@
             "icons": [
                 "DealDamageMelee"
             ],
-            "body": "When this card is dealt damage, it deals {TheTamer} 1 melee damage and another target 2 melee damage.",
+            "body": [
+                "When this card is dealt exactly 1 damage, it deals 2 non-hero targets 2 melee damage each.",
+                "When this card is dealt more than 1 damage, it deals each non-lion target 1 melee damage."
+            ],
             "flavorQuotes": [
                 {
                     "identifier": "TheTamer",
@@ -57,7 +60,30 @@
                 }
             ],
             "flavorReference": "The Tamer, Under the Big Top #29",
-            "hitpoints": 6
+            "hitpoints": 9
+        },
+        {
+            "identifier": "MistyTheYoung",
+            "count": 1,
+            "title": "Misty the Young",
+            "keywords": [
+                "lion"
+            ],
+            "icons": [
+                "DealDamageMelee"
+            ],
+            "body": [
+                "When this card is dealt exactly 1 damage, it deals 2 other targets 1 melee damage each.",
+                "When this card is dealt more than 1 damage, it deals each non-lion target 1 melee damage."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29",
+            "hitpoints": 5
         },
         {
             "identifier": "ChairOfConfusion",
@@ -98,7 +124,7 @@
             ],
             "flavorReference": "The Tamer, Under the Big Top #29"
         },
-                {
+        {
             "identifier": "TapOut",
             "count": 3,
             "title": "Tap Out",
@@ -180,7 +206,7 @@
         },
         {
             "identifier": "LingorthTheLighthearted",
-            "count": 2,
+            "count": 1,
             "title": "Lingorth the Lighthearted",
             "keywords": [
                 "lion"
@@ -190,8 +216,8 @@
             ],
             "body": [
                 "When this card is dealt exactly 1 damage, it deals one non-hero target 4 melee damage.",
-                "When this card is dealt more than 1 damage, it deals {TheTamer} 2 melee damage"
-             ],
+                "When this card is dealt more than 1 damage, it deals each non-lion target 1 melee damage."
+            ],
             "flavorQuotes": [
                 {
                     "identifier": "TheTamer",
@@ -199,7 +225,30 @@
                 }
             ],
             "flavorReference": "The Tamer, Under the Big Top #29",
-            "hitpoints": 6
+            "hitpoints": 9
+        },
+        {
+            "identifier": "DariusTheBoastful",
+            "count": 1,
+            "title": "Darius the Boastful",
+            "keywords": [
+                "lion"
+            ],
+            "icons": [
+                "DealDamageMelee"
+            ],
+            "body": [
+                "When this card is dealt exactly 1 damage, it deals each non-hero target 2 melee damage and 1 other hero target 2 melee damage.",
+                "When this card is dealt more than 1 damage, it deals each non-lion target 1 melee damage."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29",
+            "hitpoints": 9
         },
         {
             "identifier": "RingOfFire",
@@ -230,7 +279,7 @@
             "icons": [
                 "RedirectDamage"
             ],
-            "body": "Redirect all Lion damage dealt to {TheTamer} to this card.",
+            "body": "You may redirect any damage dealt to lion cards to this card. If this card was dealt damage this way, this card deals the source of that damage 3 melee damage.",
             "flavorQuotes": [
                 {
                     "identifier": "TheTamer",
@@ -238,11 +287,11 @@
                 }
             ],
             "flavorReference": "The Tamer, Under the Big Top #29",
-            "hitpoints": 5
+            "hitpoints": 12
         },
         {
             "identifier": "GildeasTheGood",
-            "count": 2,
+            "count": 1,
             "title": "Gildeas the Good",
             "keywords": [
                 "lion"
@@ -251,7 +300,10 @@
                 "DealDamageMelee",
                 "DrawCardNow"
             ],
-            "body": "When this card is dealt damage, it deals {TheTamer} 1 melee damage. Then, draw a card.",
+            "body": [
+                "When this card is dealt exactly 1 damage, draw a card.",
+                "When this card is dealt more than 1 damage, it deals each non-lion target 1 melee damage."
+            ],
             "flavorQuotes": [
                 {
                     "identifier": "TheTamer",
@@ -259,7 +311,31 @@
                 }
             ],
             "flavorReference": "The Tamer, Under the Big Top #29",
-            "hitpoints": 6
+            "hitpoints": 9
+        },
+        {
+            "identifier": "BorealisTheBrilliant",
+            "count": 1,
+            "title": "Borealis the Brilliant",
+            "keywords": [
+                "lion"
+            ],
+            "icons": [
+                "DealDamageMelee",
+                "GainHP"
+            ],
+            "body": [
+                "When this card is dealt exactly 1 damage, each other lion gains 2 HP.",
+                "When this card is dealt more than 1 damage, it deals each non-lion target 1 melee damage."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29",
+            "hitpoints": 9
         },
         {
             "identifier": "ThreeRings",
@@ -336,8 +412,8 @@
                 "DealDamageMelee"
             ],
             "body": [
-             "If there are more Lions than villain targets in play, each Lion may deal one target 1 melee damage.",
-             "One target dealt damage this way deals one Lion 2 melee damage."
+                "If there are more Lions than villain targets in play, each Lion may deal one target 1 melee damage.",
+                "One target dealt damage this way deals one Lion 2 melee damage."
             ],
             "flavorQuotes": [
                 {
@@ -366,7 +442,7 @@
             ],
             "flavorReference": "The Tamer, Under the Big Top #29"
         },
-         {
+        {
             "identifier": "WhippingWhiskers",
             "count": 2,
             "title": "Whipping Whiskers",
