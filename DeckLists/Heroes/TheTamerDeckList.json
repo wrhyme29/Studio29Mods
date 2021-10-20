@@ -271,7 +271,7 @@
         },
         {
             "identifier": "MotherOfThePack",
-            "count": 2,
+            "count": 1,
             "title": "Mother of the Pack",
             "keywords": [
                 "lion"
@@ -336,6 +336,30 @@
             ],
             "flavorReference": "The Tamer, Under the Big Top #29",
             "hitpoints": 5
+        },
+        {
+            "identifier": "MoritzTheMorbid",
+            "count": 1,
+            "title": "Moritz the Morbid",
+            "keywords": [
+                "lion"
+            ],
+            "icons": [
+                "DealDamageMelee",
+                "DrawCardNow"
+            ],
+            "body": [
+                "When this card is dealt exactly 1 damage, destroy 1 non-hero target with 2 or fewer HP.",
+                "When this card is dealt more than 1 damage, it deals each non-lion target 1 melee damage."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29",
+            "hitpoints": 9
         },
         {
             "identifier": "BorealisTheBrilliant",
