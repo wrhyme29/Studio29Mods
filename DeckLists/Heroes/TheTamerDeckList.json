@@ -377,7 +377,7 @@
                 "PlayCardNow",
                 "DestroySelf"
             ],
-            "body": "When a Lion is destroyed you may return it to your hand. You may play a Lion. Destroy this card.",
+            "body": "When a Lion is destroyed, you may return it to your hand. Then, you may play a Lion card from your hand. Destroy this card.",
             "flavorQuotes": [
                 {
                     "identifier": "TheTamer",
@@ -388,7 +388,7 @@
         },
         {
             "identifier": "NemeanCoat",
-            "count": 2,
+            "count": 1,
             "title": "Nemean Coat",
             "keywords": [
                 "equipment",
