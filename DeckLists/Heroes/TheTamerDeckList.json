@@ -96,7 +96,7 @@
             "icons": [
                 "ReduceDamageTakem"
             ],
-            "body": "Reduce damage dealt to {TheTamer} by Lions by 1.",
+            "body": "Whenever a lion would be dealt damage, reduce that damage to 1.",
             "flavorQuotes": [
                 {
                     "identifier": "TheTamer",
