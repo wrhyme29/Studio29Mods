@@ -107,7 +107,7 @@
         },
         {
             "identifier": "ElementalWhip",
-            "count": 3,
+            "count": 4,
             "title": "Elemental Whip",
             "keywords": [
                 "one-shot"
@@ -115,7 +115,7 @@
             "icons": [
                 "DealDamageEnergy"
             ],
-            "body": "Deal each Lion card in play 1 energy damage. If no lions were dealt damage this way, {TheTamer} deals himself 1 energy damage and draws 2 cards.",
+            "body": "Deal each Lion card in play 1 energy damage. If no lions were dealt damage this way, {TheTamer} deals himself 2 energy damage and draws 2 cards.",
             "flavorQuotes": [
                 {
                     "identifier": "TheTamer",
@@ -126,7 +126,7 @@
         },
         {
             "identifier": "TapOut",
-            "count": 3,
+            "count": 2,
             "title": "Tap Out",
             "keywords": [
                 "one-shot"
@@ -135,7 +135,7 @@
                 "DestroyTarget",
                 "GainHP"
             ],
-            "body": "Destroy all Lions in play. {TheTamer} regains 2 HP for each Lion destroyed this way.",
+            "body": "Destroy all Lions in play. {TheTamer} regains 3 HP for each Lion destroyed this way.",
             "flavorQuotes": [
                 {
                     "identifier": "TheTamer",

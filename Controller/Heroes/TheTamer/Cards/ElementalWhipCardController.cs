@@ -29,13 +29,13 @@ namespace Studio29.TheTamer
                 GameController.ExhaustCoroutine(coroutine);
             }
 
-            //If no lions were dealt damage this way, {Tamer} deals himself 1 energy damage and draws 2 cards.
+            //If no lions were dealt damage this way, {Tamer} deals himself 2 energy damage and draws 2 cards.
             if(DidDealDamage(storedResults) && storedResults.Any(dd => IsLion(dd.Target) && dd.DidDealDamage))
             {
                 yield break;
             }
 
-            coroutine = DealDamage(CharacterCard, CharacterCard, 1, DamageType.Energy, cardSource: GetCardSource());
+            coroutine = DealDamage(CharacterCard, CharacterCard, 2, DamageType.Energy, cardSource: GetCardSource());
             if (UseUnityCoroutines)
             {
                 yield return GameController.StartCoroutine(coroutine);
