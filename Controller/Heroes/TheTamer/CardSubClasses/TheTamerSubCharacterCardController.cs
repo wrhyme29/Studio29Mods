@@ -8,9 +8,11 @@ namespace Studio29.TheTamer
 		public TheTamerSubCharacterCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
 		{
 		}
+
+		public static readonly string LionKeyword = "lion";
 		protected bool IsLion(Card card)
 		{
-			return card.DoKeywordsContain("lion");
+			return card.DoKeywordsContain(LionKeyword);
 		}
 	}
 }

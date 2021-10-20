@@ -10,13 +10,13 @@
             "identifier": "TheTamerCharacter",
             "count": 1,
             "title": "The Tamer",
-            "body": "Nine Lives",
+            "body": "Curtains Up",
             "backgroundColor": "FF0000",
             "foilBackgroundColor": "FF0000",
             "hitpointColor": "FF0000",
             "character": true,
             "powers": [
-                "Until the start of your next turn, the first time a Lion is destroyed, it deals 1 target 3 melee damage. You may return that Lion to your hand."
+                "Until the start of your next turn, whenever a target would deal exactly 1 damage to {TheTamer}, he may redirect that target to a lion in play."
             ],
             "icons": [
                 "HasPower",
