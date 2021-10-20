@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Studio29Tests
 {
     [TestFixture()]
-    public class TestPlayerTests : BaseTest
+    public class TestPlayerTests : CustomBaseTest
     {
         #region TestPlayerHelperFunctions
         protected HeroTurnTakerController tester { get { return FindHero("TestPlayer"); } }

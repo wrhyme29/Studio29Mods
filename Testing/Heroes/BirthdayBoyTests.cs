@@ -7,7 +7,7 @@ using System.Linq;
 namespace Studio29Tests
 {
     [TestFixture()]
-    public class BirthdayBoyTests : BaseTest
+    public class BirthdayBoyTests : CustomBaseTest
     {
         #region BirthdayBoyHelperFunctions
         protected HeroTurnTakerController birthday { get { return FindHero("BirthdayBoy"); } }

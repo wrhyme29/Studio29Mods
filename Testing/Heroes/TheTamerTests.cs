@@ -8,10 +8,9 @@ using System.Linq;
 namespace Studio29Tests
 {
     [TestFixture()]
-    public class TheTamerTests : BaseTest
+    public class TheTamerTests : CustomBaseTest
     {
         #region TheTamerHelperFunctions
-        protected HeroTurnTakerController tamer { get { return FindHero("TheTamer"); } }
         private void SetupIncap(TurnTakerController villain)
         {
             SetHitPoints(tamer.CharacterCard, 1);

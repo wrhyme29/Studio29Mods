@@ -11,7 +11,6 @@ namespace Studio29Tests
     public class LoreTests : CustomBaseTest
     {
         #region LoreHelperFunctions
-        protected HeroTurnTakerController lore { get { return FindHero("Lore"); } }
         private void SetupIncap(TurnTakerController villain)
         {
             SetHitPoints(lore.CharacterCard, 1);
