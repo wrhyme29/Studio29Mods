@@ -279,7 +279,7 @@
             "icons": [
                 "RedirectDamage"
             ],
-            "body": "You may redirect any damage dealt to lion cards to this card. If this card was dealt damage this way, this card deals the source of that damage 3 melee damage.",
+            "body": "You may redirect any damage dealt to other lion cards to this card. If this card was dealt damage this way, this card deals the source of that damage 3 melee damage.",
             "flavorQuotes": [
                 {
                     "identifier": "TheTamer",
