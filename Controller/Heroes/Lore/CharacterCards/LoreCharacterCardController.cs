@@ -1,14 +1,13 @@
 ﻿using Handelabra;
 using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Studio29.Lore
 {
-	public class LoreCharacterCardController : LoreSubCharacterCardController
+    public class LoreCharacterCardController : LoreSubCharacterCardController
 	{
 		public LoreCharacterCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
 		{

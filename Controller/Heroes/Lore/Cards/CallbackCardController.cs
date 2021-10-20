@@ -1,13 +1,12 @@
 ﻿using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Studio29.Lore
 {
-	public class CallbackCardController : StoryCardController
+    public class CallbackCardController : StoryCardController
 	{
 
 		public CallbackCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, MysteryKeyword)

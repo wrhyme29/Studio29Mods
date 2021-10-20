@@ -1,10 +1,6 @@
 ﻿using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
-using System;
-using Handelabra;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Studio29.DummyPlayer
 {
