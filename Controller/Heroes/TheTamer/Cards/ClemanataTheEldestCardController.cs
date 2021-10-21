@@ -6,10 +6,10 @@ using System.Collections.Generic;
 
 namespace Studio29.TheTamer
 {
-    public class ClemanataThEldestCardController : LionCardController
+    public class ClemanataTheEldestCardController : LionCardController
     {
 
-        public ClemanataThEldestCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, TriggerType.RevealCard)
+        public ClemanataTheEldestCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, TriggerType.RevealCard)
         {
 
         }
