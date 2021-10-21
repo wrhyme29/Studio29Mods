@@ -10,6 +10,7 @@
 	"decks": {
 		"heroes": [
 			"BirthdayBoy",
+			"DummyPlayer",
 			"Lore",
 			"TheTamer"
 		],
