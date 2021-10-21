@@ -14,27 +14,17 @@ namespace Studio29.TheTamer
 		}
 		public override IEnumerator UsePower(int index = 0)
 		{
-			//Until the start of your next turn, the first time a Lion is destroyed, it deals 1 target 3 melee damage. You may return that Lion to your hand.
-			int targets = base.GetPowerNumeral(0, 1);
-			int amount = base.GetPowerNumeral(1, 3);
+			//Until the start of your next turn, whenever a target would deal exactly 1 damage to { TheTamer}, he may redirect that target to a lion in play.
+			int originalDamage = GetPowerNumeral(0, 1);
 
-			int[] powerNumerals = new int[]
-			{
-				targets,
-				amount
-			};
+			RedirectDamageStatusEffect effect = new RedirectDamageStatusEffect();
+			effect.UntilStartOfNextTurn(TurnTaker);
+			effect.TargetCriteria.IsSpecificCard = Card;
+			effect.DamageAmountCriteria.EqualTo = 1;
+			effect.RedirectableTargets.HasAnyOfTheseKeywords = new List<string>() { LionKeyword };
+			effect.IsOptional = true;
 
-			WhenCardIsDestroyedStatusEffect effect = new WhenCardIsDestroyedStatusEffect(base.Card, "DealDamageAndReturnToHand", "The first time a Lion is destroyed, it deals 1 target 3 melee damage. You may return that Lion to your hand.", new TriggerType[]
-			{
-				TriggerType.DealDamage,
-				TriggerType.ChangePostDestroyDestination
-			}, base.HeroTurnTaker, base.Card, powerNumerals);
-			effect.UntilStartOfNextTurn(base.TurnTaker);
-			effect.CardDestroyedCriteria.HasAnyOfTheseKeywords = new List<string>() { "lion" };
-			effect.BeforeOrAfter = BeforeOrAfter.After;
-			effect.NumberOfUses = 1;
-
-			IEnumerator coroutine = base.AddStatusEffect(effect);
+			IEnumerator coroutine = AddStatusEffect(effect);
 			if (base.UseUnityCoroutines)
 			{
 				yield return base.GameController.StartCoroutine(coroutine);
@@ -43,57 +33,9 @@ namespace Studio29.TheTamer
 			{
 				base.GameController.ExhaustCoroutine(coroutine);
 			}
-			yield break;
 		}
 
-		public IEnumerator DealDamageAndReturnToHand(DestroyCardAction dca, TurnTaker hero, StatusEffect effect, int[] powerNumerals = null)
-		{
-			int? targets = null;
-			int? amount = null;
-			if (powerNumerals != null)
-			{
-				targets = new int?(powerNumerals.ElementAtOrDefault(0));
-				amount = new int?(powerNumerals.ElementAtOrDefault(1));
-			}
-			if (targets == null)
-			{
-				targets = new int?(1);
-			}
-			if (amount == null)
-			{
-				targets = new int?(3);
-			}
-
-			//It deals 1 target 3 melee damage. 
-			Card destroyedLion = dca.CardToDestroy.Card;
-			IEnumerator coroutine = base.GameController.SelectTargetsAndDealDamage(this.DecisionMaker, new DamageSource(base.GameController, destroyedLion), amount.Value, DamageType.Melee, targets, false, targets, cardSource: GetCardSource());
-			if (base.UseUnityCoroutines)
-			{
-				yield return base.GameController.StartCoroutine(coroutine);
-			}
-			else
-			{
-				base.GameController.ExhaustCoroutine(coroutine);
-			}
-
-			//You may return that Lion to your hand.
-
-			List<YesNoCardDecision> storedResults = new List<YesNoCardDecision>();
-			coroutine = base.GameController.MakeYesNoCardDecision(base.HeroTurnTakerController, SelectionType.MoveCardToHand, dca.CardToDestroy.Card,storedResults: storedResults,cardSource: GetCardSource());
-			if (base.UseUnityCoroutines)
-			{
-				yield return base.GameController.StartCoroutine(coroutine);
-			}
-			else
-			{
-				base.GameController.ExhaustCoroutine(coroutine);
-			}
-			if (base.DidPlayerAnswerYes(storedResults))
-			{
-				dca.SetPostDestroyDestination(base.HeroTurnTaker.Hand, decisionSources: storedResults.CastEnumerable<YesNoCardDecision, IDecision>());
-			}
-			yield break;
-		}
+		
 		public override IEnumerator UseIncapacitatedAbility(int index)
 		{
 			switch (index)

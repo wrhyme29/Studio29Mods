@@ -1,15 +1,11 @@
 ﻿using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
-using Handelabra.Sentinels.UnitTest;
 using NUnit.Framework;
-using Studio29.DummyPlayer;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Studio29Tests
 {
     [TestFixture()]
-    public class TestPlayerTests : BaseTest
+    public class TestPlayerTests : CustomBaseTest
     {
         #region TestPlayerHelperFunctions
         protected HeroTurnTakerController tester { get { return FindHero("TestPlayer"); } }

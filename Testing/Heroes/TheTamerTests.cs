@@ -1,6 +1,5 @@
 ﻿using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
-using Handelabra.Sentinels.UnitTest;
 using NUnit.Framework;
 using Studio29.TheTamer;
 using System.Collections.Generic;
@@ -9,10 +8,9 @@ using System.Linq;
 namespace Studio29Tests
 {
     [TestFixture()]
-    public class TheTamerTests : BaseTest
+    public class TheTamerTests : CustomBaseTest
     {
         #region TheTamerHelperFunctions
-        protected HeroTurnTakerController tamer { get { return FindHero("TheTamer"); } }
         private void SetupIncap(TurnTakerController villain)
         {
             SetHitPoints(tamer.CharacterCard, 1);

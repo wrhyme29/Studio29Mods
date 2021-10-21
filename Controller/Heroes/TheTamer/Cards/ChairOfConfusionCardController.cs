@@ -1,8 +1,5 @@
 ﻿using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Studio29.TheTamer
 {
@@ -16,8 +13,8 @@ namespace Studio29.TheTamer
 
         public override void AddTriggers()
         {
-            //Reduce damage dealt to The Tamer by Lions by 1.
-            AddReduceDamageTrigger((DealDamageAction dd) => dd.DamageSource != null && IsLion(dd.DamageSource.Card) && dd.Target == base.CharacterCard, (DealDamageAction dd) => 1);
+            //Whenever a lion would be dealt damage, reduce that damage to 1.
+            AddReduceDamageToSetAmountTrigger(dd => IsLion(dd.Target), 1);
         }
 
 

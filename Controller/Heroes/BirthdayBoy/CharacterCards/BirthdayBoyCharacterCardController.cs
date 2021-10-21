@@ -1,14 +1,13 @@
 ﻿using Handelabra;
 using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Studio29.BirthdayBoy
 {
-	public class BirthdayBoyCharacterCardController : BirthdayBoyUtilityCharacterCardController
+    public class BirthdayBoyCharacterCardController : BirthdayBoyUtilityCharacterCardController
 	{
 		public override bool AllowFastCoroutinesDuringPretend => false;
 		public override bool UseDecisionMakerAsCardOwner => true;

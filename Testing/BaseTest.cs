@@ -9,8 +9,9 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using Handelabra.Sentinels.Engine.Controller.PromoCardUnlockControllers;
+using Handelabra;
 
-namespace Handelabra.Sentinels.UnitTest
+namespace Studio29Tests
 {
     public class BaseTest
     {

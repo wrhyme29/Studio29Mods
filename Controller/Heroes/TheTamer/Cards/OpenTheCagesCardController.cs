@@ -1,15 +1,13 @@
 ﻿using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace Studio29.TheTamer
 {
-    public class SendInTheClownsCardController : TheTamerCardController
+    public class OpenTheCagesCardController : TheTamerCardController
     {
 
-        public SendInTheClownsCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
+        public OpenTheCagesCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
         {
 
         }

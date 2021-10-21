@@ -1,15 +1,13 @@
 ﻿using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
-using Handelabra.Sentinels.UnitTest;
 using NUnit.Framework;
 using Studio29.BirthdayBoy;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Studio29Tests
 {
     [TestFixture()]
-    public class BirthdayBoyTests : BaseTest
+    public class BirthdayBoyTests : CustomBaseTest
     {
         #region BirthdayBoyHelperFunctions
         protected HeroTurnTakerController birthday { get { return FindHero("BirthdayBoy"); } }

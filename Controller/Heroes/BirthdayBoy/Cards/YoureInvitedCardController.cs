@@ -3,8 +3,6 @@ using Handelabra.Sentinels.Engine.Model;
 using System;
 using System.Linq;
 using System.Collections;
-using System.Collections.Generic;
-using Handelabra;
 
 namespace Studio29.BirthdayBoy
 {

@@ -1,6 +1,5 @@
 ﻿using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
-using Handelabra.Sentinels.UnitTest;
 using NUnit.Framework;
 using Studio29.Lore;
 using System.Collections.Generic;
@@ -12,7 +11,6 @@ namespace Studio29Tests
     public class LoreTests : CustomBaseTest
     {
         #region LoreHelperFunctions
-        protected HeroTurnTakerController lore { get { return FindHero("Lore"); } }
         private void SetupIncap(TurnTakerController villain)
         {
             SetHitPoints(lore.CharacterCard, 1);
