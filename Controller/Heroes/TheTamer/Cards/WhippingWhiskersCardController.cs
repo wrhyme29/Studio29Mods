@@ -16,10 +16,10 @@ namespace Studio29.TheTamer
 
         public override IEnumerator Play()
         {
-            //One Lion deals one other Lion 2 melee damage. A Lion dealt damage this way deals all non-hero targets 1 energy damage.
+            //One Lion deals one other Lion 1 melee damage. A Lion dealt damage this way deals all non-hero targets 1 energy damage.
             IEnumerable<Card> choices = FindCardsWhere((Card c) => c.IsInPlayAndHasGameText && IsLion(c));
             List<SelectCardDecision> storedResults = new List<SelectCardDecision>();
-            IEnumerator coroutine = GameController.SelectCardAndStoreResults(base.HeroTurnTakerController, SelectionType.CardToDealDamage, new LinqCardCriteria((Card c) => c.IsInPlayAndHasGameText && IsLion(c), "lion"), storedResults, false, cardSource: GetCardSource());
+            IEnumerator coroutine = GameController.SelectCardAndStoreResults(HeroTurnTakerController, SelectionType.CardToDealDamage, new LinqCardCriteria((Card c) => c.IsInPlayAndHasGameText && IsLion(c), "lion"), storedResults, false, cardSource: GetCardSource());
             if (base.UseUnityCoroutines)
             {
                 yield return base.GameController.StartCoroutine(coroutine);
@@ -32,7 +32,7 @@ namespace Studio29.TheTamer
             {
                 Card source = GetSelectedCard(storedResults);
                 List<DealDamageAction> storedDamage = new List<DealDamageAction>() ;
-                coroutine = GameController.SelectTargetsAndDealDamage(base.HeroTurnTakerController, new DamageSource(GameController, source), 2, DamageType.Melee, new int?(1), false, new int?(1), additionalCriteria: (Card c) => IsLion(c) && c.IsInPlayAndHasGameText && c != source, storedResultsDamage: storedDamage, cardSource: GetCardSource());
+                coroutine = GameController.SelectTargetsAndDealDamage(HeroTurnTakerController, new DamageSource(GameController, source), 1, DamageType.Melee, new int?(1), false, new int?(1), additionalCriteria: (Card c) => IsLion(c) && c.IsInPlayAndHasGameText && c != source, storedResultsDamage: storedDamage, cardSource: GetCardSource());
                 if (base.UseUnityCoroutines)
                 {
                     yield return base.GameController.StartCoroutine(coroutine);
