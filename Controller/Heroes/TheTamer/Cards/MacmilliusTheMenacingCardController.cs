@@ -4,10 +4,10 @@ using System.Collections;
 
 namespace Studio29.TheTamer
 {
-    public class MoritzTheMorbidCardController : LionCardController
+    public class MacmilliusTheMenacingCardController : LionCardController
     {
 
-        public MoritzTheMorbidCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, TriggerType.DestroyCard)
+        public MacmilliusTheMenacingCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, TriggerType.DestroyCard)
         {
 
         }
