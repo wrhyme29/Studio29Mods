@@ -16,7 +16,7 @@
             "hitpointColor": "FF0000",
             "character": true,
             "powers": [
-                "Until the start of your next turn, whenever a target would deal exactly 1 damage to {TheTamer}, he may redirect that target to a lion in play."
+                "Until the start of your next turn, whenever a target would deal exactly 1 damage to {TheTamer}, he may redirect that damage to a lion in play."
             ],
             "icons": [
                 "HasPower",
@@ -60,7 +60,7 @@
                 }
             ],
             "flavorReference": "The Tamer, Under the Big Top #29",
-            "hitpoints": 9
+            "hitpoints": 7
         },
         {
             "identifier": "MistyTheYoung",
@@ -205,12 +205,12 @@
                 }
             ],
             "flavorReference": "The Tamer, Under the Big Top #29",
-            "hitpoints": 9
+            "hitpoints": 7
         },
         {
-            "identifier": "DariusTheBoastful",
+            "identifier": "BeoninTheBraggert",
             "count": 1,
-            "title": "Darius the Boastful",
+            "title": "Beonin the Braggert",
             "keywords": [
                 "lion"
             ],
@@ -228,7 +228,7 @@
                 }
             ],
             "flavorReference": "The Tamer, Under the Big Top #29",
-            "hitpoints": 9
+            "hitpoints": 7
         },
         {
             "identifier": "RingOfFire",
@@ -291,21 +291,21 @@
                 }
             ],
             "flavorReference": "The Tamer, Under the Big Top #29",
-            "hitpoints": 9
+            "hitpoints": 7
         },
         {
-            "identifier": "ChartriceTheElder",
+            "identifier": "ClemanataTheEldest",
             "count": 1,
-            "title": "Chartice the Elder",
+            "title": "Clemanata the Eldest",
             "keywords": [
                 "lion"
             ],
             "icons": [
                 "DealDamageMelee",
-                "DrawCardNow"
+                "Manipulate"
             ],
             "body": [
-                "When this card is dealt exactly 1 damage, you may discard a card to play a card.",
+                "When this card is dealt exactly 1 damage, reveal the top 2 cards of the Villain deck. Put 1 of them on top of the villain deck and the other on the bottom.",
                 "When this card is dealt more than 1 damage, it deals each non-lion target 1 melee damage."
             ],
             "flavorQuotes": [
@@ -318,9 +318,34 @@
             "hitpoints": 5
         },
         {
-            "identifier": "MoritzTheMorbid",
+            "identifier": "DavilTheDashing",
             "count": 1,
-            "title": "Moritz the Morbid",
+            "title": "Davil the Dashing",
+            "keywords": [
+                "lion"
+            ],
+            "icons": [
+                "DealDamageMelee",
+                "Discard",
+                "PlayCardNow"
+            ],
+            "body": [
+                "When this card is dealt exactly 1 damage, you may discard a card to play a card.",
+                "When this card is dealt more than 1 damage, it deals each non-lion target 1 melee damage."
+            ],
+            "flavorQuotes": [
+                {
+                    "identifier": "TheTamer",
+                    "text": "-"
+                }
+            ],
+            "flavorReference": "The Tamer, Under the Big Top #29",
+            "hitpoints": 7
+        },
+        {
+            "identifier": "MacmilliusTheMenacing",
+            "count": 1,
+            "title": "Macmillius the Menacing",
             "keywords": [
                 "lion"
             ],
@@ -339,12 +364,12 @@
                 }
             ],
             "flavorReference": "The Tamer, Under the Big Top #29",
-            "hitpoints": 9
+            "hitpoints": 7
         },
         {
-            "identifier": "BorealisTheBrilliant",
+            "identifier": "BorealiaTheBrilliant",
             "count": 1,
-            "title": "Borealis the Brilliant",
+            "title": "Borealia the Brilliant",
             "keywords": [
                 "lion"
             ],
@@ -363,7 +388,7 @@
                 }
             ],
             "flavorReference": "The Tamer, Under the Big Top #29",
-            "hitpoints": 9
+            "hitpoints": 7
         },
         {
             "identifier": "ThreeRings",
@@ -396,10 +421,10 @@
             ],
             "icons": [
                 "HasPower",
-                "ImmuneToDamageMelee"
+                "DealDamageMelee"
             ],
             "powers": [
-                "Until the start of your next turn, {TheTamer} is immune to melee damage."
+                "Until the start of your next turn, whenever the {TheTamer} is dealt damage, he deals 1 lion X melee damage, where X is the amount of damage dealt to {TheTamer}."
             ],
             "flavorQuotes": [
                 {
@@ -411,7 +436,7 @@
         },
         {
             "identifier": "Catsnack",
-            "count": 3,
+            "count": 2,
             "title": "Catsnack",
             "keywords": [
                 "one-shot"
@@ -431,7 +456,7 @@
         },
         {
             "identifier": "BalancingAct",
-            "count": 3,
+            "count": 2,
             "title": "Balancing Act",
             "keywords": [
                 "one-shot"
@@ -441,7 +466,7 @@
             ],
             "body": [
                 "If there are more Lions than villain targets in play, each Lion may deal one target 1 melee damage.",
-                "One target dealt damage this way deals one Lion 2 melee damage."
+                "One target dealt damage this way deals 1 Lion 2 melee damage."
             ],
             "flavorQuotes": [
                 {
@@ -481,7 +506,7 @@
                 "DealDamageMelee",
                 "DealDamageEnergy"
             ],
-            "body": "One Lion deals one other Lion 2 melee damage. A Lion dealt damage this way deals all non-hero targets 1 energy damage.",
+            "body": "One Lion deals one other Lion 1 melee damage. A Lion dealt damage this way deals all non-hero targets 1 energy damage.",
             "flavorQuotes": [
                 {
                     "identifier": "TheTamer",
