@@ -354,7 +354,7 @@
                 "DrawCardNow"
             ],
             "body": [
-                "When this card is dealt exactly 1 damage, destroy 1 non-hero target with 2 or fewer HP.",
+                "When this card is dealt exactly 1 damage, destroy 1 non-hero ongoing card.",
                 "When this card is dealt more than 1 damage, it deals each non-lion target 1 melee damage."
             ],
             "flavorQuotes": [

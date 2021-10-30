@@ -14,8 +14,8 @@ namespace Studio29.TheTamer
 
         protected override IEnumerator DealtExactlyOneDamageResponse(DealDamageAction dd)
         {
-            //destroy 1 non-hero target with 2 or fewer HP.
-            return GameController.SelectAndDestroyCard(HeroTurnTakerController, new LinqCardCriteria((Card c) => !c.IsHero && c.IsTarget && c.HitPoints <= 2, "non-hero targets with 2 or fewer HP", useCardsSuffix: false), false, cardSource: GetCardSource());
+            //destroy 1 non-hero ongoing card.
+            return GameController.SelectAndDestroyCard(HeroTurnTakerController, new LinqCardCriteria((Card c) => !c.IsHero && c.IsOngoing, "non-hero ongoing"), false, cardSource: GetCardSource());
         }
 
 
