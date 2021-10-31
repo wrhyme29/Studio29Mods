@@ -53,7 +53,7 @@ namespace Studio29.BirthdayBoy
 			AddEndOfTurnTrigger(tt => tt == TurnTaker, EndOfTurnResponse, TriggerType.PutIntoPlay);
 
 		   //When there are no cards beneath this one, destroy this card.
-		   Func<GameAction, bool> destroyCriteria = (GameAction action) => GetCardPropertyJournalEntryBoolean(PrimedKey).Value && Card.UnderLocation.Cards.Count() == 0 && IsPotentialEmptierAction(action);
+		   Func<GameAction, bool> destroyCriteria = (GameAction action) => GetCardPropertyJournalEntryBoolean(PrimedKey) != null && GetCardPropertyJournalEntryBoolean(PrimedKey).Value && Card.UnderLocation.Cards.Count() == 0 && IsPotentialEmptierAction(action);
 			AddTrigger(destroyCriteria, DestroyThisCardResponse, TriggerType.DestroySelf, TriggerTiming.After);
 
 			//If this card is destroyed, move all cards under it into the trash
