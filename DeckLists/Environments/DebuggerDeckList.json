@@ -123,6 +123,53 @@
                 "Destroy this card."
             ],
             "flavorText": "-"
+        },
+        {
+            "identifier": "UsePower",
+            "count": 1,
+            "title": "7. Use a Power",
+            "keywords": [
+                "option"
+            ],
+            "icons": [
+                "UsePowerNow"
+            ],
+            "body": [
+                "Select a hero. They may use a power now.",
+                "Destroy this card."
+            ],
+            "flavorText": "-"
+        },
+        {
+            "identifier": "UseIncap",
+            "count": 1,
+            "title": "8. Use an Incapacitated Ability",
+            "keywords": [
+                "option"
+            ],
+            "icons": [
+            ],
+            "body": [
+                "Select a hero. They may use an incapacitated ability in their play area.",
+                "Destroy this card."
+            ],
+            "flavorText": "-"
+        },
+        {
+            "identifier": "SwitchBattlezones",
+            "count": 1,
+            "title": "0. Switch Battle Zones",
+            "keywords": [
+                "option"
+            ],
+            "icons": [
+                "SwitchBattleZone"
+            ],
+            "body": [
+                "Select a hero. Move them to the other battle zone.",
+                "Destroy this card."
+            ],
+            "flavorText": "-"
         }
     ]
 }

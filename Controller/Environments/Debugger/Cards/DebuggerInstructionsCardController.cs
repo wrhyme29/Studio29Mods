@@ -1,9 +1,12 @@
 ﻿using Handelabra;
 using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
+using System;
+using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Boomlagoon.JSON;
 
 namespace Studio29.Debugger
 {
@@ -64,6 +67,12 @@ namespace Studio29.Debugger
                     base.GameController.ExhaustCoroutine(coroutine);
                 }
 
+                if (!Game.IsOblivAeonMode)
+                {
+                    Card bzOption = TurnTaker.FindCard("SwitchBattlezones");
+                    TurnTaker.MoveCard(bzOption, TurnTaker.InTheBox);
+                }
+
                 coroutine = OpenDebuggingMenuInterface();
                 if (base.UseUnityCoroutines)
                 {
@@ -73,6 +82,8 @@ namespace Studio29.Debugger
                 {
                     base.GameController.ExhaustCoroutine(coroutine);
                 }
+                
+                yield break;
             }
         }
 
@@ -182,13 +193,6 @@ namespace Studio29.Debugger
 
         private IEnumerator SetEnvironmentForGame()
         {
-            /*
-             * Here the players should be prompted to select another environment
-             * However, that functionality is currently not possible, but has been feature requested
-             * In the meantime, we will always pull in InsulaPrimalis
-             */
-
-            //TODO: Replace with selected environment identifier once that functionality exists
             List<string> storedResults = new List<string>();
             IEnumerator coroutine = SelectEnvironment(storedResults);
             if (base.UseUnityCoroutines)
@@ -206,6 +210,7 @@ namespace Studio29.Debugger
             }
             string environmentIdentifier = storedResults.First();
             DeckDefinition deckDefinition = DeckDefinitionCache.GetDeckDefinition(environmentIdentifier);
+
             Card modelCard;
             CardController cardController;
             foreach (CardDefinition cardDefinition in deckDefinition.CardDefinitions)
@@ -245,23 +250,67 @@ namespace Studio29.Debugger
             else
             {
                 base.GameController.ExhaustCoroutine(coroutine);
+            }if (base.UseUnityCoroutines)
+            {
+                yield return base.GameController.StartCoroutine(coroutine);
+            }
+            else
+            {
+                base.GameController.ExhaustCoroutine(coroutine);
+            }
+
+            foreach(CardController cc in TurnTaker.Deck.Cards.Select(c => FindCardController(c)))
+            {
+                Log.Debug("Running PerformEnteringGameResponse for " + cc.Card.Title);
+                coroutine = cc.PerformEnteringGameResponse();
+                if (base.UseUnityCoroutines)
+                {
+                    yield return base.GameController.StartCoroutine(coroutine);
+                }
+                else
+                {
+                    base.GameController.ExhaustCoroutine(coroutine);
+                }
             }
         }
 
         private IEnumerator SelectEnvironment(List<string> storedResults)
         {
-            string insulaPrimalis = "Insula Primalis";
-            string ruinsOfAtlantis = "Ruins of Atlantis";
-            string megalopolis = "Megalopolis";
-            string wagnerMarsBase = "Wagner Mars Base";
-
-            Dictionary<string, string> titleIdentifierDictionary = new Dictionary<string, string>()
+            Dictionary<string, string> titleIdentifierDictionary = new Dictionary<string, string>();
+            IEnumerable<string> playableBaseIdentifiers = LoadPlayableBaseEnvironmentIdentifiers();
+            foreach (string id in playableBaseIdentifiers)
             {
-                {insulaPrimalis, "InsulaPrimalis" },
-                {megalopolis, "Megalopolis" },
-                {ruinsOfAtlantis, "RuinsOfAtlantis" },
-                {wagnerMarsBase, "WagnerMarsBase" }
-            };
+                Log.Debug("Environment in the box: " + id);
+                string title = DeckDefinitionCache.GetDeckDefinition(id).Name;
+                titleIdentifierDictionary.Add(title, id);
+            }
+                        
+                
+            IEnumerable<string> modIdentifiers = LoadAllModIdentifiers();
+            foreach (string id in modIdentifiers)
+            {
+                Log.Debug("Environment in the box: " + id);
+                string title = DeckDefinitionCache.GetDeckDefinition(id).Name;
+                titleIdentifierDictionary.Add(title, id);
+            }
+
+            if (Game.IsOblivAeonMode)
+            {
+                //remove the other battlezone environment
+                string otherEnv = TurnTaker.OtherBattleZone.FindEnvironment().Name;
+                titleIdentifierDictionary.Remove(otherEnv);
+
+                //remove any of the other 3 environments in OA mode
+                if (Game.ExtraTurnTakers.Where((TurnTaker tt) => tt.IsEnvironment).Any())
+                {
+                    IEnumerable<string> otherOblivAeonEnvironments = Game.ExtraTurnTakers.Where((TurnTaker tt) => tt.IsEnvironment).Select(tt => tt.Name);
+                    foreach (string env in otherOblivAeonEnvironments)
+                    {
+                        titleIdentifierDictionary.Remove(env);
+                    }
+
+                }
+            }
 
             string[] optionChoices = titleIdentifierDictionary.Keys.ToArray();
             List<SelectWordDecision> optionsDecisionResult = new List<SelectWordDecision>();
@@ -286,6 +335,92 @@ namespace Studio29.Debugger
             storedResults.Add(selectedEnvironmentIdentifier);
 
             yield break;
+        }
+
+        private IEnumerable<String> LoadPlayableBaseEnvironmentIdentifiers()
+        {
+            List<string> envIdentifiers = new List<string>();
+
+            Assembly assembly = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name == "SentinelsEngine").FirstOrDefault();
+            if (assembly is null)
+                return envIdentifiers;
+            IEnumerable<string> unlockedExpansions = GameController.GetHeroCardsInBox(s => true, s => true).Select(kvp => kvp.Key).Where(id => !id.Contains('.')).Select(id => DeckDefinitionCache.GetDeckDefinition(id)).Where(dd => dd.ExpansionIdentifier != null).Select(dd => dd.ExpansionIdentifier).Distinct();
+            foreach (var res in assembly.GetManifestResourceNames())
+            {
+
+                var stream = assembly.GetManifestResourceStream(res);
+                if (stream is null || stream.Length == 0)
+                    continue;
+
+
+                JSONObject jsonObject;
+                using (var sr = new System.IO.StreamReader(stream))
+                {
+                    string text = sr.ReadToEnd();
+                    if (string.IsNullOrEmpty(text))
+                        continue;
+                    jsonObject = JSONObject.Parse(text);
+                }
+                if (jsonObject is null)
+                    continue;
+                var kind = jsonObject.GetString("kind");
+                if (kind != "Environment")
+                    continue;
+
+                if (jsonObject.ContainsKey("expansionIdentifier"))
+                {
+                    var expansionIdentifier = jsonObject.GetString("expansionIdentifier");
+                    if (!unlockedExpansions.Contains(expansionIdentifier))
+                        continue;
+                }
+                string identifier = res.Replace("DeckList.json", string.Empty);
+                identifier = identifier.Replace("Handelabra.Sentinels.Engine.DeckLists.", string.Empty);
+                envIdentifiers.Add(identifier);
+            }
+
+            return envIdentifiers;
+        }
+
+        private IEnumerable<string> LoadAllModIdentifiers()
+        {
+            List<string> envIdentifiers = new List<string>();
+            foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies())
+            {
+
+                Assembly assembly = ModHelper.GetAssemblyForAssemblyName(a.GetName());
+                if (assembly is null)
+                {
+                    continue;
+                }
+                foreach (var res in assembly.GetManifestResourceNames())
+                {
+                    var stream = assembly.GetManifestResourceStream(res);
+                    if (stream is null || stream.Length == 0)
+                        continue;
+                  
+
+                    JSONObject jsonObject;
+                    using (var sr = new System.IO.StreamReader(stream))
+                    {
+                        string text = sr.ReadToEnd();
+                        if (string.IsNullOrEmpty(text))
+                            continue;
+                        jsonObject = JSONObject.Parse(text);
+                    }
+                    if (jsonObject is null)
+                        continue;
+                    var kind = jsonObject.GetString("kind");
+                    if (kind != "Environment")
+                        continue;
+                    string identifier = res.Replace("DeckList.json", string.Empty);
+                    identifier = identifier.Replace("DeckLists.", string.Empty);
+                    if (identifier == TurnTaker.QualifiedIdentifier)
+                        continue;
+                    envIdentifiers.Add(identifier);
+                }
+            }
+
+            return envIdentifiers;
         }
 
         public override CustomDecisionText GetCustomDecisionText(IDecision decision)
