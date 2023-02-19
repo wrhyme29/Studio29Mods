@@ -1,0 +1,254 @@
+{
+    "name": "Coven of Witches",
+    "kind": "Environment",
+    "backgroundColor": "4d4e82",
+    "difficulty": 1,
+  "cards": [
+    {
+      "identifier": "CurseOfArwen",
+      "count": 1,
+      "title": "Curse of Arwen",
+      "keywords": [
+        "curse"
+      ],
+      "icons": [
+        "CannotDealDamage",
+        "Destroy",
+        "StartOfTurnAction",
+        "Discard"
+      ],
+      "body": [
+        "At the start of the Environment turn, 1 Player may discard 2 cards to destroy this card.",
+        "Hero characters may not deal damage on their own turn.",
+        "If Curse of Lillith is ever in play, destroy it or destroy this card."
+      ],
+      "flavorText": "Enter the Coven #3"
+    },
+    {
+      "identifier": "CurseOfLillith",
+      "count": 1,
+      "title": "Curse of Lillith",
+      "keywords": [
+        "curse"
+      ],
+      "icons": [
+        "CannotDealDamage",
+        "Destroy",
+        "StartofTurnAction",
+        "Discard"
+      ],
+      "body": [
+        "At the start of the Environment turn, each Player may discard 1 card each to destroy this card.",
+        "Hero characters may only deal damage on their own turn.",
+        "If Curse of Arwen is ever in play, destroy it or destroy this card."
+      ],
+      "flavorText": "Enter the Coven #2"
+    },
+    {
+      "identifier": "CurseOfSeren",
+      "count": 1,
+      "title": "Curse of Seren",
+      "keywords": [
+        "curse"
+      ],
+      "icons": [
+        "CannotDealDamage",
+        "StartOfTurnAction",
+        "DealDamageInfernal"
+      ],
+      "body": [
+        "At the start of the Environment turn, this cards deals all non-environment targets 2 infernal damage. If all targets were dealt damage this way, destroy this card.",
+        "Targets may not deal damage the turn they enter play."
+      ],
+      "flavorText": "Enter the Coven #5"
+    },
+    {
+      "identifier": "CurseOfSybil",
+      "count": 1,
+      "title": "Curse of Sybil",
+      "keywords": [
+        "curse"
+      ],
+      "icons": [
+        "Discard",
+        "DestroySelf",
+        "DealDamageInfernal"
+      ],
+      "body": [
+        "When a villain card would enter play, you may discard it instead and destroy this card.",
+        "When this card is destroyed, this card deals all non-environment targets {H} infernal damage."
+      ],
+      "flavorText": "Enter the Coven #1"
+    },
+    {
+      "identifier": "CurseOfEvanora",
+      "count": 1,
+      "title": "Curse of Evanora",
+      "keywords": [
+        "curse"
+      ],
+      "icons": [
+        "StartOfTurnAction",
+        "Discard",
+        "DrawCardNow",
+        "DealDamageInfernal"
+      ],
+      "body": [
+        "At the start of the Environment turn, 1 player may discard their hand to destroy this card.",
+        "At the start of any hero's turn, their player may discard a card. If they do, they may draw a card. If a card was drawn this way, put a token on this card.",
+        "At the end of the environment turn, this card deals each hero target X + 1 infernal damage, where X is the number of tokens on this card."
+      ],
+      "flavorText": "Enter the Coven #4",
+      "tokenPools": [
+        {
+          "identifier": "CurseOfEvanoraPool",
+          "name": "Curse of Evanora Pool",
+          "initialValue": 0,
+          "minimumValue": 0,
+          "color": "5a28a6"
+        }
+      ]
+    },
+    {
+      "identifier": "TrippedWards",
+      "count": 3,
+      "title": "Tripped Wards",
+      "keywords": [
+        "ward"
+      ],
+      "icons": [
+        "StartOfTurnAction",
+        "DestroySelf",
+        "Search",
+        "DealDamageInfernal"
+      ],
+      "body": [
+        "At the start of the Environment turn, destroy this card.",
+        "When this card enters play, [b]Discover[/b] {H - 2} curse cards.",
+        "When this card is destroyed, this card deals all non-environment targets X infernal damage, where X is the number of curses in play."
+      ],
+      "flavorText": "Enter the Coven #2"
+    },
+    {
+      "identifier": "SybilTheClairvoyant",
+      "count": 1,
+      "title": "Sybil the Clairvoyant",
+      "keywords": [
+        "witch"
+      ],
+      "icons": [
+        "StartAndEndOfTurnAction",
+        "PlayCardNow",
+        "Search",
+        "Manipulate"
+      ],
+      "body": [
+        "At the start of the Environment turn, play the top card of the Villain deck.",
+        "When this card enters play, [b]Summon[/b] the Curse of Sybil.",
+        "At the end of the Environment turn, reveal the top 2 cards of the Villain deck. Put 1 on the top and 1 on the bottom of the Villain deck."
+      ],
+      "flavorText": "Enter the Coven #1",
+      "hitpoints": 7
+    },
+    {
+      "identifier": "EvanoraTheBargainer",
+      "count": 1,
+      "title": "Evanora the Bargainer",
+      "keywords": [
+        "witch"
+      ],
+      "icons": [
+        "StartAndEndOfTurnAction",
+        "Discard",
+        "DrawCardNow",
+        "DealDamageInfernal"
+
+      ],
+      "body": [
+        "At the start of the Environment turn, each player may discard 2 cards. Any player that does deals 1 non-environment 2 infernal damage.",
+        "When this card enters play, [b]Summon[/b] the Curse of Evanora. ",
+        "At the end of the Environment turn, 1 hero may draw X cards, where X is the number of hero cards discarded this turn."
+      ],
+      "flavorText": "Enter the Coven #4",
+      "hitpoints": 7
+    },
+    {
+      "identifier": "ArwenTheScheming",
+      "count": 1,
+      "title": "Arwen the Scheming",
+      "keywords": [
+        "witch"
+      ],
+      "icons": [
+        "StartAndEndOfTurnAction",
+        "DrawCardNow",
+        "Search",
+        "DealDamageInfernal"
+      ],
+      "body": [
+        "At the start of the Environment turn, each player draws a card.",
+        "When this card enters play, [b]Summon[/b] the Curse of Arwen.",
+        "At the end of the Environment turn, this card deals the {H - 2} hero character cards with the lowest HP X infernal damage, where X is number of hero cards discarded this turn."
+      ],
+      "flavorText": "Enter the Coven #3",
+      "hitpoints": 7
+    },
+    {
+      "identifier": "SerenTheProfound",
+      "count": 1,
+      "title": "Seren the Profound",
+      "keywords": [
+        "witch"
+      ],
+      "icons": [
+        "StartAndEndOfTurnAction",
+        "Discard",
+        "Search",
+        "CannotDealDamage"
+      ],
+      "body": [
+        "At the start of the Environment turn, 1 Player may discard 2 cards. If no cards were discarded this way, restore this card to full HP.",
+        "When this card enters play, [b]Summon[/b] the Curse of Seren.",
+        "At the end of the Environment turn, select a target. That target cannot deal damage or be damaged until the end of the next Environment turn."
+      ],
+      "flavorText": "Enter the Coven #5",
+      "hitpoints": 7
+    },
+    {
+      "identifier": "LillithTheAccursed",
+      "count": 1,
+      "title": "Lillith the Accursed",
+      "keywords": [
+        "witch"
+      ],
+      "icons": [
+        "StartAndEndOfTurnAction",
+        "Discard",
+        "Search",
+        "PlayCardNow"
+      ],
+      "body": [
+        "At the start of the Environment turn, each player discards 1 card.",
+        "When this card enters play, [b]Summon[/b] the Curse of Lillith.",
+        "At the end of the Environment turn, play the top card of the Environment deck."
+      ],
+      "flavorText": "Enter the Coven #2",
+      "hitpoints": 7
+    },
+    {
+      "identifier": "CovensCall",
+      "count": 2,
+      "title": "Coven's Call",
+      "icons": [
+        "Manipulate",
+        "EndOfTurnAction",
+        "DestroySelf"
+      ],
+      "body": [
+        "When this card enters play, shuffle the environment trash into its deck. [b]Discover[/b] {H - 2} witch cards.",
+        "At the end of the environment turn, destroy this card."
+      ],
+      "flavorText": "Enter the Coven #3"
+    }
+  ]
+}

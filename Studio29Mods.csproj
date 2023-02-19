@@ -7,11 +7,9 @@
 	<DebugType>pdbonly</DebugType>
 	<RootNamespace>Studio29</RootNamespace>
 	<Version>2.5.0</Version>
+	<IsTestProject>true</IsTestProject>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-
-  <ItemGroup>
-    <None Remove="DeckLists\**\*.json" />
-  </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="DeckLists\**\*.json">
@@ -36,6 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Lib.Harmony" Version="2.2.2" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
     <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
@@ -43,39 +42,14 @@
 
   <ItemGroup>
     <Reference Include="EngineCommon">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Sentinels of the Multiverse\Sentinels_Data\Managed\EngineCommon.dll</HintPath>
-    </Reference>
+      <HintPath>Dependencies\EngineCommon.dll</HintPath>
+		<Private>true</Private>
+	</Reference>
     <Reference Include="SentinelsEngine">
-      <HintPath>C:\Program Files (x86)\Steam\steamapps\common\Sentinels of the Multiverse\Sentinels_Data\Managed\SentinelsEngine.dll</HintPath>
-    </Reference>
+      <HintPath>Dependencies\SentinelsEngine.dll</HintPath>
+		<Private>true</Private>
+	</Reference>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controller\Villains\" />
-    <Folder Include="DeckLists\Villain\" />
-    <Folder Include="Testing\Villains\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="DeckLists\Environments\DebuggerDeckList.json">
-      <LogicalName>Studio29.DeckLists.%(EmbeddedResource.FileName).json</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Update="DeckLists\Heroes\TestPlayerDeckList.json">
-      <LogicalName>Studio29.DeckLists.%(EmbeddedResource.FileName).json</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Update="DeckLists\Heroes\DummyPlayerDeckList.json">
-      <LogicalName>Studio29.DeckLists.%(EmbeddedResource.FileName).json</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Update="DeckLists\Heroes\BirthdayBoyDeckList.json">
-      <LogicalName>Studio29.DeckLists.%(EmbeddedResource.FileName).json</LogicalName>
-    </EmbeddedResource>
-    <EmbeddedResource Update="DeckLists\Heroes\LoreDeckList.json">
-      <LogicalName>Studio29.DeckLists.%(EmbeddedResource.FileName).json</LogicalName>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-  </Target>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="copy /Y &quot;$(TargetDir)$(TargetName).dll&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Sentinels of the Multiverse\mods\Studio29Mods\$(TargetName).dll&quot;&#xD;&#xA;copy /Y &quot;$(TargetDir)manifest.json&quot; &quot;C:\Program Files (x86)\Steam\steamapps\common\Sentinels of the Multiverse\mods\Studio29Mods\manifest.json&quot;" />
