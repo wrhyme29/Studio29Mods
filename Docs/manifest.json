@@ -3,7 +3,7 @@
 	"author": "wrhyme29",
 	"description": "Homebrew decks to play with!",
 	"namespace": "Studio29",
-	"version": "v2.5.0",
+	"version": "v2.6.0",
 	"color": "35d0e8",
 	"publishedFileId": 2610195762,
 	"dll": "Studio29Mods.dll",
@@ -11,11 +11,13 @@
 		"heroes": [
 			"BirthdayBoy",
 			"Lore",
+			"DummyPlayer",
 			"TheTamer"
 		],
 		"villains": [
 		],
 		"environments": [
+			"CovenOfWitches",
 			"Debugger",
 			"TheDeliOfDisaster"
 		]
