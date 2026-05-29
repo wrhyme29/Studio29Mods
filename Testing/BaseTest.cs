@@ -1,17 +1,16 @@
-﻿using NUnit.Framework;
-using System;
+﻿using Handelabra.Sentinels.Engine.Controller;
+using Handelabra.Sentinels.Engine.Controller.PromoCardUnlockControllers;
 using Handelabra.Sentinels.Engine.Model;
-using Handelabra.Sentinels.Engine.Controller;
-using System.Collections.Generic;
-using System.Linq;
+using NUnit.Framework;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.IO;
-using Handelabra.Sentinels.Engine.Controller.PromoCardUnlockControllers;
-using Handelabra;
 
-namespace Studio29Tests
+namespace Handelabra.Sentinels.UnitTest
 {
     public class BaseTest
     {
@@ -91,11 +90,15 @@ namespace Studio29Tests
         protected int DecisionSelectLocationsIndex { get; set; }
         protected bool DecisionAutoDecideIfAble { get; set; }
         protected TurnPhase DecisionSelectTurnPhase { get; set; }
+        protected TurnPhase[] DecisionSelectTurnPhases { get; set; }
+        protected int DecisionSelectTurnPhasesIndex { get; set; }
         protected string[] DecisionSelectFromBoxIdentifiers { get; set; }
         protected string DecisionSelectFromBoxTurnTakerIdentifier { get; set; }
         protected int DecisionSelectFromBoxIndex { get; set; }
         protected bool DecisionSelectWordSkip { get; set; }
 
+        private int _decisionsToSkipBeforeAssertion;
+        private bool _skipAssertionsForThisDecision => _decisionsToSkipBeforeAssertion > 0;
         private IEnumerable<Card> _includedCardsInNextDecision;
         private IEnumerable<Card> _notIncludedCardsInNextDecision;
         private bool _expectedMessageWasShown;
@@ -112,7 +115,7 @@ namespace Studio29Tests
         private int? _numberOfChoicesInNextDecision;
         private SelectionType? _numberOfChoicesInNextDecisionSelectionType;
 
-        private Dictionary<Card, int> _quickHPStorage;
+        protected Dictionary<Card, int> _quickHPStorage;
         private Dictionary<HeroTurnTakerController, int> _quickHandStorage;
         private Dictionary<TurnTakerController, Card> _quickTopCardStorage;
         private Dictionary<TokenPool, int> _quickTokenPoolStorage;
@@ -126,9 +129,6 @@ namespace Studio29Tests
         private string _expectedDecisionSourceOutput;
 
         private Card _notDamageSource;
-        private Card _nextDamageSource;
-        private DamageType? _nextDamageType;
-
         private SelectionType? _assertDecisionOptional;
 
         protected int NumberOfDecisionsAnswered { get; private set; }
@@ -354,6 +354,7 @@ namespace Studio29Tests
             DecisionAmbiguousCardAtIndex = null;
             DecisionAmbiguousCardAtIndices = null;
             DecisionAmbiguousCardAtIndicesIndex = 0;
+            _decisionsToSkipBeforeAssertion = 0;
             _includedCardsInNextDecision = null;
             _notIncludedCardsInNextDecision = null;
             _includedPowersInNextDecision = null;
@@ -365,8 +366,6 @@ namespace Studio29Tests
             _numberOfChoicesInNextDecision = null;
             _numberOfChoicesInNextDecisionSelectionType = null;
             _notDamageSource = null;
-            _nextDamageSource = null;
-            _nextDamageType = null;
             DecisionSelectTargetFriendly = null;
             DecisionMoveCardDestinations = null;
             DecisionMoveCardDestinationsIndex = 0;
@@ -385,6 +384,8 @@ namespace Studio29Tests
             DecisionAutoDecideIfAble = false;
             NumberOfDecisionsAnswered = 0;
             DecisionSelectTurnPhase = null;
+            DecisionSelectTurnPhases = null;
+            DecisionSelectTurnPhasesIndex = 0;
             DecisionSelectFromBoxIdentifiers = null;
             DecisionSelectFromBoxTurnTakerIdentifier = null;
             DecisionSelectFromBoxIndex = 0;
@@ -463,7 +464,9 @@ namespace Studio29Tests
 
         protected GameController SetupGameController(Game game)
         {
+#pragma warning disable IDE0017 // Simplify object initialization
             GameController gameController = new GameController(game);
+#pragma warning restore IDE0017 // Simplify object initialization
             gameController.StartCoroutine = StartCoroutine;
             gameController.ExhaustCoroutine = RunCoroutine;
             gameController.OnMakeDecisions -= this.MakeDecisions;
@@ -524,9 +527,13 @@ namespace Studio29Tests
 
         protected T GetPersistentValueFromView<T>(string key)
         {
+#pragma warning disable IDE0034 // Simplify 'default' expression
             T result = default(T);
+#pragma warning restore IDE0034 // Simplify 'default' expression
 
+#pragma warning disable IDE0038 // Use pattern matching
             if (_savedViewData.ContainsKey(key) && _savedViewData[key] is T)
+#pragma warning restore IDE0038 // Use pattern matching
             {
                 result = (T)_savedViewData[key];
             }
@@ -642,7 +649,7 @@ namespace Studio29Tests
                     }
                 }
 
-                if (_assertDecisionOptional != null && decision.SelectionType == _assertDecisionOptional)
+                if (!_skipAssertionsForThisDecision && _assertDecisionOptional != null && decision.SelectionType == _assertDecisionOptional)
                 {
                     Assert.IsTrue(decision.IsOptional, "Decision was not optional: " + decision);
                 }
@@ -651,14 +658,16 @@ namespace Studio29Tests
                 {
                     SelectCardDecision selectCardDecision = (SelectCardDecision)decision;
 
-                    Assert.IsNotNull(selectCardDecision.Choices, "Choices must not be null");
-
+                    if (!_skipAssertionsForThisDecision)
+                    {
+                        Assert.IsNotNull(selectCardDecision.Choices, "Choices must not be null");
+                    }
                     if (selectCardDecision.ExtraInfo != null)
                     {
                         Console.WriteLine(selectCardDecision.ExtraInfo());
                     }
 
-                    if (_numberOfChoicesInNextDecision != null)
+                    if (!_skipAssertionsForThisDecision && _numberOfChoicesInNextDecision != null)
                     {
                         var check = true;
                         if (_numberOfChoicesInNextDecisionSelectionType != null && _numberOfChoicesInNextDecisionSelectionType != decision.SelectionType)
@@ -676,24 +685,24 @@ namespace Studio29Tests
                     var originalChoices = new List<Card>();
                     originalChoices.AddRange(selectCardDecision.Choices);
 
-                    if (_includedCardsInNextDecision != null)
+                    if (!_skipAssertionsForThisDecision && _includedCardsInNextDecision != null)
                     {
                         _includedCardsInNextDecision.ForEach(e => Assert.IsTrue(selectCardDecision.Choices.Contains(e), "SelectCardDecision did not include: " + e.Title + "."));
                         _includedCardsInNextDecision = null;
                     }
 
-                    if (_notIncludedCardsInNextDecision != null)
+                    if (!_skipAssertionsForThisDecision && _notIncludedCardsInNextDecision != null)
                     {
                         _notIncludedCardsInNextDecision.ForEach(e => Assert.IsFalse(selectCardDecision.Choices.Contains(e), "SelectCardDecision should not include: " + e.Title + ". (Choices: " + selectCardDecision.Choices.Select(c => c.Title).ToCommaList() + ")"));
                         _notIncludedCardsInNextDecision = null;
                     }
 
-                    if (selectCardDecision.Choices.Count() == 1 && !selectCardDecision.IsOptional)
+                    if (!_skipAssertionsForThisDecision && selectCardDecision.Choices.Count() == 1 && !selectCardDecision.IsOptional)
                     {
                         Assert.Fail("This test presented a decision with only 1 choice, and it was not optional.");
                     }
 
-                    if (this.ExpectedDecisionChoiceCount != null)
+                    if (!_skipAssertionsForThisDecision && this.ExpectedDecisionChoiceCount != null)
                     {
                         Assert.AreEqual(this.ExpectedDecisionChoiceCount.Value, selectCardDecision.Choices.Count(), "Expected the decision to have " + this.ExpectedDecisionChoiceCount + " choices, but it had " + selectCardDecision.Choices.Count() + ".");
                     }
@@ -764,7 +773,7 @@ namespace Studio29Tests
                             {
                                 selectCardDecision.FinishedSelecting = true;
                             }
-                            else if (this.DecisionSelectCards != null)
+                            else if (!_skipAssertionsForThisDecision && this.DecisionSelectCards != null)
                             {
                                 // Select each of the given cards in order
                                 Card toSelect = this.DecisionSelectCards.ElementAt(this.DecisionSelectCardsIndex);
@@ -986,7 +995,25 @@ namespace Studio29Tests
                     var source = yesNo.CardSource != null ? yesNo.CardSource.Card.Title : "GameController";
                     var who = yesNo.HeroTurnTakerController != null ? yesNo.HeroTurnTakerController.Name : "Everyone";
                     Console.WriteLine("[" + source + "] " + who + ", Make a YesNoDecision of type " + yesNo.SelectionType);
-                    if (this.DecisionsYesNo != null)
+                    if (yesNo.SelectionType == SelectionType.Custom)
+                    {
+                        if (decision.CardSource != null && decision.CardSource.CardController != null)
+                        {
+                            CustomDecisionText customDecisionText = decision.CardSource.CardController.GetCustomDecisionText(decision);
+
+                            if (customDecisionText == null)
+                            {
+                                Log.Warning("Decision SelectionType is Custom but nothing was returned from GetCustomDecisionText!");
+                            }
+                            Console.WriteLine(customDecisionText.Strings[CustomDecisionText.Key.Question]);
+
+                        }
+                        else
+                        {
+                            Log.Warning("Decision SelectionType is Custom but a CardSource was not provided!");
+                        }
+                    }
+                    if (!_skipAssertionsForThisDecision && this.DecisionsYesNo != null)
                     {
                         Assert.Greater(this.DecisionsYesNo.Count(), this.DecisionsYesNoIndex, "Not enough DecisionsYesNo were provided.");
                         yesNo.Answer = this.DecisionsYesNo.ElementAt(this.DecisionsYesNoIndex);
@@ -1004,7 +1031,25 @@ namespace Studio29Tests
                     var source = yesNo.CardSource != null ? yesNo.CardSource.Card.Title : "GameController";
                     var who = yesNo.HeroTurnTakerController != null ? yesNo.HeroTurnTakerController.Name : "Everyone";
                     Console.WriteLine("[" + source + "] " + who + ", Make a YesNoCardDecision of type " + yesNo.SelectionType + " with card " + yesNo.Card.Title);
-                    if (this.DecisionsYesNo != null)
+                    if (yesNo.SelectionType == SelectionType.Custom)
+                    {
+                        if (decision.CardSource != null && decision.CardSource.CardController != null)
+                        {
+                            CustomDecisionText customDecisionText = decision.CardSource.CardController.GetCustomDecisionText(decision);
+
+                            if (customDecisionText == null)
+                            {
+                                Log.Warning("Decision SelectionType is Custom but nothing was returned from GetCustomDecisionText!");
+                            }
+                            Console.WriteLine(customDecisionText.Strings[CustomDecisionText.Key.Question]);
+
+                        }
+                        else
+                        {
+                            Log.Warning("Decision SelectionType is Custom but a CardSource was not provided!");
+                        }
+                    }
+                    if (!_skipAssertionsForThisDecision && this.DecisionsYesNo != null)
                     {
                         Assert.Greater(this.DecisionsYesNo.Count(), this.DecisionsYesNoIndex, "Not enough DecisionsYesNo were provided.");
                         yesNo.Answer = this.DecisionsYesNo.ElementAt(this.DecisionsYesNoIndex);
@@ -1020,7 +1065,7 @@ namespace Studio29Tests
                 {
                     SelectDamageTypeDecision damage = decision as SelectDamageTypeDecision;
 
-                    if (_numberOfChoicesInNextDecision != null)
+                    if (!_skipAssertionsForThisDecision && _numberOfChoicesInNextDecision != null)
                     {
                         Assert.AreEqual(_numberOfChoicesInNextDecision, damage.Choices.Count(), "SelectDamageTypeDecision has the wrong number of choices.");
                         _numberOfChoicesInNextDecision = null;
@@ -1057,18 +1102,18 @@ namespace Studio29Tests
                 {
                     MoveCardDecision moveCard = decision as MoveCardDecision;
 
-                    if (_numberOfChoicesInNextDecision != null)
+                    if (!_skipAssertionsForThisDecision && _numberOfChoicesInNextDecision != null)
                     {
                         Assert.AreEqual(_numberOfChoicesInNextDecision, moveCard.PossibleDestinations.Count(), "MoveCardDecision has the wrong number of choices.");
                         _numberOfChoicesInNextDecision = null;
                     }
 
                     Console.WriteLine("Make a MoveCardDecision with destinations: [" + moveCard.PossibleDestinations.ToCommaList() + "]");
-                    if (moveCard.PossibleDestinations.Count() == 1 && !moveCard.IsOptional)
+                    if (!_skipAssertionsForThisDecision && moveCard.PossibleDestinations.Count() == 1 && !moveCard.IsOptional)
                     {
                         Assert.Fail("This test presented a decision with only 1 choice, and it was not optional.");
                     }
-                    if (this.ExpectedDecisionChoiceCount != null)
+                    if (!_skipAssertionsForThisDecision && this.ExpectedDecisionChoiceCount != null)
                     {
                         Assert.AreEqual(this.ExpectedDecisionChoiceCount.Value, moveCard.PossibleDestinations.Count());
                     }
@@ -1087,7 +1132,7 @@ namespace Studio29Tests
                         chosenDestination = this.DecisionMoveCardDestination;
                     }
 
-                    if (chosenDestination.Location != null)
+                    if (!_skipAssertionsForThisDecision && chosenDestination.Location != null)
                     {
                         if (moveCard.PossibleDestinations.Any(d => d.Location == chosenDestination.Location && d.ToBottom == chosenDestination.ToBottom))
                         {
@@ -1110,7 +1155,7 @@ namespace Studio29Tests
                 {
                     SelectLocationDecision selectLocation = decision as SelectLocationDecision;
 
-                    if (_numberOfChoicesInNextDecision != null)
+                    if (!_skipAssertionsForThisDecision && _numberOfChoicesInNextDecision != null)
                     {
                         Assert.AreEqual(_numberOfChoicesInNextDecision, selectLocation.Choices.Count(), "SelectLocationDecision has the wrong number of choices.");
                         _numberOfChoicesInNextDecision = null;
@@ -1122,11 +1167,11 @@ namespace Studio29Tests
                         choices += ", Skip";
                     }
                     Console.WriteLine("Make a SelectLocationDecision with locations: [" + choices + "]");
-                    if (selectLocation.Choices.Count() == 1 && !selectLocation.IsOptional)
+                    if (!_skipAssertionsForThisDecision && selectLocation.Choices.Count() == 1 && !selectLocation.IsOptional)
                     {
                         Assert.Fail("This test presented a decision with only 1 choice, and it was not optional.");
                     }
-                    if (this.ExpectedDecisionChoiceCount != null)
+                    if (!_skipAssertionsForThisDecision && this.ExpectedDecisionChoiceCount != null)
                     {
                         Assert.AreEqual(this.ExpectedDecisionChoiceCount.Value, selectLocation.Choices.Count());
                     }
@@ -1154,7 +1199,7 @@ namespace Studio29Tests
                         {
                             selectLocation.FinishedSelecting = true;
                         }
-                        else if (!selectLocation.Choices.Any(c => c.Location == location.Location))
+                        else if (!_skipAssertionsForThisDecision && !selectLocation.Choices.Any(c => c.Location == location.Location))
                         {
                             Assert.Fail("The selected location was not a choice: {0}", location);
                         }
@@ -1165,7 +1210,7 @@ namespace Studio29Tests
                     }
                     else if (this.DecisionSelectLocation.Location != null)
                     {
-                        if (!selectLocation.Choices.Any(c => c.Location == this.DecisionSelectLocation.Location))
+                        if (!_skipAssertionsForThisDecision && !selectLocation.Choices.Any(c => c.Location == this.DecisionSelectLocation.Location))
                         {
                             Assert.Fail("The selected location was not a choice: {0}", this.DecisionSelectLocation);
                         }
@@ -1197,7 +1242,7 @@ namespace Studio29Tests
                 {
                     UsePowerDecision power = decision as UsePowerDecision;
 
-                    if (_numberOfChoicesInNextDecision != null)
+                    if (!_skipAssertionsForThisDecision && _numberOfChoicesInNextDecision != null)
                     {
                         Assert.AreEqual(_numberOfChoicesInNextDecision, power.Choices.Count(), "UsePowerDecision has the wrong number of choices.");
                         _numberOfChoicesInNextDecision = null;
@@ -1249,7 +1294,7 @@ namespace Studio29Tests
                 {
                     UseIncapacitatedAbilityDecision ability = decision as UseIncapacitatedAbilityDecision;
 
-                    if (_numberOfChoicesInNextDecision != null)
+                    if (!_skipAssertionsForThisDecision && _numberOfChoicesInNextDecision != null)
                     {
                         Assert.AreEqual(_numberOfChoicesInNextDecision, ability.Choices.Count(), "UseIncapacitatedAbilityDecision has the wrong number of choices.");
                         _numberOfChoicesInNextDecision = null;
@@ -1262,7 +1307,7 @@ namespace Studio29Tests
                 else if (decision is SelectCardsDecision)
                 {
                     SelectCardsDecision selectCards = decision as SelectCardsDecision;
-                    if (selectCards.IsOptional && selectCards.AllowAutoDecide)
+                    if (!_skipAssertionsForThisDecision && selectCards.IsOptional && selectCards.AllowAutoDecide)
                     {
                         Assert.Fail("A SelectCardsDecision may not be both optional and allow for auto-decisions.");
                     }
@@ -1286,7 +1331,7 @@ namespace Studio29Tests
                 {
                     SelectTurnTakerDecision selectTurnTaker = decision as SelectTurnTakerDecision;
 
-                    if (_numberOfChoicesInNextDecision != null)
+                    if (!_skipAssertionsForThisDecision && _numberOfChoicesInNextDecision != null)
                     {
                         Assert.AreEqual(_numberOfChoicesInNextDecision, selectTurnTaker.Choices.Count(), "SelectTurnTakerDecision has the wrong number of choices.");
                         _numberOfChoicesInNextDecision = null;
@@ -1340,7 +1385,7 @@ namespace Studio29Tests
                     string ttname = selectTurnTaker.SelectedTurnTaker != null ? selectTurnTaker.SelectedTurnTaker.Name : "None";
                     Console.WriteLine("Selected: " + ttname);
 
-                    if (selectTurnTaker.SelectedTurnTaker != null && !selectTurnTaker.Choices.Contains(selectTurnTaker.SelectedTurnTaker))
+                    if (!_skipAssertionsForThisDecision && selectTurnTaker.SelectedTurnTaker != null && !selectTurnTaker.Choices.Contains(selectTurnTaker.SelectedTurnTaker))
                     {
                         Assert.Fail("The test selected " + selectTurnTaker.SelectedTurnTaker.Name + ", which is not one of the options: " + selectTurnTaker.Choices.Select(tt => tt.Name).ToCommaList());
                     }
@@ -1349,7 +1394,7 @@ namespace Studio29Tests
                 {
                     SelectFunctionDecision selectAction = decision as SelectFunctionDecision;
 
-                    if (_numberOfChoicesInNextDecision != null)
+                    if (!_skipAssertionsForThisDecision && _numberOfChoicesInNextDecision != null)
                     {
                         var check = true;
                         if (_numberOfChoicesInNextDecisionSelectionType != null && _numberOfChoicesInNextDecisionSelectionType != decision.SelectionType)
@@ -1477,21 +1522,28 @@ namespace Studio29Tests
                 {
                     SelectWordDecision selectWord = decision as SelectWordDecision;
                     Console.WriteLine("Make a SelectWordDecision: [" + selectWord.Choices.ToCommaList() + "]");
+                    if (selectWord.SelectionType == SelectionType.Custom)
+                    {
+                        if (decision.CardSource != null && decision.CardSource.CardController != null)
+                        {
+                            CustomDecisionText customDecisionText = decision.CardSource.CardController.GetCustomDecisionText(decision);
 
+                            if (customDecisionText == null)
+                            {
+                                Log.Warning("Decision SelectionType is Custom but nothing was returned from GetCustomDecisionText!");
+                            }
+                            Console.WriteLine(customDecisionText.Strings[CustomDecisionText.Key.Question]);
+
+                        }
+                        else
+                        {
+                            Log.Warning("Decision SelectionType is Custom but a CardSource was not provided!");
+                        }
+                    }
                     if (this.DecisionSelectWords != null)
                     {
                         var word = this.DecisionSelectWords[this.DecisionSelectWordsIndex];
-                        if(word is null)
-                        {
-                            //treat like a skip
-                            if (!selectWord.IsOptional)
-                            {
-                                Assert.Fail("The SelectWordDecision is not optional so cannot be skipped.");
-                            }
-
-                            selectWord.Skip();
-                            Log.Debug("Skipping SelectWordDecision");
-                        } else if (!selectWord.Choices.Contains(word))
+                        if (!_skipAssertionsForThisDecision && !selectWord.Choices.Contains(word))
                         {
                             Assert.Fail("The SelectWordDecision does not contain the word: " + word);
                         }
@@ -1501,7 +1553,7 @@ namespace Studio29Tests
                     }
                     else if (this.DecisionSelectWord != null)
                     {
-                        if (!selectWord.Choices.Contains(this.DecisionSelectWord))
+                        if (!_skipAssertionsForThisDecision && !selectWord.Choices.Contains(this.DecisionSelectWord))
                         {
                             Assert.Fail("The SelectWordDecision does not contain the word: " + this.DecisionSelectWord);
                         }
@@ -1510,13 +1562,12 @@ namespace Studio29Tests
                     }
                     else if (this.DecisionSelectWordSkip)
                     {
-                        if (!selectWord.IsOptional)
+                        if (!_skipAssertionsForThisDecision && !selectWord.IsOptional)
                         {
                             Assert.Fail("The SelectWordDecision is not optional so cannot be skipped.");
                         }
 
                         selectWord.Skip();
-                        Log.Debug("Skipping SelectWordDecision");
                     }
                     else
                     {
@@ -1532,7 +1583,7 @@ namespace Studio29Tests
                     SelectFromBoxDecision selectFromBox = decision as SelectFromBoxDecision;
                     Console.WriteLine("Make a SelectFromBoxDecision: ");
 
-                    if (this.DecisionSelectFromBoxIdentifiers != null
+                    if (!_skipAssertionsForThisDecision && this.DecisionSelectFromBoxIdentifiers != null
                         && this.DecisionSelectFromBoxIdentifiers.Count() > 0
                         && this.DecisionSelectFromBoxIndex < this.DecisionSelectFromBoxIdentifiers.Count())
                     {
@@ -1562,7 +1613,7 @@ namespace Studio29Tests
                     SelectTurnPhaseDecision selectPhase = decision as SelectTurnPhaseDecision;
                     Console.WriteLine("Make a SelectTurnPhaseDecision: [" + selectPhase.Choices.Select(tp => tp.Phase).ToCommaList() + "]");
 
-                    if (this.DecisionSelectTurnPhase != null)
+                    if (!_skipAssertionsForThisDecision && this.DecisionSelectTurnPhase != null)
                     {
                         if (!selectPhase.Choices.Contains(this.DecisionSelectTurnPhase))
                         {
@@ -1570,6 +1621,16 @@ namespace Studio29Tests
                         }
 
                         selectPhase.SelectedPhase = this.DecisionSelectTurnPhase;
+                    }
+                    if (!_skipAssertionsForThisDecision && this.DecisionSelectTurnPhases != null)
+                    {
+                        var phase = this.DecisionSelectTurnPhases[this.DecisionSelectTurnPhasesIndex];
+                        if (!selectPhase.Choices.Contains(phase))
+                        {
+                            Assert.Fail("The SelectTurnPhaseDecision does not contain the phase: " + phase);
+                        }
+                        selectPhase.SelectedPhase = phase;
+                        this.DecisionSelectTurnPhasesIndex++;
                     }
                     else
                     {
@@ -1581,6 +1642,7 @@ namespace Studio29Tests
             }
 
             this.NumberOfDecisionsAnswered += 1;
+            _decisionsToSkipBeforeAssertion = Math.Max(_decisionsToSkipBeforeAssertion - 1, 0);
 
             yield return null;
         }
@@ -2456,21 +2518,21 @@ namespace Studio29Tests
             RunCoroutine(this.GameController.ShuffleLocation(location, null));
         }
 
-        protected IEnumerable<Card> DiscardTopCards(TurnTaker tt, int amount)
+        protected IEnumerable<Card> DiscardTopCards(TurnTaker tt, int amount, CardSource cardSource = null)
         {
             var cards = tt.Deck.GetTopCards(amount);
-            RunCoroutine(this.GameController.DiscardTopCards(null, tt.Deck, amount));
+            RunCoroutine(this.GameController.DiscardTopCards(null, tt.Deck, amount, cardSource: cardSource));
             return cards;
         }
 
-        protected void DiscardTopCards(Location location, int amount)
+        protected void DiscardTopCards(Location location, int amount, CardSource cardSource = null)
         {
-            RunCoroutine(this.GameController.DiscardTopCards(null, location, amount));
+            RunCoroutine(this.GameController.DiscardTopCards(null, location, amount, cardSource: cardSource));
         }
 
-        protected IEnumerable<Card> DiscardTopCards(TurnTakerController ttc, int amount)
+        protected IEnumerable<Card> DiscardTopCards(TurnTakerController ttc, int amount, CardSource cardSource = null)
         {
-            return DiscardTopCards(ttc.TurnTaker, amount);
+            return DiscardTopCards(ttc.TurnTaker, amount, cardSource);
         }
 
         protected Card DestroyCard(Card card, Card cardSource = null)
@@ -2624,13 +2686,7 @@ namespace Studio29Tests
 
         protected void GainHP(Card card, int amount)
         {
-            this.RunCoroutine(this.GameController.GainHP(card, amount));
-        }
-
-        protected void GainHP(Card card, int amount, Card cardSource)
-        {
-            CardSource cardSourceReal = FindCardController(cardSource).GetCardSource();
-            this.RunCoroutine(this.GameController.GainHP(card, amount, cardSource: cardSourceReal));
+            this.RunCoroutine(this.GameController.GainHP(card, amount, cardSource: FindCardController(card).GetCardSource()));
         }
 
         protected void RestoreToMaxHP(TurnTakerController ttc)
@@ -2690,14 +2746,14 @@ namespace Studio29Tests
 
         protected IEnumerable<DamagePreviewResult> GetDamagePreviewResults(Card source, Card target, int amount, DamageType? damageType, bool isIrreducible = false)
         {
-            var results = this.GameController.GetDamagePreviewResults(new DamageSource(this.GameController, source), target, amount, null, damageType, isIrreducible);
+            var results = this.GameController.GetDamagePreviewResults(new DamageSource(this.GameController, source), target, amount, null, damageType, isIrreducible, cardSource: FindCardController(source).GetCardSource());
             OutputDamagePreviewResults(results);
             return results;
         }
 
         protected IEnumerable<DamagePreviewResult> GetDamagePreviewResults(TurnTaker source, Card target, int amount, DamageType? damageType, bool isIrreducible = false)
         {
-            var results = this.GameController.GetDamagePreviewResults(new DamageSource(this.GameController, source), target, amount, null, damageType, isIrreducible);
+            var results = this.GameController.GetDamagePreviewResults(new DamageSource(this.GameController, source), target, amount, null, damageType, isIrreducible, cardSource: FindCardController(source.CharacterCard).GetCardSource());
             OutputDamagePreviewResults(results);
             return results;
         }
@@ -3330,6 +3386,11 @@ namespace Studio29Tests
             Assert.IsTrue(FindCardsWhere(card => card.Location.IsDeck && card.Identifier == identifier).Count() == 0, "There are cards with identifier " + identifier + " that are in a deck.");
         }
 
+        protected void AssertNotInDeck(Card card)
+        {
+            Assert.IsTrue(FindCardsWhere(c => c.Location.IsDeck && c == card).Count() == 0, "The card " + card.Title + " is still in a deck.");
+        }
+
         protected void AssertOffToTheSide(Card card)
         {
             Assert.IsTrue(card.Location.IsOffToTheSide, card.Title + " is not off to the side.");
@@ -3410,22 +3471,6 @@ namespace Studio29Tests
         protected void AssertInPlayArea(TurnTakerController ttc, IEnumerable<Card> cards)
         {
             cards.ForEach(c => AssertInPlayArea(ttc, c));
-        }
-
-        protected void AssertAnyInPlayArea(TurnTakerController ttc, IEnumerable<Card> cards)
-        {
-            Func<Card, bool> CheckIfCardIsInPlayArea = (Card c) =>
-            {
-                try
-                {
-                    AssertInPlayArea(ttc, c);
-                    return true;
-                } catch(AssertionException)
-                {
-                    return false;
-                }
-            };
-            cards.Any(c => CheckIfCardIsInPlayArea(c));
         }
 
         protected void AssertNotInPlayArea(TurnTakerController ttc, Card card)
@@ -3649,6 +3694,11 @@ namespace Studio29Tests
             RunCoroutine(this.GameController.GameOver(result, output));
         }
 
+        protected void SkipDecisionsBeforeAssertion(int numberOfDecisionToSkip)
+        {
+            _decisionsToSkipBeforeAssertion = numberOfDecisionToSkip;
+        }
+
         protected void AssertNextDecisionChoices(IEnumerable<Card> included = null, IEnumerable<Card> notIncluded = null)
         {
             if (included != null)
@@ -3688,7 +3738,7 @@ namespace Studio29Tests
             }
         }
 
-        protected void AssertNextDecisionChoices(IEnumerable<TurnTaker> included, IEnumerable<TurnTaker> notIncluded)
+        protected void AssertNextDecisionChoices(IEnumerable<TurnTaker> included = null, IEnumerable<TurnTaker> notIncluded = null)
         {
             if (included != null)
             {
@@ -4101,7 +4151,9 @@ namespace Studio29Tests
 
         protected TurnTakerController FindVillain(string identifier = null)
         {
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             TurnTakerController result = null;
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
 
             if (identifier != null)
             {
@@ -4119,7 +4171,9 @@ namespace Studio29Tests
 
         protected TurnTakerController FindVillainTeamMember(string identifier)
         {
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             TurnTakerController result = null;
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
 
             if (identifier.Contains("Team"))
             {
@@ -4349,6 +4403,8 @@ namespace Studio29Tests
             }
             Console.WriteLine("==============================");
         }
+
+
 
         public void PrintCardsInPlayWithGameText(Func<Card, bool> cardCriteria = null)
         {
@@ -4800,7 +4856,9 @@ namespace Studio29Tests
             MoveCard(FindTurnTakerController(card.Owner), card, card.NativeDeck, toBottom);
         }
 
+#pragma warning disable IDE0044 // Add readonly modifier
         Dictionary<Location, string[]> _stackAfterReshuffle = new Dictionary<Location, string[]>();
+#pragma warning restore IDE0044 // Add readonly modifier
 
         private IEnumerator StackCardsResponse(ShuffleCardsAction action)
         {
@@ -4848,7 +4906,9 @@ namespace Studio29Tests
         {
             Assert.AreEqual(cards.Count(), hpChanges.Count(), "AssertHPAtEndOfTurn: The number of cards provided and the number of expected results do not match up: " + cards.Count() + " and " + hpChanges.Count());
             int index = this.GameController.TurnTakerControllers.IndexOf(ttc).Value;
+#pragma warning disable IDE0059 // Unnecessary assignment of a value
             TurnTakerController previousTTC = null;
+#pragma warning restore IDE0059 // Unnecessary assignment of a value
             if (index > 0)
             {
                 previousTTC = this.GameController.TurnTakerControllers.ElementAt(index - 1);
@@ -4889,7 +4949,9 @@ namespace Studio29Tests
                 controller = this.GameController;
             }
 
+#pragma warning disable IDE0017 // Simplify object initialization
             BinaryFormatter formatter = new BinaryFormatter();
+#pragma warning restore IDE0017 // Simplify object initialization
             formatter.AssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple;
             FileStream stream = null;
             try
@@ -4928,7 +4990,9 @@ namespace Studio29Tests
         {
             if (File.Exists(path))
             {
+#pragma warning disable IDE0017 // Simplify object initialization
                 BinaryFormatter formatter = new BinaryFormatter();
+#pragma warning restore IDE0017 // Simplify object initialization
                 formatter.AssemblyFormat = System.Runtime.Serialization.Formatters.FormatterAssemblyStyle.Simple;
                 FileStream stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
                 try
@@ -5067,8 +5131,9 @@ namespace Studio29Tests
         protected Game MakeReplayableGame(Game existingGame)
         {
             // Get the information from the copied game, but not the state of it.
-            var turnTakerIds = existingGame.TurnTakers.Select(tt => tt.Identifier);
+            var turnTakerIds = existingGame.TurnTakers.Select(tt => tt.QualifiedIdentifier);
             var isAdvanced = existingGame.IsAdvanced;
+            var isChallenge = existingGame.IsChallenge;
             var promoIds = new Dictionary<string, string>();
             foreach (var ttWithPromo in existingGame.TurnTakers.Where(tt => tt.PromoIdentifier != null))
             {
@@ -5078,7 +5143,7 @@ namespace Studio29Tests
             var isMultiplayer = existingGame.IsMultiplayer;
             var randomizer = existingGame.InitialRNG;
 
-            var game = new Game(turnTakerIds, isAdvanced, promoIds, randomSeed, isMultiplayer, randomizer);
+            var game = new Game(turnTakerIds, isAdvanced: isAdvanced, promoIdentifiers: promoIds, randomSeed: randomSeed, isMultiplayer: isMultiplayer, randomizer: randomizer, isChallenge: isChallenge);
             this.ReplayDecisionAnswers = existingGame.Journal.DecisionAnswerEntries(e => true).ToList();
             Console.WriteLine("# of saved replay decision answers: " + this.ReplayDecisionAnswers.Count());
 
@@ -5122,7 +5187,6 @@ namespace Studio29Tests
             this.RunCoroutine(this.GameController.ActivateAbility(ability, new CardSource(cc)));
         }
 
-
         protected void AssertNotTargets(Func<Card, bool> cardCriteria)
         {
             var cards = FindCardsWhere(cardCriteria).ToList();
@@ -5151,7 +5215,7 @@ namespace Studio29Tests
             Assert.IsTrue(card.IsTarget, card.Title + " should be a target.");
             if (maxHitPoints.HasValue)
             {
-                Assert.AreEqual(maxHitPoints.Value, card.HitPoints.Value);
+                Assert.AreEqual(maxHitPoints.Value, card.MaximumHitPoints.Value);
             }
         }
 
@@ -5212,19 +5276,7 @@ namespace Studio29Tests
 
             if (gameAction is DealDamageAction && _notDamageSource != null)
             {
-                Assert.AreNotEqual(_notDamageSource, (gameAction as DealDamageAction).DamageSource.Card, _notDamageSource.Title + " was not expected to be a damage source.");
-            }
-
-            if (gameAction is DealDamageAction && _nextDamageSource != null)
-            {
-                Assert.AreEqual(_nextDamageSource, (gameAction as DealDamageAction).DamageSource.Card, _nextDamageSource.Title + " was expected to be a damage source.");
-                _nextDamageSource = null;
-            }
-
-            if (gameAction is DealDamageAction && _nextDamageType != null)
-            {
-                Assert.AreEqual(_nextDamageType.Value, (gameAction as DealDamageAction).DamageType, _nextDamageType + " was expected to be the type of damage.");
-                _nextDamageType = null;
+                Assert.AreNotEqual(_notDamageSource, (gameAction as DealDamageAction).DamageSource, _notDamageSource.Title + " was not expected to be a damage source.");
             }
 
             if (_decisionSourceCriteria != null)
@@ -5353,6 +5405,11 @@ namespace Studio29Tests
             {
                 Console.WriteLine("GAME OVER");
                 this._continueRunningGame = false;
+            }
+
+            if (gameAction is UnlockPromoCardAction unlock && unlock.IsSuccessful)
+            {
+                SetPersistentValueInView(unlock.PromoCardUnlockedPropertyKey, true);
             }
 
             yield return null;
@@ -5494,7 +5551,9 @@ namespace Studio29Tests
 
         protected void SelectTurnTakerControllersForNextDecision(params TurnTakerController[] ttcs)
         {
+#pragma warning disable IDE0031 // Use null propagation
             var tts = ttcs.Select(ttc => ttc == null ? null : ttc.TurnTaker);
+#pragma warning restore IDE0031 // Use null propagation
             SelectTurnTakersForNextDecision(tts.ToArray());
         }
 
@@ -5550,6 +5609,26 @@ namespace Studio29Tests
                 {
                     Assert.AreEqual(this.DecisionNextSelectionType, decision.SelectionType,
                         "The next decision type was expected to be " + type + " but was " + decision.SelectionType);
+                    this.DecisionNextSelectionType = null;
+                }
+
+                return this.MakeDecisions(decision);
+            };
+
+            ReplaceOnMakeDecisions(decider);
+            return decider;
+        }
+
+        protected GameControllerDecisionEvent AssertNextDecisionSelectionTypeIsNot(SelectionType type)
+        {
+            this.DecisionNextSelectionType = type;
+
+            GameControllerDecisionEvent decider = decision =>
+            {
+                if (this.DecisionNextSelectionType.HasValue)
+                {
+                    Assert.AreNotEqual(this.DecisionNextSelectionType, decision.SelectionType,
+                        "The next decision type was expected to not be " + type + " but was " + decision.SelectionType);
                     this.DecisionNextSelectionType = null;
                 }
 
@@ -5945,7 +6024,9 @@ namespace Studio29Tests
             }
         }
 
+#pragma warning disable IDE0051 // Remove unused private members
         private void PrintReplayDecisionAnswers()
+#pragma warning restore IDE0051 // Remove unused private members
         {
             Console.WriteLine(this.ReplayDecisionAnswers.Select(d => d.DecisionIdentifier).ToCommaList());
         }
@@ -5953,16 +6034,6 @@ namespace Studio29Tests
         public void AssertNotDamageSource(Card card)
         {
             _notDamageSource = card;
-        }
-
-        public void AssertNextDamageSource(Card card)
-        {
-            _nextDamageSource = card;
-        }
-
-        public void AssertNextDamageType(DamageType damageType)
-        {
-            _nextDamageType = damageType;
         }
 
         public void AssertDecisionIsOptional(SelectionType type)
