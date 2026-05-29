@@ -48,6 +48,7 @@ namespace Studio29Tests
             CannotPlayCardsStatusEffect effect = new CannotPlayCardsStatusEffect();
             effect.CardCriteria.IsHero = new bool?(heroesCannotPlay);
             effect.CardCriteria.IsVillain = new bool?(villainsCannotPlay);
+            effect.CardCriteria.IsEnvironment = false;
             effect.UntilStartOfNextTurn(ttc.TurnTaker);
             this.RunCoroutine(this.GameController.AddStatusEffect(effect, true, new CardSource(ttc.CharacterCardController)));
         }
@@ -84,6 +85,17 @@ namespace Studio29Tests
             increaseDamageStatusEffect.DamageTypeCriteria.AddType(damageType);
             increaseDamageStatusEffect.NumberOfUses = 1;
             this.RunCoroutine(this.GameController.AddStatusEffect(increaseDamageStatusEffect, true, new CardSource(httc.CharacterCardController)));
+        }
+
+        protected void AddMakeCardIndestructibleToTheNextDestructionTrigger(Card cardToMakeIndestructible, CardSource cardSource = null)
+        {
+            cardSource = cardSource ?? FindCardController(cardToMakeIndestructible).GetCardSource();
+
+            MakeIndestructibleStatusEffect makeIndestructibleStatusEffect = new MakeIndestructibleStatusEffect();
+            makeIndestructibleStatusEffect.CardsToMakeIndestructible.IsSpecificCard = cardToMakeIndestructible;
+            makeIndestructibleStatusEffect.NumberOfUses = 1;
+            this.RunCoroutine(this.GameController.AddStatusEffect(makeIndestructibleStatusEffect, true, cardSource));
+
         }
 
         protected void PreventEndOfTurnEffects(TurnTakerController ttc, Card cardToPrevent)
