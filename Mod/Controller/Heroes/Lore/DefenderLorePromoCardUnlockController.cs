@@ -15,21 +15,24 @@ namespace Studio29
         }
 
         public const string DefenderLoreUnlockCondition1 = "DefenderLoreUnlockCondition1";
+        public const string DefenderLoreUnlocked = "DefenderLoreUnlocked";
+
+
         public const string PostSaveDefenderLoreUnlockCondition1 = "DefenderLoreUnlockCondition1_h2656047196";
 
         public override bool IsUnlockPossibleThisGame()
         {
-            return IsInGame("Lore", "LoreCharacter") && GameController.GetPersistentValueFromView<bool>(PostSaveDefenderLoreUnlockCondition1);
+            return IsInGame("Lore", "LoreCharacter") && HasFlagBeenSetToTrue(DefenderLoreUnlockCondition1);
         }
 
         public string PrintFlag()
         {
-            return GameController.GetPersistentValueFromView<bool>(DefenderLoreUnlockCondition1).ToString();
+            return HasFlagBeenSetToTrue(DefenderLoreUnlockCondition1).ToString();
         }
 
         public override bool IsFlagPossibleThisGame()
         {
-            return AreInGame(new string[] { "Lore", "TheTamer" },new Dictionary<string, string> { {"Lore", "LoreCharacter" }, { "TheTamer", "TheTamerCharacter" } }) && !GameController.GetPersistentValueFromView<bool>(PostSaveDefenderLoreUnlockCondition1);
+            return AreInGame(new string[] { "Lore", "TheTamer" },new Dictionary<string, string> { {"Lore", "LoreCharacter" }, { "TheTamer", "TheTamerCharacter" } }) && !HasFlagBeenSetToTrue(DefenderLoreUnlockCondition1);
         }
 
         public override void CheckForFlags(GameAction action)
@@ -38,7 +41,8 @@ namespace Studio29
             if (IsGameOverDefeat(action))
             {
                 Log.Debug(LogName.PromoCards, "Defender Lore flag has been set!");
-                GameController.SetPersistentValueInView(DefenderLoreUnlockCondition1, value: true);
+                //GameController.SetPersistentValueInView(DefenderLoreUnlockCondition1, value: true);
+                SetFlag(DefenderLoreUnlockCondition1, value: true);
                 ContinueCheckingForFlags = false;
             }
         }
@@ -47,7 +51,7 @@ namespace Studio29
         {
             //Lore has plays a story card.
             // && IsGameOverVictory(action)
-            if (GameController.GetPersistentValueFromView<bool>(PostSaveDefenderLoreUnlockCondition1))
+            if (HasFlagBeenSetToTrue(DefenderLoreUnlockCondition1))
             {
                 IsUnlocked = FindCardsPlayedThisGame((Card c) => IsStory(c) && c.Owner.Identifier == "Lore").Distinct().Count() >= 1;
                 IsUnlocked = true;

@@ -1,9 +1,11 @@
 ﻿using Handelabra;
 using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using static System.Collections.Specialized.BitVector32;
 
 namespace Studio29.Lore
 {
@@ -14,13 +16,20 @@ namespace Studio29.Lore
 		}
 
 		public DefenderLorePromoCardUnlockController DefenderLorePromo { get; private set; }
+		public BaseLorePromoCardUnlockController BaseLorePromo { get; private set; }
 
         public override void AddTriggers()
         {
 			
 			DefenderLorePromo = new DefenderLorePromoCardUnlockController(GameController);
+			BaseLorePromo = new BaseLorePromoCardUnlockController(GameController);
+            if (BaseLorePromo.IsUnlockPossibleThisGame())
+            {
+                AddTrigger((GameAction action) => !BaseLorePromo.IsUnlocked, CheckForBaseLoreUnlock, TriggerType.Hidden, TriggerTiming.Before, outOfPlayTrigger: true);
+                Log.Debug(LogName.PromoCards, "Lore is unlockable this game.");
+            }
 
-			Log.Debug("Flag is set to: " + DefenderLorePromo.PrintFlag());
+            Log.Debug("Flag is set to: " + DefenderLorePromo.PrintFlag());
 
 			if (DefenderLorePromo.IsUnlockPossibleThisGame())
 			{
@@ -33,6 +42,25 @@ namespace Studio29.Lore
 				Log.Debug(LogName.PromoCards, "Defender Lore flag can be met this game.");
 				AddTrigger((GameAction action) => DefenderLorePromo.ContinueCheckingForFlags, CheckForDefenderLoreFlag, TriggerType.Hidden, TriggerTiming.Before, outOfPlayTrigger: true);
 			}
+        }
+
+        private IEnumerator CheckForBaseLoreUnlock(GameAction action)
+		{
+            if (BaseLorePromo.CheckForUnlock(action))
+            {
+				Log.Debug("In conditional of CheckForUnlock");
+                UnlockPromoCardAction unlockPromoCard = new UnlockPromoCardAction(GameController, BaseLorePromo);
+                IEnumerator coroutine = DoAction(unlockPromoCard);
+                if (base.UseUnityCoroutines)
+                {
+                    yield return base.GameController.StartCoroutine(coroutine);
+                }
+                else
+                {
+                    base.GameController.ExhaustCoroutine(coroutine);
+                }
+            }
+            yield return null;
         }
 
         private IEnumerator CheckForDefenderLoreFlag(GameAction action)
