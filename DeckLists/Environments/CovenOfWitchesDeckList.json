@@ -207,9 +207,9 @@
         "CannotDealDamage"
       ],
       "body": [
-        "At the start of the Environment turn, 1 Player may discard 2 cards. If no cards were discarded this way, restore this card to full HP.",
-        "When this card enters play, [b]Summon[/b] the Curse of Seren.",
-        "At the end of the Environment turn, select a target. That target cannot deal damage or be damaged until the end of the next Environment turn."
+        "[y=0.9]At the start of the Environment turn, 1 Player may discard 2 cards. If no cards were discarded this way, restore this card to full HP.[/y]",
+        "[y=0.9]When this card enters play, [b]Summon[/b] the Curse of Seren.[/y]",
+        "[y=0.9]At the end of the Environment turn, select a target. That target cannot deal damage or be damaged until the end of the next Environment turn.[/y]"
       ],
       "flavorText": "Enter the Coven #5",
       "hitpoints": 7
