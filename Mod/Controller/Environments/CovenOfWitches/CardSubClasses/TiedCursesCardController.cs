@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace Studio29.CovenOfWitches
 {
-    public class TiedCursesCardController : CovenOfWitchesCardController
+    public class TiedCursesCardController : CardController
     {
         public string TiedCurseIdentifier { get; set; }
 

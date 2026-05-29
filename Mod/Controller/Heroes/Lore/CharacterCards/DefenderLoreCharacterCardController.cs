@@ -6,8 +6,8 @@ using System.Linq;
 
 namespace Studio29.Lore
 {
-    public class DefenderLoreCharacterCardController : LoreSubCharacterCardController
-	{
+    public class DefenderLoreCharacterCardController : HeroCharacterCardController
+    {
 		public DefenderLoreCharacterCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
 		{
 		}
@@ -17,15 +17,15 @@ namespace Studio29.Lore
 
 			int powerNumeral = GetPowerNumeral(0, 1);
 			int powerNumeral2 = GetPowerNumeral(1, 1);
-			IEnumerable<Card> source = FindCardsWhere((Card c) => IsStory(c) && c.IsInPlay && c.Owner == base.TurnTaker);
-			IEnumerator coroutine = base.GameController.SelectTargetsAndDealDamage(DecisionMaker, new DamageSource(base.GameController, base.Card), source.Count() + powerNumeral2, DamageType.Projectile, powerNumeral, optional: false, powerNumeral,cardSource: GetCardSource());
-			if (base.UseUnityCoroutines)
+			IEnumerable<Card> source = FindCardsWhere((Card c) => c.IsStory() && c.IsInPlay && c.Owner == TurnTaker);
+			IEnumerator coroutine = GameController.SelectTargetsAndDealDamage(DecisionMaker, new DamageSource(GameController, Card), source.Count() + powerNumeral2, DamageType.Projectile, powerNumeral, optional: false, powerNumeral,cardSource: GetCardSource());
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 			
 		}

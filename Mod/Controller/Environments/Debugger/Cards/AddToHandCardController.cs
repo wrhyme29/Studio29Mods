@@ -19,25 +19,25 @@ namespace Studio29.Debugger
 			//Select a hero. Select any number of cards from that hero's deck or trash. Move the selected cards into that hero's hand.
 			List<SelectTurnTakerDecision> storedTurnTaker = new List<SelectTurnTakerDecision>();
 			IEnumerator coroutine = GameController.SelectHeroTurnTaker(DecisionMaker, SelectionType.Custom, false, false, storedTurnTaker, canBeCancelled: false, cardSource: GetCardSource());
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 
 			if(!DidSelectTurnTaker(storedTurnTaker))
             {
 				coroutine = DestroyThisCardResponse(null);
-				if (base.UseUnityCoroutines)
+				if (UseUnityCoroutines)
 				{
-					yield return base.GameController.StartCoroutine(coroutine);
+					yield return GameController.StartCoroutine(coroutine);
 				}
 				else
 				{
-					base.GameController.ExhaustCoroutine(coroutine);
+					GameController.ExhaustCoroutine(coroutine);
 				}
 				yield break;
             }
@@ -49,47 +49,47 @@ namespace Studio29.Debugger
 			SelectCardsDecision scd = new SelectCardsDecision(GameController, selectedHeroTurnTakerController, (Card c) => c.Owner == selectedTurnTaker && (c.IsInDeck || c.IsInTrash), SelectionType.MoveCardToHand, numberOfCards: null, requiredDecisions: 0, eliminateOptions: true, cardSource: GetCardSource());
 			selectedCards.Add(scd);
 			coroutine = GameController.SelectCardsAndDoAction(scd, (SelectCardDecision card) => DoNothing(), cardSource: GetCardSource());
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 
 			if (!DidSelectCards(selectedCards))
 			{
 				coroutine = DestroyThisCardResponse(null);
-				if (base.UseUnityCoroutines)
+				if (UseUnityCoroutines)
 				{
-					yield return base.GameController.StartCoroutine(coroutine);
+					yield return GameController.StartCoroutine(coroutine);
 				}
 				else
 				{
-					base.GameController.ExhaustCoroutine(coroutine);
+					GameController.ExhaustCoroutine(coroutine);
 				}
 				yield break;
 			}
 			IEnumerable<Card> cards = GetSelectedCards(selectedCards);
 			coroutine = GameController.MoveCards(TurnTakerController, cards, (Card c) => new MoveCardDestination(c.Owner.ToHero().Hand), cardSource: GetCardSource());
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 
 			coroutine = DestroyThisCardResponse(null);
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 
 		}

@@ -21,8 +21,8 @@ namespace Studio29.BirthdayBoy
         }
 
 
-        IEnumerable<TurnTaker> heroesWithPresents => GameController.TurnTakerControllers.Where(ttc => ttc.TurnTaker.IsHero && ttc.TurnTaker != TurnTaker && !ttc.TurnTaker.IsIncapacitatedOrOutOfGame && GetPresentsInPlay().Any(c => GetOriginalOwner(c) == ttc.TurnTaker && GameController.IsTurnTakerVisibleToCardSource(ttc.TurnTaker, GetCardSource()))).Select(ttc => ttc.TurnTaker);
-        IEnumerable<TurnTaker> heroesWithNoPresents => GameController.TurnTakerControllers.Where(ttc => ttc.TurnTaker.IsHero && ttc.TurnTaker != TurnTaker && !ttc.TurnTaker.IsIncapacitatedOrOutOfGame && !GetPresentsInPlay().Any(c => GetOriginalOwner(c) == ttc.TurnTaker && GameController.IsTurnTakerVisibleToCardSource(ttc.TurnTaker, GetCardSource()))).Select(ttc => ttc.TurnTaker);
+        IEnumerable<TurnTaker> heroesWithPresents => GameController.TurnTakerControllers.Where(ttc => ttc.TurnTaker.IsHero && ttc.TurnTaker != TurnTaker && !ttc.TurnTaker.IsIncapacitatedOrOutOfGame && GetPresentsInPlay().Any(c => this.GetOriginalOwner(c) == ttc.TurnTaker && GameController.IsTurnTakerVisibleToCardSource(ttc.TurnTaker, GetCardSource()))).Select(ttc => ttc.TurnTaker);
+        IEnumerable<TurnTaker> heroesWithNoPresents => GameController.TurnTakerControllers.Where(ttc => ttc.TurnTaker.IsHero && ttc.TurnTaker != TurnTaker && !ttc.TurnTaker.IsIncapacitatedOrOutOfGame && !GetPresentsInPlay().Any(c => this.GetOriginalOwner(c) == ttc.TurnTaker && GameController.IsTurnTakerVisibleToCardSource(ttc.TurnTaker, GetCardSource()))).Select(ttc => ttc.TurnTaker);
 
         public override IEnumerator Play()
         {
@@ -32,15 +32,15 @@ namespace Studio29.BirthdayBoy
             int X;
             foreach(TurnTaker tt in heroesWithPresents)
             {
-                X = GetPresentsInPlay().Count(present => GetOriginalOwner(present) == tt);
+                X = GetPresentsInPlay().Count(present => this.GetOriginalOwner(present) == tt);
                 coroutine = GameController.DrawCards(FindHeroTurnTakerController(tt.ToHero()), X, cardSource: GetCardSource());
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
             }
             //Any other hero with no presents in play deals themselves 2 psychic damage."
@@ -50,13 +50,13 @@ namespace Studio29.BirthdayBoy
                 foreach(Card hero in heroCards)
                 {
                     coroutine = DealDamage(hero, hero, 2, DamageType.Psychic, cardSource: GetCardSource());
-                    if (base.UseUnityCoroutines)
+                    if (UseUnityCoroutines)
                     {
-                        yield return base.GameController.StartCoroutine(coroutine);
+                        yield return GameController.StartCoroutine(coroutine);
                     }
                     else
                     {
-                        base.GameController.ExhaustCoroutine(coroutine);
+                        GameController.ExhaustCoroutine(coroutine);
                     }
                 }
 

@@ -8,7 +8,7 @@ using Handelabra;
 
 namespace Studio29.CovenOfWitches
 {
-    public class CurseOfSerenCardController : CovenOfWitchesCardController
+    public class CurseOfSerenCardController : CardController
     {
 
         public CurseOfSerenCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)

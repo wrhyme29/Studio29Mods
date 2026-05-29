@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Studio29.Lore
 {
-    public class DoubleAgentCardController : LoreCardController
+    public class DoubleAgentCardController : CardController
     {
 
         public DoubleAgentCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)

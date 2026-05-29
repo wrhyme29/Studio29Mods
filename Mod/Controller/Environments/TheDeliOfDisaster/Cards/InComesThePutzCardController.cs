@@ -25,13 +25,13 @@ namespace Studio29.TheDeliOfDisaster
             //this card deals the villain target with the highest HP 4 sonic damage.
             List<DealDamageAction> storedResults = new List<DealDamageAction>();
             IEnumerator coroutine = DealDamageToHighestHP(Card, 1, c => IsVillainTarget(c), c => 4, DamageType.Sonic, storedResults: storedResults);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
             if(!DidDealDamage(storedResults))
             {
@@ -40,24 +40,24 @@ namespace Studio29.TheDeliOfDisaster
 
             //If damage is taken this way, play the top card of the villain deck
             coroutine = PlayTheTopCardOfTheVillainDeckWithMessageResponse(storedResults.First());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             //and restore this card to its max hp.
             coroutine = GameController.SetHP(Card, Card.MaximumHitPoints.Value, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 

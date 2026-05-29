@@ -19,26 +19,26 @@ namespace Studio29.TheTamer
 			//reveal the top 2 cards of the Villain deck. Put 1 of them on top of the villain deck and the other on the bottom.
 			List<SelectLocationDecision> storedResults = new List<SelectLocationDecision>();
 			IEnumerator coroutine = FindVillainDeck(DecisionMaker, SelectionType.RevealCardsFromDeck, storedResults, (Location l) => true);
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 			Location deck = GetSelectedLocation(storedResults);
 			List<Card> storedCards = new List<Card>();
 			if (deck != null)
 			{
 				coroutine = RevealCardsFromTopOfDeck_PutOnTopAndOnBottom(HeroTurnTakerController, TurnTakerController, deck, storedResults: storedCards);
-				if (base.UseUnityCoroutines)
+				if (UseUnityCoroutines)
 				{
-					yield return base.GameController.StartCoroutine(coroutine);
+					yield return GameController.StartCoroutine(coroutine);
 				}
 				else
 				{
-					base.GameController.ExhaustCoroutine(coroutine);
+					GameController.ExhaustCoroutine(coroutine);
 				}
 			}
 		}

@@ -7,23 +7,7 @@ namespace Studio29Tests
 {
     [TestFixture()]
     public class DummyPlayerTests : CustomBaseTest
-    {
-        #region BirthdayBoyHelperFunctions
-        protected HeroTurnTakerController dummy { get { return FindHero("DummyPlayer"); } }
-       
-
-        protected void AddImmuneToDamageTrigger(TurnTakerController ttc, bool heroesImmune, bool villainsImmune, bool charactersImmune)
-        {
-            ImmuneToDamageStatusEffect immuneToDamageStatusEffect = new ImmuneToDamageStatusEffect();
-            immuneToDamageStatusEffect.TargetCriteria.IsHero = new bool?(heroesImmune);
-            immuneToDamageStatusEffect.TargetCriteria.IsCharacter = new bool?(charactersImmune);
-            immuneToDamageStatusEffect.TargetCriteria.IsVillain = new bool?(villainsImmune);
-            immuneToDamageStatusEffect.UntilStartOfNextTurn(ttc.TurnTaker);
-            this.RunCoroutine(this.GameController.AddStatusEffect(immuneToDamageStatusEffect, true, new CardSource(ttc.CharacterCardController)));
-        }
-
-
-        #endregion
+    {      
 
         [Test()]
         public void TestDummyPlayerLoads()
@@ -32,9 +16,9 @@ namespace Studio29Tests
             StartGame();
             Assert.AreEqual(5, this.GameController.TurnTakerControllers.Count());
 
-            Assert.IsNotNull(dummy);
+            Assert.IsNotNull(dummyPlayer);
 
-            AssertIncapacitated(dummy);
+            AssertIncapacitated(dummyPlayer);
         }
 
         

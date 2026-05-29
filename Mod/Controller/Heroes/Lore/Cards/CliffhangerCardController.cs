@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Studio29.Lore
 {
-    public class CliffhangerCardController : LoreCardController
+    public class CliffhangerCardController : CardController
     {
 
         public CliffhangerCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
@@ -16,24 +16,24 @@ namespace Studio29.Lore
         {
             //You may destroy one Environment card
             IEnumerator coroutine = GameController.SelectAndDestroyCard(DecisionMaker, new LinqCardCriteria((Card c) => c.IsEnvironment, "environment"), optional: true, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             //Play the top card of the environment deck
             coroutine = PlayTheTopCardOfTheEnvironmentDeckWithMessageResponse(null);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 

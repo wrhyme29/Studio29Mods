@@ -22,27 +22,27 @@ namespace Studio29.BirthdayBoy
 
             List<SelectCardDecision> storedResults = new List<SelectCardDecision>();
             IEnumerator coroutine = GameController.SelectCardAndStoreResults(HeroTurnTakerController, SelectionType.MoveCard, presentsList, storedResults, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
             if(DidSelectCard(storedResults))
             {
                 Card selectedCard = GetSelectedCard(storedResults);
-                TurnTaker tt = GetOriginalOwner(selectedCard);
+                TurnTaker tt = this.GetOriginalOwner(selectedCard);
                 GameController.ChangeCardOwnership(selectedCard, tt);
                 coroutine = GameController.ModifyKeywords("present", addingOrRemoving: false, affectedCards: selectedCard.ToEnumerable().ToList(), cardSource: GetCardSource());
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
 
                 Location destination = tt.Trash;
@@ -52,13 +52,13 @@ namespace Studio29.BirthdayBoy
                 }
 
                 coroutine = GameController.MoveCard(TurnTakerController, selectedCard, destination, showMessage: true, cardSource: GetCardSource());
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
 
             }
@@ -66,13 +66,13 @@ namespace Studio29.BirthdayBoy
             //Gain 4 HP
 
             coroutine = GameController.GainHP(CharacterCard, 4, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 

@@ -16,23 +16,23 @@ namespace Studio29.Debugger
         {
             //Select any number of cards in play. Destroy the selected cards.
             IEnumerator coroutine = GameController.SelectAndDestroyCards(DecisionMaker, new LinqCardCriteria(c => c.IsInPlayAndHasGameText && !c.IsIncapacitatedOrOutOfGame && c.ParentDeck.Identifier != TurnTaker.Identifier, "in play", useCardsSuffix: false, useCardsPrefix: true), null, optional: false, requiredDecisions: 0, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             coroutine = DestroyThisCardResponse(null);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 

@@ -20,36 +20,36 @@ namespace Studio29.Debugger
 
 			List<SelectTurnTakerDecision> storedResults = new List<SelectTurnTakerDecision>();
 			IEnumerator coroutine = GameController.SelectTurnTaker(DecisionMaker, SelectionType.SwitchBattleZone, storedResults, additionalCriteria: tt => tt.IsHero && !tt.IsIncapacitatedOrOutOfGame, ignoreBattleZone: true, cardSource: GetCardSource());
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 			if (DidSelectTurnTaker(storedResults))
 			{
 				HeroTurnTaker htt = GetSelectedTurnTaker(storedResults).ToHero();
-				HeroTurnTakerController httc = FindHeroTurnTakerController(htt);
-				coroutine = GameController.SwitchBattleZone(httc);
-				if (base.UseUnityCoroutines)
+				HeroTurnTakerController hccc = FindHeroTurnTakerController(htt);
+				coroutine = GameController.SwitchBattleZone(hccc);
+				if (UseUnityCoroutines)
 				{
-					yield return base.GameController.StartCoroutine(coroutine);
+					yield return GameController.StartCoroutine(coroutine);
 				}
 				else
 				{
-					base.GameController.ExhaustCoroutine(coroutine);
+					GameController.ExhaustCoroutine(coroutine);
 				}
 			}
 			coroutine = DestroyThisCardResponse(null);
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 		}
 

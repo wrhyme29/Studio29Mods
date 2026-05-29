@@ -8,7 +8,7 @@ namespace Studio29.Lore
     public class BlessingOfTheFifteenthStoneCardController : StoryCardController
     {
 
-        public BlessingOfTheFifteenthStoneCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, MythKeyword)
+        public BlessingOfTheFifteenthStoneCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, "myth")
         {
 
         }
@@ -26,13 +26,13 @@ namespace Studio29.Lore
 
             List<SelectCardDecision> storedResults = new List<SelectCardDecision>();
             IEnumerator coroutine = GameController.SelectCardAndStoreResults(DecisionMaker, SelectionType.Custom, new LinqCardCriteria(c => c.IsInPlayAndHasGameText && c.IsTarget && c.HitPoints <= 5 && c != CharacterCard && GameController.IsCardVisibleToCardSource(c, GetCardSource())), storedResults, false, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             //Until the start of your next turn, that target is indestructible.
@@ -47,13 +47,13 @@ namespace Studio29.Lore
             effect.CardsToMakeIndestructible.IsSpecificCard = selectedTarget;
             effect.UntilStartOfNextTurn(TurnTaker);
             coroutine = AddStatusEffect(effect);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 

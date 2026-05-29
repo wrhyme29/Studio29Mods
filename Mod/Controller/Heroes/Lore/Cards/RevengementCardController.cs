@@ -7,7 +7,7 @@ namespace Studio29.Lore
     public class RevengementCardController : StoryCardController
     {
 
-        public RevengementCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, ActionKeyword)
+        public RevengementCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, "action")
         {
 
         }
@@ -21,13 +21,13 @@ namespace Studio29.Lore
         private IEnumerator DealDamageResponse(DealDamageAction dd)
         {
             IEnumerator coroutine = GameController.SelectTargetsAndDealDamage(DecisionMaker, new DamageSource(GameController, CharacterCard), 1, DamageType.Cold, 1, false, 0, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
     }

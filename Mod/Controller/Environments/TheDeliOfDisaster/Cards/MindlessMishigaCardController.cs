@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Studio29.TheDeliOfDisaster
 {
-    public class MindlessMishigaCardController : TheDeliOfDisasterCardController
+    public class MindlessMishigaCardController : CardController
     {
 
         public MindlessMishigaCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
@@ -22,46 +22,46 @@ namespace Studio29.TheDeliOfDisaster
         {
             //The villain and hero target with the lowest HP regains 1 HP.
             IEnumerator coroutine = LowestHeroAndVillainGainHP();
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             //One player draws a card.
             coroutine = GameController.SelectHeroToDrawCards(DecisionMaker, 1, optionalDrawCards: false, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             //Shuffle the Villain trash and reveal cards from the top until a Target is revealed. Put it into play. Put the other revealed cards back into the Villain Trash.
             coroutine = BringTargetBackResponse();
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             //The villain target with the lowest HP deals the villain target with the highest HP 3 fire damage.
             coroutine = LowestVillainDealsHighestVillainDamage();
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
         }
@@ -69,14 +69,14 @@ namespace Studio29.TheDeliOfDisaster
         private IEnumerator LowestVillainDealsHighestVillainDamage()
         {
             List<Card> storedResults = new List<Card>();
-            IEnumerator coroutine = base.GameController.FindTargetWithLowestHitPoints(1, (Card c) => IsVillainTarget(c), storedResults, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            IEnumerator coroutine = GameController.FindTargetWithLowestHitPoints(1, (Card c) => IsVillainTarget(c), storedResults, cardSource: GetCardSource());
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             Card card = storedResults.FirstOrDefault();
@@ -86,13 +86,13 @@ namespace Studio29.TheDeliOfDisaster
             }
 
             IEnumerator coroutine2 = DealDamageToHighestHP(card, 1, (Card c) => IsVillainTarget(c), (Card c) => 3, DamageType.Fire);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine2);
+                yield return GameController.StartCoroutine(coroutine2);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine2);
+                GameController.ExhaustCoroutine(coroutine2);
             }
 
         }
@@ -102,13 +102,13 @@ namespace Studio29.TheDeliOfDisaster
             List<Card> lowestHeroAndVillain = new List<Card>();
             List<Card> storedLowestHero = new List<Card>();
             IEnumerator coroutine = GameController.FindTargetWithLowestHitPoints(1, (Card c) => c.IsHero, storedLowestHero, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             Card card = storedLowestHero.FirstOrDefault();
@@ -119,13 +119,13 @@ namespace Studio29.TheDeliOfDisaster
 
             List<Card> storedLowestVillain = new List<Card>();
             coroutine = GameController.FindTargetWithLowestHitPoints(1, (Card c) => IsVillainTarget(c), storedLowestVillain, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             card = storedLowestVillain.FirstOrDefault();
@@ -135,13 +135,13 @@ namespace Studio29.TheDeliOfDisaster
             }
 
             coroutine = GameController.GainHP(DecisionMaker, c => lowestHeroAndVillain.Contains(c), 1, numberOfCardsToHeal: 2, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 
@@ -152,49 +152,49 @@ namespace Studio29.TheDeliOfDisaster
             {
                 string message = $"{Card.Title} puts {source.First().Title} from the villain trash into play.";
                 IEnumerator coroutine = GameController.SendMessageAction(message, Priority.Low, GetCardSource(), null, showCardSource: true);
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
             }
             List<SelectLocationDecision> storedResults = new List<SelectLocationDecision>();
             IEnumerator coroutine2 = FindVillainDeck(DecisionMaker, SelectionType.PutIntoPlay, storedResults, (Location l) => FindTrashFromDeck(l) != null && FindTrashFromDeck(l).Cards.Any((Card c) => c.IsTarget));
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine2);
+                yield return GameController.StartCoroutine(coroutine2);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine2);
+                GameController.ExhaustCoroutine(coroutine2);
             }
             Location selectedLocation = GetSelectedLocation(storedResults);
             if (selectedLocation != null)
             {
                 Location trash = FindTrashFromDeck(selectedLocation);
                 coroutine2 = ReviveCardFromTurnTakerTrash(FindTurnTakerController(trash.OwnerTurnTaker), c => IsVillainTarget(c));
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine2);
+                    yield return GameController.StartCoroutine(coroutine2);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine2);
+                    GameController.ExhaustCoroutine(coroutine2);
                 }
             }
             else
             {
-                coroutine2 = base.GameController.SendMessageAction("There are no villain targets in any villain trash to put into play.", Priority.Low, GetCardSource(), null, showCardSource: true);
-                if (base.UseUnityCoroutines)
+                coroutine2 = GameController.SendMessageAction("There are no villain targets in any villain trash to put into play.", Priority.Low, GetCardSource(), null, showCardSource: true);
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine2);
+                    yield return GameController.StartCoroutine(coroutine2);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine2);
+                    GameController.ExhaustCoroutine(coroutine2);
                 }
             }
         }

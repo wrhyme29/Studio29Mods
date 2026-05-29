@@ -27,7 +27,7 @@ namespace Studio29.TheTamer
         private IEnumerator DealtMoreThanOneDamageResponse(DealDamageAction dd)
         {
             //it deals each non-lion target 1 melee damage.
-            return DealDamage(Card, c => !IsLion(c), 1, DamageType.Melee);
+            return DealDamage(Card, c => !c.IsLion(), 1, DamageType.Melee);
         }
     }
 }

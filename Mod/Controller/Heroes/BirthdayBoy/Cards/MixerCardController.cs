@@ -20,14 +20,14 @@ namespace Studio29.BirthdayBoy
         {
             //You may destroy any number of presents.
             List<DestroyCardAction> storedDestroyResults = new List<DestroyCardAction>();
-            IEnumerator coroutine = base.GameController.SelectAndDestroyCards(HeroTurnTakerController, new LinqCardCriteria((Card c) => IsPresent(c), "present"), null,  requiredDecisions: 0, storedResultsAction: storedDestroyResults, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            IEnumerator coroutine = GameController.SelectAndDestroyCards(HeroTurnTakerController, new LinqCardCriteria((Card c) => c.IsPresent(), "present"), null,  requiredDecisions: 0, storedResultsAction: storedDestroyResults, cardSource: GetCardSource());
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             if(!DidDestroyCards(storedDestroyResults))
@@ -38,27 +38,27 @@ namespace Studio29.BirthdayBoy
             //You may use {BirthdayBoy}'s innate power X + 1 times this turn, where X is the number of presents destroyed this way.
             int X = GetNumberOfCardsDestroyed(storedDestroyResults);
 			NumberOfPowerUsesForCustomDecision = X + 1;
-            if (base.GameController.ActiveTurnTaker == base.TurnTaker)
+            if (GameController.ActiveTurnTaker == TurnTaker)
             {
                 AllowSetNumberOfPowerUseStatusEffect allowSetNumberOfPowerUseStatusEffect = new AllowSetNumberOfPowerUseStatusEffect(X + 1);
-                allowSetNumberOfPowerUseStatusEffect.UsePowerCriteria.IsSpecificCard = base.CharacterCard;
-                allowSetNumberOfPowerUseStatusEffect.UsePowerCriteria.CardSource = base.CharacterCard;
-                allowSetNumberOfPowerUseStatusEffect.UntilThisTurnIsOver(base.GameController.Game);
-                allowSetNumberOfPowerUseStatusEffect.CardDestroyedExpiryCriteria.Card = base.CharacterCard;
+                allowSetNumberOfPowerUseStatusEffect.UsePowerCriteria.IsSpecificCard = CharacterCard;
+                allowSetNumberOfPowerUseStatusEffect.UsePowerCriteria.CardSource = CharacterCard;
+                allowSetNumberOfPowerUseStatusEffect.UntilThisTurnIsOver(GameController.Game);
+                allowSetNumberOfPowerUseStatusEffect.CardDestroyedExpiryCriteria.Card = CharacterCard;
                 allowSetNumberOfPowerUseStatusEffect.NumberOfUses = 1;
                 coroutine = AddStatusEffect(allowSetNumberOfPowerUseStatusEffect);
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
             } 
 
-			int timesUsed = (from e in base.Journal.UsePowerEntriesThisTurn()
-							 where e.CardWithPower == base.CharacterCard
+			int timesUsed = (from e in Journal.UsePowerEntriesThisTurn()
+							 where e.CardWithPower == CharacterCard
 							 select e).Count();
 			if (timesUsed < X + 1)
 			{
@@ -68,14 +68,14 @@ namespace Studio29.BirthdayBoy
 				{
 					type = SelectionType.UsePowerAgain;
 				}
-				IEnumerator coroutine2 = base.GameController.MakeYesNoCardDecision(base.HeroTurnTakerController, type, base.CharacterCard, storedResults: storedResults, cardSource: GetCardSource());
-				if (base.UseUnityCoroutines)
+				IEnumerator coroutine2 = GameController.MakeYesNoCardDecision(HeroTurnTakerController, type, CharacterCard, storedResults: storedResults, cardSource: GetCardSource());
+				if (UseUnityCoroutines)
 				{
-					yield return base.GameController.StartCoroutine(coroutine2);
+					yield return GameController.StartCoroutine(coroutine2);
 				}
 				else
 				{
-					base.GameController.ExhaustCoroutine(coroutine2);
+					GameController.ExhaustCoroutine(coroutine2);
 				}
 				if (!DidPlayerAnswerYes(storedResults))
 				{
@@ -83,27 +83,27 @@ namespace Studio29.BirthdayBoy
 				}
 				for (int i = 0; i < X + 1 - timesUsed; i++)
 				{
-					coroutine2 = UsePowerOnOtherCard(base.CharacterCard);
-					if (base.UseUnityCoroutines)
+					coroutine2 = UsePowerOnOtherCard(CharacterCard);
+					if (UseUnityCoroutines)
 					{
-						yield return base.GameController.StartCoroutine(coroutine2);
+						yield return GameController.StartCoroutine(coroutine2);
 					}
 					else
 					{
-						base.GameController.ExhaustCoroutine(coroutine2);
+						GameController.ExhaustCoroutine(coroutine2);
 					}
 				}
 			}
 			else
 			{
-				IEnumerator coroutine3 = base.GameController.SendMessageAction($"{base.TurnTaker.Name} has already used {base.CharacterCard.Definition.Body.First()} {X + 1} times this turn.", Priority.High, GetCardSource(), showCardSource: true);
-				if (base.UseUnityCoroutines)
+				IEnumerator coroutine3 = GameController.SendMessageAction($"{TurnTaker.Name} has already used {CharacterCard.Definition.Body.First()} {X + 1} times this turn.", Priority.High, GetCardSource(), showCardSource: true);
+				if (UseUnityCoroutines)
 				{
-					yield return base.GameController.StartCoroutine(coroutine3);
+					yield return GameController.StartCoroutine(coroutine3);
 				}
 				else
 				{
-					base.GameController.ExhaustCoroutine(coroutine3);
+					GameController.ExhaustCoroutine(coroutine3);
 				}
 			}
 

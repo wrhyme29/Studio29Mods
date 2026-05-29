@@ -16,13 +16,13 @@ namespace Studio29.DummyPlayer
         {
           
             IEnumerator coroutine = GameController.FlipCard(CharacterCardController, cardSource: CharacterCardController.GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
             yield break;
         }

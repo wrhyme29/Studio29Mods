@@ -24,7 +24,7 @@ namespace Studio29.BirthdayBoy
 		{
 			AddThisCardControllerToList(CardControllerListType.ReplacesCards);
 			AddThisCardControllerToList(CardControllerListType.ReplacesTurnTakerController);
-			AddTrigger((GameAction ga) => ga.CardSource != null && IsPresent(ga.CardSource.Card), AddThisAsAssociatedCardSource, TriggerType.Hidden, TriggerTiming.Before);			
+			AddTrigger((GameAction ga) => ga.CardSource != null && ga.CardSource.Card.IsPresent(), AddThisAsAssociatedCardSource, TriggerType.Hidden, TriggerTiming.Before);			
 		}
 		public override IEnumerator UsePower(int index = 0)
 		{
@@ -37,13 +37,13 @@ namespace Studio29.BirthdayBoy
             {
 				coroutine = GameController.SendMessageAction($"{Card.Title} already owns 40 cards! Let's not go overboard with the presents!", Priority.High, GetCardSource(), showCardSource: true);
             }
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 			yield break;
 		}
@@ -51,16 +51,16 @@ namespace Studio29.BirthdayBoy
         private IEnumerator MoveCardsToOwnPlayArea()
         {
 			//{BirthdayBoy} may move any hero ongoing, hero equipment, or hero target with max 5hp or fewer in play to your play area.
-			LinqCardCriteria criteria = new LinqCardCriteria((Card c) => c.Owner != base.TurnTaker && c.IsInPlayAndHasGameText && c.IsHero && (c.IsOngoing || IsEquipment(c) || (c.IsTarget && c.MaximumHitPoints <= 5)), "hero ongoing, hero equipment, or hero target with max 5hp");
+			LinqCardCriteria criteria = new LinqCardCriteria((Card c) => c.Owner != TurnTaker && c.IsInPlayAndHasGameText && c.IsHero && (c.IsOngoing || IsEquipment(c) || (c.IsTarget && c.MaximumHitPoints <= 5)), "hero ongoing, hero equipment, or hero target with max 5hp");
             List<SelectCardDecision> storedResults = new List<SelectCardDecision>();
-            IEnumerator coroutine = GameController.MoveCards(base.HeroTurnTakerController, criteria, (Card c) => base.TurnTaker.PlayArea,numberOfCards: new int?(1), requiredDecisions: new int?(0), playIfMovingToPlayArea: false, storedResults: storedResults, cardSource: GetCardSource());
-			if (base.UseUnityCoroutines)
+            IEnumerator coroutine = GameController.MoveCards(HeroTurnTakerController, criteria, (Card c) => TurnTaker.PlayArea,numberOfCards: new int?(1), requiredDecisions: new int?(0), playIfMovingToPlayArea: false, storedResults: storedResults, cardSource: GetCardSource());
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 
 			if(DidSelectCard(storedResults))
@@ -72,38 +72,38 @@ namespace Studio29.BirthdayBoy
 				GameController.ChangeCardOwnership(movedCard, TurnTaker);
 
 				Log.Debug("New owner: " + movedCard.Owner.Identifier);
-				Log.Debug("Original owner: " + GetOriginalOwner(movedCard).Identifier);
+				Log.Debug("Original owner: " + this.GetOriginalOwner(movedCard).Identifier);
 
 				coroutine = GameController.ModifyKeywords("present", addingOrRemoving: true, affectedCards: movedCard.ToEnumerable().ToList(), cardSource: GetCardSource());
-				if (base.UseUnityCoroutines)
+				if (UseUnityCoroutines)
 				{
-					yield return base.GameController.StartCoroutine(coroutine);
+					yield return GameController.StartCoroutine(coroutine);
 				}
 				else
 				{
-					base.GameController.ExhaustCoroutine(coroutine);
+					GameController.ExhaustCoroutine(coroutine);
 				}
-				coroutine = GameController.SendMessageAction($"{movedCard.Title} is now a Present belonging to { base.Card.AlternateTitleOrTitle}", Priority.High, GetCardSource());
-				if (base.UseUnityCoroutines)
+				coroutine = GameController.SendMessageAction($"{movedCard.Title} is now a Present belonging to { Card.AlternateTitleOrTitle}", Priority.High, GetCardSource());
+				if (UseUnityCoroutines)
 				{
-					yield return base.GameController.StartCoroutine(coroutine);
+					yield return GameController.StartCoroutine(coroutine);
 				}
 				else
 				{
-					base.GameController.ExhaustCoroutine(coroutine);
+					GameController.ExhaustCoroutine(coroutine);
 				}
 
 				CardController cardController = FindCardController(movedCard);
 				if (!cardController.DoesHaveActivePlayMethod)
 				{
 					coroutine = cardController.Play();
-					if (base.UseUnityCoroutines)
+					if (UseUnityCoroutines)
 					{
-						yield return base.GameController.StartCoroutine(coroutine);
+						yield return GameController.StartCoroutine(coroutine);
 					}
 					else
 					{
-						base.GameController.ExhaustCoroutine(coroutine);
+						GameController.ExhaustCoroutine(coroutine);
 					}
 				}
 			}
@@ -163,11 +163,11 @@ namespace Studio29.BirthdayBoy
 
 		public override bool AskIfCardContainsKeyword(Card card, string keyword, bool evenIfUnderCard = false, bool evenIfFaceDown = false)
 		{
-			if (card.Owner == base.TurnTaker && card.Owner != GetOriginalOwner(card) && keyword == "present")
+			if (card.Owner == TurnTaker && card.Owner != this.GetOriginalOwner(card) && keyword == "present")
 			{
 				return true;
 			}
-			return base.AskIfCardContainsKeyword(card, keyword, evenIfUnderCard, evenIfFaceDown);
+			return AskIfCardContainsKeyword(card, keyword, evenIfUnderCard, evenIfFaceDown);
 		}
 
 		private IEnumerator AddThisAsAssociatedCardSource(GameAction ga)
@@ -182,9 +182,9 @@ namespace Studio29.BirthdayBoy
 			{
 				_checkForReplacements = true;
 				Card cardWithoutReplacements = cardSource.CardController.CardWithoutReplacements;
-				if ( cardWithoutReplacements != null && IsPresent(cardWithoutReplacements) && GetOriginalOwner(cardWithoutReplacements).CharacterCards.Contains(card))
+				if ( cardWithoutReplacements != null && cardWithoutReplacements.IsPresent() && this.GetOriginalOwner(cardWithoutReplacements).CharacterCards.Contains(card))
 				{
-					Card result = base.CharacterCard;
+					Card result = CharacterCard;
 					_checkForReplacements = false;
 					return result;
 				}
@@ -196,25 +196,25 @@ namespace Studio29.BirthdayBoy
 
 		public override TurnTakerController AskIfTurnTakerControllerIsReplaced(TurnTakerController ttc, CardSource cardSource)
 		{
-			if (!_checkForReplacements && cardSource != null && cardSource.Card.Owner != base.Card.Owner && cardSource.AllowReplacements)
+			if (!_checkForReplacements && cardSource != null && cardSource.Card.Owner != Card.Owner && cardSource.AllowReplacements)
 			{
 				_checkForReplacements = true;
 				Card cardWithoutReplacements = cardSource.CardController.CardWithoutReplacements;
 				HeroTurnTakerController heroTurnTakerController = cardSource.FindMostRecentDecisionMaker();
-				bool flag = heroTurnTakerController == null || heroTurnTakerController == base.TurnTakerControllerWithoutReplacements;
-				if (cardWithoutReplacements != null && ttc.TurnTaker == GetOriginalOwner(cardWithoutReplacements) && flag)
+				bool flag = heroTurnTakerController == null || heroTurnTakerController == TurnTakerControllerWithoutReplacements;
+				if (cardWithoutReplacements != null && ttc.TurnTaker == this.GetOriginalOwner(cardWithoutReplacements) && flag)
 				{
-					if (IsPresent(cardWithoutReplacements))
+					if (cardWithoutReplacements.IsPresent())
 					{
-						TurnTakerController result = base.TurnTakerController;
+						TurnTakerController result = TurnTakerController;
 						_checkForReplacements = false;
-						return base.TurnTakerController;
+						return TurnTakerController;
 					}
 					if (cardSource.CardSourceChain.Any((CardSource cs) => cs.CardController == this))
 					{
-						TurnTakerController result = base.TurnTakerController;
+						TurnTakerController result = TurnTakerController;
 						_checkForReplacements = false;
-						return base.TurnTakerController;
+						return TurnTakerController;
 					}
 				}
 
@@ -225,13 +225,13 @@ namespace Studio29.BirthdayBoy
 
 		public override IEnumerable<string> AskForCardAdditionalKeywords(Card card)
 		{
-			if (card.Owner == base.TurnTaker && card.Owner != GetOriginalOwner(card))
+			if (card.Owner == TurnTaker && card.Owner != this.GetOriginalOwner(card))
 			{
 				string present = "present";
 				return present.ToEnumerable();
 			}
 
-			return base.AskForCardAdditionalKeywords(card);
+			return AskForCardAdditionalKeywords(card);
 		}
 
 		private IEnumerator SelectHeroAndUseIncapitatedAbility(int abilityIndex)

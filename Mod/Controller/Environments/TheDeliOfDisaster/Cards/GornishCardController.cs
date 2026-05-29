@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Studio29.TheDeliOfDisaster
 {
-    public class GornishCardController : TheDeliOfDisasterCardController
+    public class GornishCardController : CardController
     {
 
         public GornishCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
@@ -24,15 +24,15 @@ namespace Studio29.TheDeliOfDisaster
         private IEnumerator EndOfTurnResponse(PhaseChangeAction pca)
         {
             TurnTaker tt = pca.ToPhase.TurnTaker;
-            HeroTurnTakerController httc = FindHeroTurnTakerController(tt.ToHero());
-            return GameController.SelectAndDiscardCards(httc, 2, false, 2, cardSource: GetCardSource());
+            HeroTurnTakerController hccc = FindHeroTurnTakerController(tt.ToHero());
+            return GameController.SelectAndDiscardCards(hccc, 2, false, 2, cardSource: GetCardSource());
         }
 
         private IEnumerator StartOfTurnResponse(PhaseChangeAction pca)
         {
             TurnTaker tt = pca.ToPhase.TurnTaker;
-            HeroTurnTakerController httc = FindHeroTurnTakerController(tt.ToHero());
-            return DrawCards(httc, 2);
+            HeroTurnTakerController hccc = FindHeroTurnTakerController(tt.ToHero());
+            return DrawCards(hccc, 2);
         }
     }
 }

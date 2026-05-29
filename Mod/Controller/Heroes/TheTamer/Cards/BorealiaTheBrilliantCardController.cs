@@ -15,7 +15,7 @@ namespace Studio29.TheTamer
         protected override IEnumerator DealtExactlyOneDamageResponse(DealDamageAction dd)
         {
             //each other lion gains 2 HP.
-            return GameController.GainHP(HeroTurnTakerController, c => IsLion(c) && c != Card, 2, cardSource: GetCardSource());
+            return GameController.GainHP(HeroTurnTakerController, c => c.IsLion() && c != Card, 2, cardSource: GetCardSource());
         }
 
     }

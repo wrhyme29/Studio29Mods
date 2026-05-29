@@ -20,15 +20,15 @@ namespace Studio29.TheTamer
             effect.SourceCriteria.HasAnyOfTheseKeywords = new List<string>() { "lion" };
             effect.TargetCriteria.IsHero = false;
             effect.TargetCriteria.IsTarget = true;
-            effect.UntilStartOfNextTurn(base.TurnTaker);
+            effect.UntilStartOfNextTurn(TurnTaker);
             IEnumerator coroutine = AddStatusEffect(effect);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             yield break;

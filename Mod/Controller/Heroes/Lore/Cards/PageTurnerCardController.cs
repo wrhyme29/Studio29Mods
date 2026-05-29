@@ -8,7 +8,7 @@ namespace Studio29.Lore
     public class PageTurnerCardController : StoryCardController
     {
 
-        public PageTurnerCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, MysteryKeyword)
+        public PageTurnerCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, "mystery")
         {
 
         }
@@ -24,14 +24,14 @@ namespace Studio29.Lore
             //...reveal the top card of 2 different decks, then replace or discard each card.
             List<SelectLocationDecision> storedResult = new List<SelectLocationDecision>();
             //Pick first deck
-            IEnumerator coroutine = base.GameController.SelectADeck(base.HeroTurnTakerController, SelectionType.RevealTopCardOfDeck, (Location deck) => true, storedResult, cardSource: base.GetCardSource());
-            if (base.UseUnityCoroutines)
+            IEnumerator coroutine = GameController.SelectADeck(HeroTurnTakerController, SelectionType.RevealTopCardOfDeck, (Location deck) => true, storedResult, cardSource: GetCardSource());
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             if (!DidSelectLocation(storedResult))
@@ -41,25 +41,25 @@ namespace Studio29.Lore
 
             Location selectedDeck = GetSelectedLocation(storedResult);
             coroutine = RevealCard_DiscardItOrPutItOnDeck(DecisionMaker, FindTurnTakerController(selectedDeck.OwnerTurnTaker), selectedDeck, false);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             //Second Deck
             List<SelectLocationDecision> storedResult2 = new List<SelectLocationDecision>();
             coroutine = GameController.SelectADeck(HeroTurnTakerController, SelectionType.RevealTopCardOfDeck, (Location deck) => deck != selectedDeck, storedResult2, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
             if (!DidSelectLocation(storedResult2))
             {
@@ -68,13 +68,13 @@ namespace Studio29.Lore
                 
             selectedDeck = GetSelectedLocation(storedResult2);
             coroutine = RevealCard_DiscardItOrPutItOnDeck(DecisionMaker, FindTurnTakerController(selectedDeck.OwnerTurnTaker), selectedDeck, false);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
             
         }

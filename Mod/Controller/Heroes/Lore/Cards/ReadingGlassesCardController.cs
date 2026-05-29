@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Studio29.Lore
 {
-    public class ReadingGlassesCardController : LoreCardController
+    public class ReadingGlassesCardController : CardController
     {
 		public override bool DoesHaveActivePlayMethod => false;
 
@@ -21,13 +21,13 @@ namespace Studio29.Lore
 		public override IEnumerator Play()
 		{
 			IEnumerator coroutine = IncreasePhaseActionCountIfInPhase((TurnTaker tt) => tt == TurnTaker, Phase.UsePower, 1);
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 		}
 

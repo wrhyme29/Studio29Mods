@@ -18,39 +18,39 @@ namespace Studio29.DummyPlayer
 				case 0:
 					{
 						IEnumerator coroutine3 = SelectHeroToPlayCard(DecisionMaker);
-						if (base.UseUnityCoroutines)
+						if (UseUnityCoroutines)
 						{
-							yield return base.GameController.StartCoroutine(coroutine3);
+							yield return GameController.StartCoroutine(coroutine3);
 						}
 						else
 						{
-							base.GameController.ExhaustCoroutine(coroutine3);
+							GameController.ExhaustCoroutine(coroutine3);
 						}
 						break;
 					}
 				case 1:
 					{
-						IEnumerator coroutine2 = base.GameController.SelectHeroToUsePower(DecisionMaker, optionalSelectHero: false, optionalUsePower: true, allowAutoDecide: false, null, null, null, omitHeroesWithNoUsablePowers: true, canBeCancelled: true, GetCardSource());
-						if (base.UseUnityCoroutines)
+						IEnumerator coroutine2 = GameController.SelectHeroToUsePower(DecisionMaker, optionalSelectHero: false, optionalUsePower: true, allowAutoDecide: false, null, null, null, omitHeroesWithNoUsablePowers: true, canBeCancelled: true, GetCardSource());
+						if (UseUnityCoroutines)
 						{
-							yield return base.GameController.StartCoroutine(coroutine2);
+							yield return GameController.StartCoroutine(coroutine2);
 						}
 						else
 						{
-							base.GameController.ExhaustCoroutine(coroutine2);
+							GameController.ExhaustCoroutine(coroutine2);
 						}
 						break;
 					}
 				case 2:
 					{
-						IEnumerator coroutine = base.GameController.SelectHeroToDrawCard(DecisionMaker, optionalSelectHero: false, optionalDrawCard: true, allowAutoDecideHero: false, null, null, null, GetCardSource());
-						if (base.UseUnityCoroutines)
+						IEnumerator coroutine = GameController.SelectHeroToDrawCard(DecisionMaker, optionalSelectHero: false, optionalDrawCard: true, allowAutoDecideHero: false, null, null, null, GetCardSource());
+						if (UseUnityCoroutines)
 						{
-							yield return base.GameController.StartCoroutine(coroutine);
+							yield return GameController.StartCoroutine(coroutine);
 						}
 						else
 						{
-							base.GameController.ExhaustCoroutine(coroutine);
+							GameController.ExhaustCoroutine(coroutine);
 						}
 						break;
 					}

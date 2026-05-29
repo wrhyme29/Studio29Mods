@@ -11,8 +11,6 @@ namespace Studio29
 {
     public static class DefinitiveExtensionMethods
     {
-
-
         public static IEnumerator Discover(this CardController card, TurnTakerController ttc, Location deck, LinqCardCriteria criteria, int numToDiscover, List<Card> storedResults = null, bool shuffleTrashIntoDeckFirst = false)
         {
             if(shuffleTrashIntoDeckFirst)

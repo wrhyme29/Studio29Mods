@@ -8,7 +8,7 @@ namespace Studio29.Lore
     public class EpilogueCardController : StoryCardController
     {
 
-        public EpilogueCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, MythKeyword)
+        public EpilogueCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, "myth")
         {
 
         }
@@ -19,13 +19,13 @@ namespace Studio29.Lore
 
             List<SelectLocationDecision> storedResults = new List<SelectLocationDecision>() ;
             IEnumerator coroutine = GameController.SelectATrash(DecisionMaker, SelectionType.PlayCard, (Location loc) => GameController.IsLocationVisibleToSource(loc, GetCardSource()), storedResults: storedResults, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             if(!DidSelectLocation(storedResults))
@@ -35,13 +35,13 @@ namespace Studio29.Lore
             Location selectedTrash = GetSelectedLocation(storedResults);
             List<MoveCardDestination> destination = new List<MoveCardDestination>() { new MoveCardDestination(selectedTrash.OwnerTurnTaker.PlayArea) };
             coroutine = GameController.SelectCardsFromLocationAndMoveThem(DecisionMaker, selectedTrash, 0, 1, new LinqCardCriteria(c => c.IsTarget, "target", useCardsSuffix: false, singular: "target", plural: "targets"), destination, isPutIntoPlay: true, cardSource: GetCardSource()); 
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 

@@ -32,7 +32,7 @@ namespace Studio29.CovenOfWitches
             AddCannotDealDamageTrigger((Card c) => c.IsHeroCharacterCard && c.Owner != Game.ActiveTurnTaker);
 
             // Add TiedCurses triggers
-            base.AddTriggers();
+            AddTriggers();
         }
 
 

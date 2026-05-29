@@ -9,7 +9,7 @@ namespace Studio29.Lore
     public class WhirlwindingCardController : StoryCardController
     {
 
-        public WhirlwindingCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, RomanceKeyword)
+        public WhirlwindingCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, "romance")
         {
 
         }
@@ -27,14 +27,14 @@ namespace Studio29.Lore
 
 			//Select one hero character card. Until the start of your next turn, whenever that hero is dealt damage, Lore regains 1 hp and deals one target 2 psychic damage.
 			List<SelectCardDecision> storedResults = new List<SelectCardDecision>();
-			IEnumerator coroutine = base.GameController.SelectCardAndStoreResults(DecisionMaker, SelectionType.SelectTargetFriendly, new LinqCardCriteria((Card c) => c.IsInPlayAndHasGameText && c.IsHeroCharacterCard && !c.IsIncapacitatedOrOutOfGame, "active hero character cards in play", useCardsSuffix: false), storedResults, optional: false, cardSource: GetCardSource());
-			if (base.UseUnityCoroutines)
+			IEnumerator coroutine = GameController.SelectCardAndStoreResults(DecisionMaker, SelectionType.SelectTargetFriendly, new LinqCardCriteria((Card c) => c.IsInPlayAndHasGameText && c.IsHeroCharacterCard && !c.IsIncapacitatedOrOutOfGame, "active hero character cards in play", useCardsSuffix: false), storedResults, optional: false, cardSource: GetCardSource());
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 			if (!DidSelectCard(storedResults))
 			{
@@ -52,13 +52,13 @@ namespace Studio29.Lore
 			onDealDamageStatusEffect.UntilTargetLeavesPlay(selectedCard);
 			onDealDamageStatusEffect.DoesDealDamage = true;
 			coroutine = AddStatusEffect(onDealDamageStatusEffect);
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
         }
 
@@ -88,22 +88,22 @@ namespace Studio29.Lore
 
 			//Lore regains 1 hp and deals one target 2 psychic damage
 			IEnumerator coroutine = GameController.GainHP(CharacterCard, hpGain, cardSource: GetCardSource());
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 			coroutine = GameController.SelectTargetsAndDealDamage(DecisionMaker, new DamageSource(GameController, CharacterCard), damage.Value, DamageType.Psychic, 1, false, 1, cardSource: GetCardSource());
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 
 			yield break;

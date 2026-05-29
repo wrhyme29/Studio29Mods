@@ -11,20 +11,10 @@ namespace Studio29.BirthdayBoy
 		{
 		}
 		
-		protected TurnTaker GetOriginalOwner(Card c)
-        {
-			return (FindTurnTakersWhere((TurnTaker tt) => tt.Identifier == c.ParentDeck.Identifier)).FirstOrDefault();
-        }
-
-		protected bool IsPresent(Card c)
-        {
-			bool result = GameController.DoesCardContainKeyword(c, "present");
-			return result;
-		}
 
 		protected IEnumerable<Card> FindBirthdayBoysPresentsInPlay()
         {
-			return FindCardsWhere(c => c.IsInPlayAndHasGameText && IsPresent(c) && c.Owner == base.TurnTaker);
+			return FindCardsWhere(c => c.IsInPlayAndHasGameText && c.IsPresent() && c.Owner == TurnTaker);
 
 			
         }

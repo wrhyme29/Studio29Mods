@@ -9,27 +9,6 @@ namespace Studio29Tests
     [TestFixture()]
     public class BirthdayBoyTests : CustomBaseTest
     {
-        #region BirthdayBoyHelperFunctions
-        protected HeroTurnTakerController birthday { get { return FindHero("BirthdayBoy"); } }
-        private void SetupIncap(TurnTakerController villain)
-        {
-            SetHitPoints(birthday.CharacterCard, 1);
-            DealDamage(villain, birthday, 2, DamageType.Melee);
-        }
-
-        protected void AddImmuneToDamageTrigger(TurnTakerController ttc, bool heroesImmune, bool villainsImmune, bool charactersImmune)
-        {
-            ImmuneToDamageStatusEffect immuneToDamageStatusEffect = new ImmuneToDamageStatusEffect();
-            immuneToDamageStatusEffect.TargetCriteria.IsHero = new bool?(heroesImmune);
-            immuneToDamageStatusEffect.TargetCriteria.IsCharacter = new bool?(charactersImmune);
-            immuneToDamageStatusEffect.TargetCriteria.IsVillain = new bool?(villainsImmune);
-            immuneToDamageStatusEffect.UntilStartOfNextTurn(ttc.TurnTaker);
-            this.RunCoroutine(this.GameController.AddStatusEffect(immuneToDamageStatusEffect, true, new CardSource(ttc.CharacterCardController)));
-        }
-
-
-        #endregion
-
         [Test()]
         public void TestBirthdayBoyLoads()
         {
@@ -37,10 +16,10 @@ namespace Studio29Tests
             StartGame();
             Assert.AreEqual(3, this.GameController.TurnTakerControllers.Count());
 
-            Assert.IsNotNull(birthday);
-            Assert.IsInstanceOf(typeof(BirthdayBoyCharacterCardController), birthday.CharacterCardController);
+            Assert.IsNotNull(birthdayBoy);
+            Assert.IsInstanceOf(typeof(BirthdayBoyCharacterCardController), birthdayBoy.CharacterCardController);
 
-            Assert.AreEqual(29, birthday.CharacterCard.HitPoints);
+            Assert.AreEqual(29, birthdayBoy.CharacterCard.HitPoints);
         }
 
         [Test()]
@@ -50,7 +29,7 @@ namespace Studio29Tests
             SetupGameController("BaronBlade", "Studio29.BirthdayBoy", "Megalopolis");
             StartGame();
 
-            GoToPlayCardPhase(birthday);
+            GoToPlayCardPhase(birthdayBoy);
 
             Card card = GetCard(oneshot);
             AssertCardHasKeyword(card, "one-shot", false);
@@ -63,7 +42,7 @@ namespace Studio29Tests
             SetupGameController("BaronBlade", "Studio29.BirthdayBoy", "Megalopolis");
             StartGame();
 
-            GoToPlayCardPhase(birthday);
+            GoToPlayCardPhase(birthdayBoy);
 
             Card card = GetCard(surprise);
             AssertCardHasKeyword(card, "surprise", false);
@@ -76,21 +55,21 @@ namespace Studio29Tests
             StartGame();
             DestroyNonCharacterVillainCards();
 
-            GoToPlayCardPhase(birthday);
+            GoToPlayCardPhase(birthdayBoy);
             PlayCard("DecoyProjection");
             PlayCard("Dominion");
             Card surge = PlayCard("SurgeOfStrength");
             AssertInPlayArea(legacy, surge);
 
-            GoToUsePowerPhase(birthday);
+            GoToUsePowerPhase(birthdayBoy);
             DecisionSelectCard = surge;
-            UsePower(birthday.CharacterCard);
-            AssertInPlayArea(birthday, surge);
+            UsePower(birthdayBoy.CharacterCard);
+            AssertInPlayArea(birthdayBoy, surge);
             AssertCardHasKeyword(surge, "present", false);
 
             //should be increased by 1 because of stolen card
             QuickHPStorage(baron);
-            DealDamage(birthday, baron, 2, DamageType.Radiant);
+            DealDamage(birthdayBoy, baron, 2, DamageType.Radiant);
             QuickHPCheck(-3);
    
         }
@@ -102,23 +81,23 @@ namespace Studio29Tests
             StartGame();
             DestroyNonCharacterVillainCards();
 
-            GoToPlayCardPhase(birthday);
+            GoToPlayCardPhase(birthdayBoy);
             PlayCard("DecoyProjection");
             Card mere = PlayCard("Mere");
             PlayCard("SurgeOfStrength");
             AssertInPlayArea(haka, mere);
 
-            GoToUsePowerPhase(birthday);
+            GoToUsePowerPhase(birthdayBoy);
             DecisionSelectCard = mere;
-            UsePower(birthday.CharacterCard);
-            AssertInPlayArea(birthday, mere);
+            UsePower(birthdayBoy.CharacterCard);
+            AssertInPlayArea(birthdayBoy, mere);
             AssertCardHasKeyword(mere, "present", false);
 
             AssertNotDamageSource(haka.CharacterCard);
-            AssertNextDecisionMaker(birthday);
+            AssertNextDecisionMaker(birthdayBoy);
             bool skipped;
             AssertNextPowerDecisionChoices(included: new Card[] { mere });
-            SelectAndUsePower(birthday, out skipped);
+            SelectAndUsePower(birthdayBoy, out skipped);
 
             AssertNextPowerDecisionChoices(notIncluded: new Card[] { mere });
             SelectAndUsePower(haka, out skipped);
@@ -139,9 +118,9 @@ namespace Studio29Tests
             Card mere = PlayCard("Mere");
             PlayCard("SurgeOfStrength");
 
-            GoToUsePowerPhase(birthday);
+            GoToUsePowerPhase(birthdayBoy);
             DecisionSelectCards = new Card[] { mere, battalion };
-            UsePower(birthday.CharacterCard);
+            UsePower(birthdayBoy.CharacterCard);
 
             
             Card blowout = PlayCard("Blowout");
@@ -171,8 +150,8 @@ namespace Studio29Tests
             PlayCard("TrashTheVenue");
 
             AssertInTrash(env1, env2);
-            AssertInHand(birthday, present1);
-            AssertInHand(birthday, present2);
+            AssertInHand(birthdayBoy, present1);
+            AssertInHand(birthdayBoy, present2);
 
 
         }

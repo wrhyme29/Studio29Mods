@@ -19,7 +19,7 @@ namespace Studio29.TheTamer
             //Deal each Lion card in play 1 energy damage.
 
             List<DealDamageAction> storedResults = new List<DealDamageAction>();
-            IEnumerator coroutine = DealDamage(base.CharacterCard, (Card c) => IsLion(c) && c.IsInPlayAndHasGameText, 1, DamageType.Energy, storedResults: storedResults);
+            IEnumerator coroutine = DealDamage(CharacterCard, (Card c) => c.IsLion() && c.IsInPlayAndHasGameText, 1, DamageType.Energy, storedResults: storedResults);
             if (UseUnityCoroutines)
             {
                 yield return GameController.StartCoroutine(coroutine);
@@ -30,7 +30,7 @@ namespace Studio29.TheTamer
             }
 
             //If no lions were dealt damage this way, {Tamer} deals himself 2 energy damage and draws 2 cards.
-            if(DidDealDamage(storedResults) && storedResults.Any(dd => IsLion(dd.Target) && dd.DidDealDamage))
+            if(DidDealDamage(storedResults) && storedResults.Any(dd => dd.Target.IsLion() && dd.DidDealDamage))
             {
                 yield break;
             }

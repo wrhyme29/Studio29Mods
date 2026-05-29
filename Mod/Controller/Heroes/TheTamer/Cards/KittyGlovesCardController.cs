@@ -15,7 +15,7 @@ namespace Studio29.TheTamer
 		public override void AddTriggers()
 		{
 			//Whenever a Lion enters play, reduce damage dealt to that Lion by 1 until the start of your next turn.
-			AddTargetEntersPlayTrigger((Card c) => IsLion(c), ReduceDamageResponse, TriggerType.CreateStatusEffect, TriggerTiming.After);
+			AddTargetEntersPlayTrigger((Card c) => c.IsLion(), ReduceDamageResponse, TriggerType.CreateStatusEffect, TriggerTiming.After);
 		}
 
 		private IEnumerator ReduceDamageResponse(Card target)
@@ -23,16 +23,16 @@ namespace Studio29.TheTamer
 			//Reduce damage dealt to that Lion by 1 until the start of your next turn.
 			ReduceDamageStatusEffect reduceDamageStatusEffect = new ReduceDamageStatusEffect(1);
 			reduceDamageStatusEffect.TargetCriteria.IsSpecificCard = target;
-			reduceDamageStatusEffect.UntilStartOfNextTurn(base.TurnTaker);
+			reduceDamageStatusEffect.UntilStartOfNextTurn(TurnTaker);
 			reduceDamageStatusEffect.UntilCardLeavesPlay(target);
 			IEnumerator coroutine = AddStatusEffect(reduceDamageStatusEffect);
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 		}
 	}

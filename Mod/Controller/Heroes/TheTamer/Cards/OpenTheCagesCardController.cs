@@ -16,24 +16,24 @@ namespace Studio29.TheTamer
         {
             //Draw 2 cards. You may play a Lion.
 
-            IEnumerator coroutine = DrawCards(base.HeroTurnTakerController, 2);
-            if (base.UseUnityCoroutines)
+            IEnumerator coroutine = DrawCards(HeroTurnTakerController, 2);
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
-            coroutine = GameController.SelectAndPlayCardFromHand(base.HeroTurnTakerController, true, cardCriteria: new LinqCardCriteria((Card c) => IsLion(c), "lion"), cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            coroutine = GameController.SelectAndPlayCardFromHand(HeroTurnTakerController, true, cardCriteria: new LinqCardCriteria((Card c) => c.IsLion(), "lion"), cardSource: GetCardSource());
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             yield break;

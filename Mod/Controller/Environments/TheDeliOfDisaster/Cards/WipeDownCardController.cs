@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace Studio29.TheDeliOfDisaster
 {
-    public class WipeDownCardController : TheDeliOfDisasterCardController
+    public class WipeDownCardController : CardController
     {
 
         public WipeDownCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
         {
-            SpecialStringMaker.ShowNumberOfCardsInPlay(new LinqCardCriteria(c => IsDish(c), "dish"));
+            SpecialStringMaker.ShowNumberOfCardsInPlay(new LinqCardCriteria(c => c.IsDish(), "dish"));
         }
 
         public override void AddTriggers()
@@ -23,25 +23,25 @@ namespace Studio29.TheDeliOfDisaster
         {
             //When this card enters play, destroy all dish cards. This card deals each target X + 1 energy damage, where X is the number of dishes destroyed this way.
             List<DestroyCardAction> storedResults = new List<DestroyCardAction>();
-            IEnumerator coroutine = GameController.DestroyCards(DecisionMaker, new LinqCardCriteria(c => IsDish(c), "dish"), autoDecide: true, storedResults: storedResults, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            IEnumerator coroutine = GameController.DestroyCards(DecisionMaker, new LinqCardCriteria(c => c.IsDish(), "dish"), autoDecide: true, storedResults: storedResults, cardSource: GetCardSource());
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             int X = GetNumberOfCardsDestroyed(storedResults);
             coroutine = DealDamage(Card, c => c.IsTarget, X + 1, DamageType.Energy);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 

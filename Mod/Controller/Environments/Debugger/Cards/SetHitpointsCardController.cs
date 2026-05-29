@@ -29,25 +29,25 @@ namespace Studio29.Debugger
             List<SelectCardDecision> storedTarget = new List<SelectCardDecision>();
             mode = CustomDecisionMode.SELECTCARD;
             IEnumerator coroutine = GameController.SelectCardAndStoreResults(DecisionMaker, SelectionType.SetHP, new LinqCardCriteria(c => c.IsTarget & c.IsInPlayAndHasGameText, "target", useCardsSuffix: false), storedTarget, optional: false, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             if(!DidSelectCard(storedTarget))
             {
                 coroutine = DestroyThisCardResponse(null);
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
                 yield break;
             }
@@ -59,48 +59,48 @@ namespace Studio29.Debugger
             List<SelectWordDecision> hpDecisionResult = new List<SelectWordDecision>();
             mode = CustomDecisionMode.SELECTHP;
             coroutine = GameController.SelectWord(DecisionMaker, hpChoices, SelectionType.Custom, storedResults: hpDecisionResult, optional: true, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             if (!DidSelectWord(hpDecisionResult))
             {
                 coroutine = DestroyThisCardResponse(null);
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
                 yield break;
             }
 
             int selectedHP = Convert.ToInt32(GetSelectedWord(hpDecisionResult));
             coroutine = GameController.SetHP(selectedTarget, selectedHP, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             coroutine = DestroyThisCardResponse(null);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 

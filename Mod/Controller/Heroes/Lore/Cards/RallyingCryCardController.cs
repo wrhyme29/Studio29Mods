@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Studio29.Lore
 {
-    public class RallyingCryCardController : LoreCardController
+    public class RallyingCryCardController : CardController
     {
 
         public RallyingCryCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
@@ -17,7 +17,7 @@ namespace Studio29.Lore
         public override IEnumerator Play()
         {
             //If there is an action card in play, increase damage dealt by hero targets by 1 until the start of your next turn.            
-            bool actionCardsInPlay = FindCardsWhere(c => c.IsInPlayAndHasGameText && IsAction(c)).Any();
+            bool actionCardsInPlay = FindCardsWhere(c => c.IsInPlayAndHasGameText && c.IsAction()).Any();
             IEnumerator coroutine;
             if (actionCardsInPlay)
             {
@@ -26,26 +26,26 @@ namespace Studio29.Lore
                 effect.SourceCriteria.IsTarget = true;
                 effect.UntilStartOfNextTurn(TurnTaker);
                 coroutine = AddStatusEffect(effect);
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
             }
             else
             {
                 //If there is not an action card in play, draw a card.
                 coroutine = DrawCard();
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
 
             }

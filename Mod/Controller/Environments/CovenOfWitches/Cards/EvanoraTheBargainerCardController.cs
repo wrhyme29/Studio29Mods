@@ -48,45 +48,45 @@ namespace Studio29.CovenOfWitches
             List<DiscardCardAction> storedResults = new List<DiscardCardAction>();
             IEnumerator coroutine = GameController.SelectTurnTakersAndDoAction(DecisionMaker, new LinqTurnTakerCriteria((TurnTaker tt) => tt.IsHero && !tt.IsIncapacitatedOrOutOfGame && (tt as HeroTurnTaker).HasCardsInHand && (tt as HeroTurnTaker).Hand.Cards.Count() > 1, $"heroes with at least 2 cards in hand"), SelectionType.DiscardCard, (TurnTaker tt) =>
                 SelectAndDiscardCards(FindHeroTurnTakerController((HeroTurnTaker)tt), 2, optional: true, 2, storedResults: storedResults), cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
             if (storedResults.Count() <= 0)
             {
                 yield break;
             }
 
-            foreach(HeroTurnTakerController httc in storedResults.Select(d => d.HeroTurnTakerController).Distinct())
+            foreach(HeroTurnTakerController hccc in storedResults.Select(d => d.HeroTurnTakerController).Distinct())
             {
-                if (httc != null)
+                if (hccc != null)
                 {
                     // Any player that does deals 1 non - environment 2 infernal damage.
                     List<Card> storedCharacter = new List<Card>();
-                    coroutine = FindCharacterCard(httc.HeroTurnTaker, SelectionType.HeroToDealDamage, storedCharacter);
-                    if (base.UseUnityCoroutines)
+                    coroutine = FindCharacterCard(hccc.HeroTurnTaker, SelectionType.HeroToDealDamage, storedCharacter);
+                    if (UseUnityCoroutines)
                     {
-                        yield return base.GameController.StartCoroutine(coroutine);
+                        yield return GameController.StartCoroutine(coroutine);
                     }
                     else
                     {
-                        base.GameController.ExhaustCoroutine(coroutine);
+                        GameController.ExhaustCoroutine(coroutine);
                     }
                     Card card = storedCharacter.FirstOrDefault();
                     if (card != null)
                     {
-                        coroutine = base.GameController.SelectTargetsAndDealDamage(httc, new DamageSource(GameController, card), 2, DamageType.Infernal, 1,  optional: false, 1, additionalCriteria: c => !c.IsEnvironment, cardSource: GetCardSource());
-                        if (base.UseUnityCoroutines)
+                        coroutine = GameController.SelectTargetsAndDealDamage(hccc, new DamageSource(GameController, card), 2, DamageType.Infernal, 1,  optional: false, 1, additionalCriteria: c => !c.IsEnvironment, cardSource: GetCardSource());
+                        if (UseUnityCoroutines)
                         {
-                            yield return base.GameController.StartCoroutine(coroutine);
+                            yield return GameController.StartCoroutine(coroutine);
                         }
                         else
                         {
-                            base.GameController.ExhaustCoroutine(coroutine);
+                            GameController.ExhaustCoroutine(coroutine);
                         }
                     }
                 }

@@ -35,36 +35,36 @@ namespace Studio29.Debugger
                 List<bool> didEnterPlay = new List<bool>();
                 DebuggerTurnTakerController debuggerTTC = TurnTakerController as DebuggerTurnTakerController;
                 coroutine = GameController.PlayCard(TurnTakerController, Card, isPutIntoPlay: true, wasCardPlayed: didEnterPlay, canBeCancelled: false, cardSource: GetCardSource());
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
 
                 if(didEnterPlay.First() == false)
                     Log.Debug($"Debugger Instructions card did not enter play.");
 
                 coroutine = MoveAllOptionCardsUnderMenu();
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
 
                 coroutine = SetEnvironmentForGame();
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
 
                 if (!Game.IsOblivAeonMode)
@@ -74,13 +74,13 @@ namespace Studio29.Debugger
                 }
 
                 coroutine = OpenDebuggingMenuInterface();
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
                 
                 yield break;
@@ -90,14 +90,14 @@ namespace Studio29.Debugger
         private IEnumerator MoveAllOptionCardsUnderMenu()
         {
             IEnumerable<Card> options = FindCardsWhere(new LinqCardCriteria(c => IsOption(c) && c.Owner == TurnTaker));
-            IEnumerator coroutine = base.GameController.BulkMoveCards(TurnTakerController, options, Card.UnderLocation, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            IEnumerator coroutine = GameController.BulkMoveCards(TurnTakerController, options, Card.UnderLocation, cardSource: GetCardSource());
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 
@@ -109,33 +109,33 @@ namespace Studio29.Debugger
         private IEnumerator OpenDebuggingMenuInterface()
         {
             IEnumerator coroutine = GameController.SendMessageAction("Launching the debugging menu...", Priority.Medium, GetCardSource(), showCardSource: true);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             coroutine = ShowDebuggingMenu();
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             coroutine = GameController.SendMessageAction("Closing the debugging menu...", Priority.Medium, GetCardSource(), showCardSource: true);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 
@@ -152,13 +152,13 @@ namespace Studio29.Debugger
             while (true)
             {
                 coroutine = GameController.SelectWord(DecisionMaker, optionChoices, SelectionType.Custom, storedResults: optionsDecisionResult, optional: true, cardSource: GetCardSource());
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
 
                 if(!DidSelectWord(optionsDecisionResult))
@@ -171,13 +171,13 @@ namespace Studio29.Debugger
                 cardToPlay = options.Where(c => c.Title == selectedTitle).First();
 
                 coroutine = GameController.PlayCard(DecisionMaker, cardToPlay, isPutIntoPlay: true, canBeCancelled: false, cardSource: GetCardSource());
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
             }
         }
@@ -195,13 +195,13 @@ namespace Studio29.Debugger
         {
             List<string> storedResults = new List<string>();
             IEnumerator coroutine = SelectEnvironment(storedResults);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             if(storedResults.Count() == 0)
@@ -232,44 +232,44 @@ namespace Studio29.Debugger
             }
 
             coroutine = GameController.ShuffleLocation(TurnTaker.Deck, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
 
             coroutine = GameController.SendMessageAction($"The environment is now {deckDefinition.Name}!", Priority.Medium, GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
-            }if (base.UseUnityCoroutines)
+                GameController.ExhaustCoroutine(coroutine);
+            }if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             foreach(CardController cc in TurnTaker.Deck.Cards.Select(c => FindCardController(c)))
             {
                 Log.Debug("Running PerformEnteringGameResponse for " + cc.Card.Title);
                 coroutine = cc.PerformEnteringGameResponse();
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
             }
         }
@@ -316,13 +316,13 @@ namespace Studio29.Debugger
             List<SelectWordDecision> optionsDecisionResult = new List<SelectWordDecision>();
             customDecisionMode = CustomDecisionMode.SelectEnvironment;
             IEnumerator coroutine = GameController.SelectWord(DecisionMaker, optionChoices, SelectionType.Custom, storedResults: optionsDecisionResult, optional: false, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             if (!DidSelectWord(optionsDecisionResult))

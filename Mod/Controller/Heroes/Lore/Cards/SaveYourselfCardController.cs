@@ -8,7 +8,7 @@ namespace Studio29.Lore
     public class SaveYourselfCardController : StoryCardController
     {
 
-        public SaveYourselfCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, ActionKeyword)
+        public SaveYourselfCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, "action")
         {
 
         }
@@ -30,38 +30,38 @@ namespace Studio29.Lore
             Card originalTarget = dd.Target;
             //you may redirect that damage to any target. 
             IEnumerator coroutine = GameController.SelectTargetAndRedirectDamage(DecisionMaker, (Card c) => GameController.IsCardVisibleToCardSource(c, GetCardSource()), dd, optional: true, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
             if(dd.Target != originalTarget)
             {
                 //If you do, discard a card or destroy this card. If this card is destroyed this way, Lore deals himself 2 toxic damage.
                 List<DiscardCardAction> storedResults = new List<DiscardCardAction>();
-                coroutine = base.GameController.SelectAndDiscardCard(HeroTurnTakerController, optional: true, storedResults: storedResults, cardSource: GetCardSource());
-                if (base.UseUnityCoroutines)
+                coroutine = GameController.SelectAndDiscardCard(HeroTurnTakerController, optional: true, storedResults: storedResults, cardSource: GetCardSource());
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
                 if (!DidDiscardCards(storedResults))
                 {
                     _destroyedByOwnEffectFlag = true;
-                    coroutine = base.GameController.DestroyCard(DecisionMaker, Card, cardSource: GetCardSource());
-                    if (base.UseUnityCoroutines)
+                    coroutine = GameController.DestroyCard(DecisionMaker, Card, cardSource: GetCardSource());
+                    if (UseUnityCoroutines)
                     {
-                        yield return base.GameController.StartCoroutine(coroutine);
+                        yield return GameController.StartCoroutine(coroutine);
                     }
                     else
                     {
-                        base.GameController.ExhaustCoroutine(coroutine);
+                        GameController.ExhaustCoroutine(coroutine);
                     }
                 }
             }
@@ -72,13 +72,13 @@ namespace Studio29.Lore
             // Lore deals himself 2 toxic damage.
             _destroyedByOwnEffectFlag = false;
             IEnumerator coroutine = DealDamage(CharacterCard, CharacterCard, 2, DamageType.Toxic, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 

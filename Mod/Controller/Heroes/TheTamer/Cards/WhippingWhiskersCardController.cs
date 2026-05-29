@@ -17,43 +17,43 @@ namespace Studio29.TheTamer
         public override IEnumerator Play()
         {
             //One Lion deals one other Lion 1 melee damage. A Lion dealt damage this way deals all non-hero targets 1 energy damage.
-            IEnumerable<Card> choices = FindCardsWhere((Card c) => c.IsInPlayAndHasGameText && IsLion(c));
+            IEnumerable<Card> choices = FindCardsWhere((Card c) => c.IsInPlayAndHasGameText && c.IsLion());
             List<SelectCardDecision> storedResults = new List<SelectCardDecision>();
-            IEnumerator coroutine = GameController.SelectCardAndStoreResults(HeroTurnTakerController, SelectionType.CardToDealDamage, new LinqCardCriteria((Card c) => c.IsInPlayAndHasGameText && IsLion(c), "lion"), storedResults, false, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            IEnumerator coroutine = GameController.SelectCardAndStoreResults(HeroTurnTakerController, SelectionType.CardToDealDamage, new LinqCardCriteria((Card c) => c.IsInPlayAndHasGameText && c.IsLion(), "lion"), storedResults, false, cardSource: GetCardSource());
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
             if(DidSelectCard(storedResults))
             {
                 Card source = GetSelectedCard(storedResults);
                 List<DealDamageAction> storedDamage = new List<DealDamageAction>() ;
-                coroutine = GameController.SelectTargetsAndDealDamage(HeroTurnTakerController, new DamageSource(GameController, source), 1, DamageType.Melee, new int?(1), false, new int?(1), additionalCriteria: (Card c) => IsLion(c) && c.IsInPlayAndHasGameText && c != source, storedResultsDamage: storedDamage, cardSource: GetCardSource());
-                if (base.UseUnityCoroutines)
+                coroutine = GameController.SelectTargetsAndDealDamage(HeroTurnTakerController, new DamageSource(GameController, source), 1, DamageType.Melee, new int?(1), false, new int?(1), additionalCriteria: (Card c) => c.IsLion() && c.IsInPlayAndHasGameText && c != source, storedResultsDamage: storedDamage, cardSource: GetCardSource());
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
                 if(DidDealDamage(storedDamage) && storedDamage.FirstOrDefault().DidDestroyTarget == false)
                 {
                     Card target = storedDamage.FirstOrDefault().Target;
-                    if(IsLion(target))
+                    if(target.IsLion())
                     {
                         coroutine = DealDamage(target, (Card c) => !c.IsHero && c.IsTarget, 1, DamageType.Energy);
-                        if (base.UseUnityCoroutines)
+                        if (UseUnityCoroutines)
                         {
-                            yield return base.GameController.StartCoroutine(coroutine);
+                            yield return GameController.StartCoroutine(coroutine);
                         }
                         else
                         {
-                            base.GameController.ExhaustCoroutine(coroutine);
+                            GameController.ExhaustCoroutine(coroutine);
                         }
                     }
                 }

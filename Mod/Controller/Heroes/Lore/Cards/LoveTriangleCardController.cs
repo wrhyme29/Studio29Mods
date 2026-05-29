@@ -7,7 +7,7 @@ namespace Studio29.Lore
     public class LoveTriangleCardController : StoryCardController
     {
 
-        public LoveTriangleCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, RomanceKeyword)
+        public LoveTriangleCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, "romance")
         {
 
         }
@@ -19,23 +19,23 @@ namespace Studio29.Lore
             int hpGain = GetPowerNumeral(1, 2);
 
             IEnumerator coroutine = DealDamage(CharacterCard, CharacterCard, selfDamage, DamageType.Psychic, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             coroutine = GameController.SelectAndGainHP(DecisionMaker, hpGain, additionalCriteria: (Card c) => c.IsInPlayAndHasGameText && c.IsCharacter && c != CharacterCard && GameController.IsCardVisibleToCardSource(c, GetCardSource()), numberOfTargets: 2, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 

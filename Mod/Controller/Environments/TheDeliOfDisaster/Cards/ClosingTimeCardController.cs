@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Studio29.TheDeliOfDisaster
 {
-    public class ClosingTimeCardController : TheDeliOfDisasterCardController
+    public class ClosingTimeCardController : CardController
     {
 
         public ClosingTimeCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)

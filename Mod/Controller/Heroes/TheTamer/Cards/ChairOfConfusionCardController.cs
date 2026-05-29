@@ -14,7 +14,7 @@ namespace Studio29.TheTamer
         public override void AddTriggers()
         {
             //Whenever a lion would be dealt damage, reduce that damage to 1.
-            AddReduceDamageToSetAmountTrigger(dd => IsLion(dd.Target), 1);
+            AddReduceDamageToSetAmountTrigger(dd => dd.Target.IsLion(), 1);
         }
 
 

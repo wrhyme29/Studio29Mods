@@ -5,7 +5,7 @@ using System.Collections;
 
 namespace Studio29.TheDeliOfDisaster
 {
-    public class KugelConundrumCardController : TheDeliOfDisasterCardController
+    public class KugelConundrumCardController : CardController
     {
 
         public KugelConundrumCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
@@ -25,24 +25,24 @@ namespace Studio29.TheDeliOfDisaster
         {
             //Each hero character card with an odd number of hp regains 1 hp.
             IEnumerator coroutine = GameController.GainHP(DecisionMaker, c => c.IsHeroCharacterCard && c.HitPoints % 2 == 1, 1, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             //Each hero character card with an even number of hp may take 1 toxic damage from this card to deal 2 toxic damage to another target. 
             coroutine = GameController.SelectTargetsAndDealDamage(DecisionMaker, new DamageSource(GameController, Card), 1, DamageType.Toxic, FindCardsWhere(c => c.IsHeroCharacterCard && !c.IsIncapacitatedOrOutOfGame && c.HitPoints % 2 == 0).Count(), false, 0, additionalCriteria: c => c.IsHeroCharacterCard && !c.IsIncapacitatedOrOutOfGame && c.HitPoints % 2 == 0, addStatusEffect: DealFollowupDamageResponse, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 
@@ -57,24 +57,24 @@ namespace Studio29.TheDeliOfDisaster
             Card source = dd.Target;
             HeroTurnTakerController hero = FindHeroTurnTakerController(source.Owner.ToHero());
             IEnumerator coroutine = GameController.SelectTargetsAndDealDamage(hero, new DamageSource(GameController, source), 2, DamageType.Toxic, 1, false, 1, additionalCriteria: c => c != source, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             //Each character dealt damage by this card must discard 1 card.
             coroutine = GameController.SelectAndDiscardCard(hero, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
     }

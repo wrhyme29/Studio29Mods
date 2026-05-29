@@ -9,7 +9,7 @@ namespace Studio29.Lore
     public class FourFiftyOneCardController : StoryCardController
     {
 
-        public FourFiftyOneCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, EpicKeyword)
+        public FourFiftyOneCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, "epic")
         {
 
         }
@@ -18,24 +18,24 @@ namespace Studio29.Lore
         {
             //Destroy any number of Story cards. Draw X cards, where X is the number of cards destroyed this way plus 1.
             List<DestroyCardAction> storedResults = new List<DestroyCardAction>();
-            IEnumerator coroutine = GameController.SelectAndDestroyCards(DecisionMaker, new LinqCardCriteria((Card c) => IsStory(c), "story"), null,  requiredDecisions: 0, storedResultsAction: storedResults, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            IEnumerator coroutine = GameController.SelectAndDestroyCards(DecisionMaker, new LinqCardCriteria((Card c) => c.IsStory(), "story"), null,  requiredDecisions: 0, storedResultsAction: storedResults, cardSource: GetCardSource());
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
             int amount = storedResults.Where((DestroyCardAction d) => d.CardToDestroy != null && d.WasCardDestroyed).Count() + 1;
             coroutine = DrawCards(HeroTurnTakerController, amount);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 

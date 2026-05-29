@@ -20,36 +20,36 @@ namespace Studio29.Debugger
 
 			List<SelectTurnTakerDecision> storedResults = new List<SelectTurnTakerDecision>();
             IEnumerator coroutine = GameController.SelectHeroTurnTaker(DecisionMaker, SelectionType.UseIncapacitatedAbility, false, false, storedResults, heroCriteria: new LinqTurnTakerCriteria(htt => htt.PlayArea.Cards.Any(c => c.Owner == htt && c.IsIncapacitated && c.IncapacitatedAbilities.Count() > 0)), allowIncapacitatedHeroes: true, cardSource: GetCardSource());
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 			if (DidSelectTurnTaker(storedResults))
 			{
 				HeroTurnTaker htt = GetSelectedTurnTaker(storedResults).ToHero();
-				HeroTurnTakerController httc = FindHeroTurnTakerController(htt);
-				coroutine = GameController.SelectIncapacitatedHeroAndUseAbility(httc);
-				if (base.UseUnityCoroutines)
+				HeroTurnTakerController hccc = FindHeroTurnTakerController(htt);
+				coroutine = GameController.SelectIncapacitatedHeroAndUseAbility(hccc);
+				if (UseUnityCoroutines)
 				{
-					yield return base.GameController.StartCoroutine(coroutine);
+					yield return GameController.StartCoroutine(coroutine);
 				}
 				else
 				{
-					base.GameController.ExhaustCoroutine(coroutine);
+					GameController.ExhaustCoroutine(coroutine);
 				}
 			}
 			coroutine = DestroyThisCardResponse(null);
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 		}
 

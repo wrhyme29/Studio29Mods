@@ -33,13 +33,13 @@ namespace Studio29.TheTamer
 			onDealDamageStatusEffect.BeforeOrAfter = BeforeOrAfter.After;
 			onDealDamageStatusEffect.DoesDealDamage = true;
 			IEnumerator coroutine = AddStatusEffect(onDealDamageStatusEffect);
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 		}
 
@@ -57,14 +57,14 @@ namespace Studio29.TheTamer
 			}
 			int X = dd.Amount;
 
-			IEnumerator coroutine = DealDamage(CharacterCard, c => IsLion(c), c => X, DamageType.Melee, dynamicNumberOfTargets: () => num.Value);
-			if (base.UseUnityCoroutines)
+			IEnumerator coroutine = DealDamage(CharacterCard, c => c.IsLion(), c => X, DamageType.Melee, dynamicNumberOfTargets: () => num.Value);
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 		}
 

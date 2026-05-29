@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Studio29.Lore
 {
-    public class AStoryOfFireCardController : LoreCardController
+    public class AStoryOfFireCardController : CardController
     {
 
         public AStoryOfFireCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
@@ -21,15 +21,15 @@ namespace Studio29.Lore
 			IEnumerator damage1 = GameController.SelectTargetsAndDealDamage(DecisionMaker, new DamageSource(GameController, CharacterCard), 2, DamageType.Fire, 1, false, 1, storedResultsDecisions: targets, cardSource: GetCardSource());
 			IEnumerator damage2 = GameController.SelectTargetsAndDealDamage(DecisionMaker, new DamageSource(GameController, CharacterCard), 2, DamageType.Fire, 1, false, 1, additionalCriteria: (Card card) => !targets.Select((SelectCardDecision d) => d.SelectedCard).Contains(card), cardSource: GetCardSource());
 
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(damage1);
-				yield return base.GameController.StartCoroutine(damage2);
+				yield return GameController.StartCoroutine(damage1);
+				yield return GameController.StartCoroutine(damage2);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(damage1);
-				base.GameController.ExhaustCoroutine(damage2);
+				GameController.ExhaustCoroutine(damage1);
+				GameController.ExhaustCoroutine(damage2);
 			}
         }
 

@@ -11,7 +11,7 @@ namespace Studio29.BirthdayBoy
 
         public PartyTilDawnCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
         {
-            SpecialStringMaker.ShowNumberOfCardsInPlay(new LinqCardCriteria(c => IsPresent(c), "present"));
+            SpecialStringMaker.ShowNumberOfCardsInPlay(new LinqCardCriteria(c => c.IsPresent(), "present"));
         }
 
         public override IEnumerator Play()

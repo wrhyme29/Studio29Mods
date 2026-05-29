@@ -9,7 +9,7 @@ namespace Studio29.Lore
     public class SpeedReaderCardController : StoryCardController
     {
 
-        public SpeedReaderCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, EpicKeyword)
+        public SpeedReaderCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController, "epic")
         {
 
         }
@@ -24,39 +24,39 @@ namespace Studio29.Lore
         {
             //you may destroy one Story
             List<DestroyCardAction> storedDestroy = new List<DestroyCardAction>();
-            IEnumerator coroutine = GameController.SelectAndDestroyCard(DecisionMaker, new LinqCardCriteria((Card c) => IsStory(c), "story"), optional: true, storedResultsAction: storedDestroy, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            IEnumerator coroutine = GameController.SelectAndDestroyCard(DecisionMaker, new LinqCardCriteria((Card c) => c.IsStory(), "story"), optional: true, storedResultsAction: storedDestroy, cardSource: GetCardSource());
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             //...may play one Story. 
             List<PlayCardAction> storedFirstPlay = new List<PlayCardAction>();
-            coroutine = GameController.SelectAndPlayCardsFromHand(DecisionMaker, numberOfCards: 1, optional: false, requiredCards: 0, cardCriteria: new LinqCardCriteria(c => IsStory(c), "story"), storedResults: storedFirstPlay, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            coroutine = GameController.SelectAndPlayCardsFromHand(DecisionMaker, numberOfCards: 1, optional: false, requiredCards: 0, cardCriteria: new LinqCardCriteria(c => c.IsStory(), "story"), storedResults: storedFirstPlay, cardSource: GetCardSource());
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             //If a Story is destroyed this way, {Lore} deals one target 1 sonic damage. 
             if(DidDestroyCard(storedDestroy))
             {
                 coroutine = GameController.SelectTargetsAndDealDamage(DecisionMaker, new DamageSource(GameController, CharacterCard), 1, DamageType.Sonic, 1, false, 1, cardSource: GetCardSource());
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
             }
 
@@ -67,38 +67,38 @@ namespace Studio29.Lore
 
             }
             coroutine = DealDamage(CharacterCard, CharacterCard, 1, DamageType.Sonic, isIrreducible: true, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
             
 
             //You may then play another Story. 
             List<PlayCardAction> storedSecondPlay = new List<PlayCardAction>();
-            coroutine = GameController.SelectAndPlayCardsFromHand(DecisionMaker, numberOfCards: 1, optional: false, requiredCards: 0, cardCriteria: new LinqCardCriteria(c => IsStory(c), "story"), storedResults: storedSecondPlay, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            coroutine = GameController.SelectAndPlayCardsFromHand(DecisionMaker, numberOfCards: 1, optional: false, requiredCards: 0, cardCriteria: new LinqCardCriteria(c => c.IsStory(), "story"), storedResults: storedSecondPlay, cardSource: GetCardSource());
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
             //If you do, destroy this card.
             if (DidPlayCards(storedSecondPlay))
             {
                 coroutine = DestroyThisCardResponse(storedSecondPlay.First());
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
             }
             yield break;

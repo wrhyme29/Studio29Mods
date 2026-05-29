@@ -57,19 +57,19 @@ namespace Studio29.BirthdayBoy
 			AddTrigger(destroyCriteria, DestroyThisCardResponse, TriggerType.DestroySelf, TriggerTiming.After);
 
 			//If this card is destroyed, move all cards under it into the trash
-			base.AddBeforeLeavesPlayAction(new Func<GameAction, IEnumerator>(MoveCardsUnderThisCardToTrash), TriggerType.MoveCard);
+			AddBeforeLeavesPlayAction(new Func<GameAction, IEnumerator>(MoveCardsUnderThisCardToTrash), TriggerType.MoveCard);
 		}
 
         private IEnumerator EndOfTurnResponse(PhaseChangeAction pca)
         {
 			IEnumerator coroutine = GameController.SelectAndPlayCard(DecisionMaker, (Card c) => Card.UnderLocation.HasCard(c), isPutIntoPlay: true, cardSource: GetCardSource());
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 
 		}
@@ -86,13 +86,13 @@ namespace Studio29.BirthdayBoy
 																						1,
 																						new LinqCardCriteria(c => c.IsOngoing || IsEquipment(c) || (c.IsTarget && c.MaximumHitPoints <= 5)),
 																						storedResults: storedResults);
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 
 			//Each card now belongs to {BirthdayBoy} and gains the Present keyword.
@@ -104,25 +104,25 @@ namespace Studio29.BirthdayBoy
 				GameController.ChangeCardOwnership(selectedCard, TurnTaker);
 
 				Log.Debug("New owner: " + selectedCard.Owner.Identifier);
-				Log.Debug("Original owner: " + GetOriginalOwner(selectedCard).Identifier);
+				Log.Debug("Original owner: " + this.GetOriginalOwner(selectedCard).Identifier);
 
 				coroutine = GameController.ModifyKeywords("present", addingOrRemoving: true, affectedCards: selectedCard.ToEnumerable().ToList(), cardSource: GetCardSource());
-				if (base.UseUnityCoroutines)
+				if (UseUnityCoroutines)
 				{
-					yield return base.GameController.StartCoroutine(coroutine);
+					yield return GameController.StartCoroutine(coroutine);
 				}
 				else
 				{
-					base.GameController.ExhaustCoroutine(coroutine);
+					GameController.ExhaustCoroutine(coroutine);
 				}
-				coroutine = GameController.SendMessageAction($"{selectedCard.Title} is now a Present belonging to { base.Card.AlternateTitleOrTitle}", Priority.High, GetCardSource());
-				if (base.UseUnityCoroutines)
+				coroutine = GameController.SendMessageAction($"{selectedCard.Title} is now a Present belonging to { Card.AlternateTitleOrTitle}", Priority.High, GetCardSource());
+				if (UseUnityCoroutines)
 				{
-					yield return base.GameController.StartCoroutine(coroutine);
+					yield return GameController.StartCoroutine(coroutine);
 				}
 				else
 				{
-					base.GameController.ExhaustCoroutine(coroutine);
+					GameController.ExhaustCoroutine(coroutine);
 				}
 
 			}
@@ -189,13 +189,13 @@ namespace Studio29.BirthdayBoy
 		{
 			//Move all cards under this to the trash
 			IEnumerator coroutine = GameController.MoveCards(TurnTakerController, Card.UnderLocation.Cards, TurnTaker.Trash, cardSource: GetCardSource());
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 			yield break;
 		}

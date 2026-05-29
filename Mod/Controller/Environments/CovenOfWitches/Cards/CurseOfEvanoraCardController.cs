@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Studio29.CovenOfWitches
 {
-    public class CurseOfEvanoraCardController : CovenOfWitchesCardController
+    public class CurseOfEvanoraCardController : CardController
 	{
 
         public CurseOfEvanoraCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)

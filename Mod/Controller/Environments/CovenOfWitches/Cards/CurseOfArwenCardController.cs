@@ -30,7 +30,7 @@ namespace Studio29.CovenOfWitches
             AddCannotDealDamageTrigger((Card c) => c.IsHeroCharacterCard && c.Owner == Game.ActiveTurnTaker);
 
             // Add TiedCurses triggers
-            base.AddTriggers();
+            AddTriggers();
         }
 
 		private IEnumerator OnePlayerMayDiscardTwoCardsToDestroyThisCardResponse(PhaseChangeAction phaseChange)
@@ -55,9 +55,9 @@ namespace Studio29.CovenOfWitches
 				TurnTaker selectedTurnTaker = GetSelectedTurnTaker(selectHero);
 				if (selectedTurnTaker.IsHero)
 				{
-					HeroTurnTakerController httc = FindHeroTurnTakerController(selectedTurnTaker.ToHero());
+					HeroTurnTakerController hccc = FindHeroTurnTakerController(selectedTurnTaker.ToHero());
                     List<DiscardCardAction> storedDiscards = new List<DiscardCardAction>();
-                    IEnumerator coroutine2 = GameController.SelectAndDiscardCards(httc, 2, optional: false, requiredDiscards: 2, storedResults: storedDiscards, cardSource: GetCardSource());
+                    IEnumerator coroutine2 = GameController.SelectAndDiscardCards(hccc, 2, optional: false, requiredDiscards: 2, storedResults: storedDiscards, cardSource: GetCardSource());
 					if (UseUnityCoroutines)
 					{
 						yield return GameController.StartCoroutine(coroutine2);

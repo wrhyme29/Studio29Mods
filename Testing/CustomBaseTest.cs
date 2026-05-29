@@ -15,15 +15,16 @@ namespace Studio29Tests
     public class CustomBaseTest : BaseTest
     {
         //heroes
-        protected HeroTurnTakerController tamer { get { return FindHero("TheTamer"); } }
-        protected HeroTurnTakerController lore { get { return FindHero("Lore"); } }
         protected HeroTurnTakerController birthdayBoy { get { return FindHero("BirthdayBoy"); } }
+        protected HeroTurnTakerController dummyPlayer { get { return FindHero("DummyPlayer"); } }
+        protected HeroTurnTakerController lore { get { return FindHero("Lore"); } }
+        protected HeroTurnTakerController tamer { get { return FindHero("TheTamer"); } }
 
-
-        protected void AddImmuneToDamageTrigger(TurnTakerController ttc, bool heroesImmune, bool villainsImmune)
+        protected void AddImmuneToDamageTrigger(TurnTakerController ttc, bool heroesImmune, bool villainsImmune, bool charactersImmune)
         {
             ImmuneToDamageStatusEffect immuneToDamageStatusEffect = new ImmuneToDamageStatusEffect();
             immuneToDamageStatusEffect.TargetCriteria.IsHero = new bool?(heroesImmune);
+            immuneToDamageStatusEffect.TargetCriteria.IsCharacter = new bool?(charactersImmune);
             immuneToDamageStatusEffect.TargetCriteria.IsVillain = new bool?(villainsImmune);
             immuneToDamageStatusEffect.UntilStartOfNextTurn(ttc.TurnTaker);
             this.RunCoroutine(this.GameController.AddStatusEffect(immuneToDamageStatusEffect, true, new CardSource(ttc.CharacterCardController)));
@@ -73,20 +74,20 @@ namespace Studio29Tests
             this.RunCoroutine(this.GameController.AddStatusEffect(effect, true, new CardSource(ttc.CharacterCardController)));
         }
 
-        protected void AddReduceDamageOfDamageTypeTrigger(HeroTurnTakerController httc, DamageType damageType, int amount)
+        protected void AddReduceDamageOfDamageTypeTrigger(HeroTurnTakerController hccc, DamageType damageType, int amount)
         {
             ReduceDamageStatusEffect reduceDamageStatusEffect = new ReduceDamageStatusEffect(amount);
             reduceDamageStatusEffect.DamageTypeCriteria.AddType(damageType);
             reduceDamageStatusEffect.NumberOfUses = 1;
-            this.RunCoroutine(this.GameController.AddStatusEffect(reduceDamageStatusEffect, true, new CardSource(httc.CharacterCardController)));
+            this.RunCoroutine(this.GameController.AddStatusEffect(reduceDamageStatusEffect, true, new CardSource(hccc.CharacterCardController)));
         }
 
-        protected void AddIncreaseDamageOfDamageTypeTrigger(HeroTurnTakerController httc, DamageType damageType, int amount)
+        protected void AddIncreaseDamageOfDamageTypeTrigger(HeroTurnTakerController hccc, DamageType damageType, int amount)
         {
             IncreaseDamageStatusEffect increaseDamageStatusEffect = new IncreaseDamageStatusEffect(amount);
             increaseDamageStatusEffect.DamageTypeCriteria.AddType(damageType);
             increaseDamageStatusEffect.NumberOfUses = 1;
-            this.RunCoroutine(this.GameController.AddStatusEffect(increaseDamageStatusEffect, true, new CardSource(httc.CharacterCardController)));
+            this.RunCoroutine(this.GameController.AddStatusEffect(increaseDamageStatusEffect, true, new CardSource(hccc.CharacterCardController)));
         }
 
         protected void AddMakeCardIndestructibleToTheNextDestructionTrigger(Card cardToMakeIndestructible, CardSource cardSource = null)
@@ -105,7 +106,7 @@ namespace Studio29Tests
             PreventPhaseEffectStatusEffect preventPhaseEffectStatusEffect = new PreventPhaseEffectStatusEffect();
             preventPhaseEffectStatusEffect.UntilStartOfNextTurn(ttc.TurnTaker);
             preventPhaseEffectStatusEffect.CardCriteria.IsSpecificCard = cardToPrevent;
-            RunCoroutine(base.GameController.AddStatusEffect(preventPhaseEffectStatusEffect, showMessage: true, ttc.CharacterCardController.GetCardSource()));
+            RunCoroutine(GameController.AddStatusEffect(preventPhaseEffectStatusEffect, showMessage: true, ttc.CharacterCardController.GetCardSource()));
         }
 
         protected void PreventStartOfTurnEffects(TurnTakerController ttc, Card cardToPrevent)
@@ -113,7 +114,7 @@ namespace Studio29Tests
             PreventPhaseEffectStatusEffect preventPhaseEffectStatusEffect = new PreventPhaseEffectStatusEffect(Phase.Start);
             preventPhaseEffectStatusEffect.UntilEndOfNextTurn(ttc.TurnTaker);
             preventPhaseEffectStatusEffect.CardCriteria.IsSpecificCard = cardToPrevent;
-            RunCoroutine(base.GameController.AddStatusEffect(preventPhaseEffectStatusEffect, showMessage: true, ttc.CharacterCardController.GetCardSource()));
+            RunCoroutine(GameController.AddStatusEffect(preventPhaseEffectStatusEffect, showMessage: true, ttc.CharacterCardController.GetCardSource()));
         }
 
         protected void AssertCardConfiguration(string identifier, string[] keywords = null, int hitpoints = 0)
@@ -151,10 +152,10 @@ namespace Studio29Tests
         }
 
 
-        protected void AssertDamageTypeChanged(HeroTurnTakerController httc, Card source, Card target, int amount, DamageType initialDamageType, DamageType expectedDamageType)
+        protected void AssertDamageTypeChanged(HeroTurnTakerController hccc, Card source, Card target, int amount, DamageType initialDamageType, DamageType expectedDamageType)
         {
             List<DealDamageAction> storedResults = new List<DealDamageAction>();
-            this.RunCoroutine(this.GameController.DealDamage(httc, source, (Card c) => c == target, amount, initialDamageType, false, false, storedResults, null, null, false, null, null, false, false, new CardSource(GetCardController(source))));
+            this.RunCoroutine(this.GameController.DealDamage(hccc, source, (Card c) => c == target, amount, initialDamageType, false, false, storedResults, null, null, false, null, null, false, false, new CardSource(GetCardController(source))));
 
             if (storedResults != null)
             {
@@ -219,6 +220,12 @@ namespace Studio29Tests
             }
 
             return this.GameController;
+        }
+
+        protected void SetupIncap(TurnTakerController villainToDealDamage, Card heroCharacterCardToIncap)
+        {
+            SetHitPoints(heroCharacterCardToIncap, 1);
+            DealDamage(villainToDealDamage, heroCharacterCardToIncap, 2, DamageType.Melee);
         }
 
     }

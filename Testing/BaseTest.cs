@@ -1704,19 +1704,19 @@ namespace Handelabra.Sentinels.UnitTest
             return card;
         }
 
-        protected Card PutInHand(HeroTurnTakerController httc, string identifier, int index = 0)
+        protected Card PutInHand(HeroTurnTakerController hccc, string identifier, int index = 0)
         {
-            return this.MoveCard(httc, GetCard(identifier, index), httc.HeroTurnTaker.Hand);
+            return this.MoveCard(hccc, GetCard(identifier, index), hccc.HeroTurnTaker.Hand);
         }
 
-        protected void PutInHand(HeroTurnTakerController httc, Card card)
+        protected void PutInHand(HeroTurnTakerController hccc, Card card)
         {
-            this.MoveCard(httc, card, httc.HeroTurnTaker.Hand);
+            this.MoveCard(hccc, card, hccc.HeroTurnTaker.Hand);
         }
 
-        protected void PutInDeck(HeroTurnTakerController httc, Card card)
+        protected void PutInDeck(HeroTurnTakerController hccc, Card card)
         {
-            this.MoveCard(httc, card, httc.HeroTurnTaker.Deck);
+            this.MoveCard(hccc, card, hccc.HeroTurnTaker.Deck);
         }
 
         protected Card PutInHand(string identifier)
@@ -1748,20 +1748,20 @@ namespace Handelabra.Sentinels.UnitTest
             return card;
         }
 
-        protected void PutInHand(HeroTurnTakerController httc, Card[] cards)
+        protected void PutInHand(HeroTurnTakerController hccc, Card[] cards)
         {
             foreach (Card card in cards)
             {
-                PutInHand(httc, card);
+                PutInHand(hccc, card);
             }
         }
 
-        protected IList<Card> PutInHand(HeroTurnTakerController httc, string[] identifiers)
+        protected IList<Card> PutInHand(HeroTurnTakerController hccc, string[] identifiers)
         {
             List<Card> results = new List<Card>(identifiers.Length);
             foreach (string id in identifiers)
             {
-                var card = PutInHand(httc, id);
+                var card = PutInHand(hccc, id);
                 results.Add(card);
             }
 
@@ -2070,9 +2070,9 @@ namespace Handelabra.Sentinels.UnitTest
             return ttc.TurnTaker.GetAllCards().Where(c => c.IsInDeck).Count();
         }
 
-        protected int GetNumberOfCardsInHand(HeroTurnTakerController httc)
+        protected int GetNumberOfCardsInHand(HeroTurnTakerController hccc)
         {
-            return httc.HeroTurnTaker.Hand.Cards.Count();
+            return hccc.HeroTurnTaker.Hand.Cards.Count();
         }
 
         protected int GetNumberOfCardsInTrash(TurnTakerController ttc, Func<Card, bool> cardCriteria = null)
@@ -2260,12 +2260,12 @@ namespace Handelabra.Sentinels.UnitTest
             return turnPhaseList;
         }
 
-        protected IEnumerable<Card> DrawCard(HeroTurnTakerController httc, int numberOfCards = 1, bool optional = false)
+        protected IEnumerable<Card> DrawCard(HeroTurnTakerController hccc, int numberOfCards = 1, bool optional = false)
         {
             var storedResults = new List<DrawCardAction>();
             for (int i = 0; i < numberOfCards; i++)
             {
-                this.RunCoroutine(this.GameController.DrawCard(httc.HeroTurnTaker, optional, storedResults));
+                this.RunCoroutine(this.GameController.DrawCard(hccc.HeroTurnTaker, optional, storedResults));
             }
             return storedResults.Select(d => d.DrawnCard);
         }
@@ -3519,11 +3519,11 @@ namespace Handelabra.Sentinels.UnitTest
         }
 
 
-        protected void AssertNumberOfCardsInHand(HeroTurnTakerController httc, int number)
+        protected void AssertNumberOfCardsInHand(HeroTurnTakerController hccc, int number)
         {
-            int actual = GetNumberOfCardsInHand(httc);
+            int actual = GetNumberOfCardsInHand(hccc);
             number = Math.Max(number, 0);
-            Assert.AreEqual(number, actual, String.Format("{0} should have had {1} cards in their hand, but instead had {2}.", httc.Name, number, actual));
+            Assert.AreEqual(number, actual, String.Format("{0} should have had {1} cards in their hand, but instead had {2}.", hccc.Name, number, actual));
         }
 
         protected void AssertNumberOfCardsNextToCard(Card card, int number)
@@ -3606,16 +3606,16 @@ namespace Handelabra.Sentinels.UnitTest
             Assert.AreEqual(numberExpected, actual, "There were " + actual + " usable powers this turn for " + card.Title + ".");
         }
 
-        protected void AssertNumberOfUsablePowers(HeroTurnTakerController httc, int numberExpected)
+        protected void AssertNumberOfUsablePowers(HeroTurnTakerController hccc, int numberExpected)
         {
-            var usablePowers = this.GameController.GetUsablePowersThisTurn(httc);
+            var usablePowers = this.GameController.GetUsablePowersThisTurn(hccc);
             int actual = usablePowers.Count();
-            Assert.AreEqual(numberExpected, actual, "There were " + actual + " usable powers this turn for " + httc.Name + ".");
+            Assert.AreEqual(numberExpected, actual, "There were " + actual + " usable powers this turn for " + hccc.Name + ".");
         }
 
-        protected void AssertIncapacitated(HeroTurnTakerController httc)
+        protected void AssertIncapacitated(HeroTurnTakerController hccc)
         {
-            Assert.IsTrue(httc.HeroTurnTaker.IsIncapacitatedOrOutOfGame, httc.Name + " should be incapacitated or out of game.");
+            Assert.IsTrue(hccc.HeroTurnTaker.IsIncapacitatedOrOutOfGame, hccc.Name + " should be incapacitated or out of game.");
         }
 
         protected void AssertIncapacitated(TurnTakerController ttc)
@@ -3870,9 +3870,9 @@ namespace Handelabra.Sentinels.UnitTest
             return null;
         }
 
-        protected void AssertInDeckOrHand(HeroTurnTakerController httc, Card card)
+        protected void AssertInDeckOrHand(HeroTurnTakerController hccc, Card card)
         {
-            Assert.IsTrue(httc.TurnTaker.Deck.Cards.Contains(card) || httc.HeroTurnTaker.Hand.Cards.Contains(card), card.Title + " was supposed to be in " + httc.Name + "'s deck or hand, but was in " + card.Location.GetFriendlyName() + ".");
+            Assert.IsTrue(hccc.TurnTaker.Deck.Cards.Contains(card) || hccc.HeroTurnTaker.Hand.Cards.Contains(card), card.Title + " was supposed to be in " + hccc.Name + "'s deck or hand, but was in " + card.Location.GetFriendlyName() + ".");
         }
 
         protected void AssertInDeck(TurnTakerController ttc, IEnumerable<Card> cards)
@@ -6000,16 +6000,16 @@ namespace Handelabra.Sentinels.UnitTest
             }
         }
 
-        protected void SelectAndUsePower(HeroTurnTakerController httc, out bool skipped)
+        protected void SelectAndUsePower(HeroTurnTakerController hccc, out bool skipped)
         {
             var storedResults = new List<UsePowerDecision>();
-            RunCoroutine(this.GameController.SelectAndUsePower(httc, true, storedResults: storedResults));
+            RunCoroutine(this.GameController.SelectAndUsePower(hccc, true, storedResults: storedResults));
             skipped = (storedResults.Any(d => d.Skipped));
         }
 
-        private void SelectAndUseIncapacitatedAbility(HeroTurnTakerController httc)
+        private void SelectAndUseIncapacitatedAbility(HeroTurnTakerController hccc)
         {
-            RunCoroutine(this.GameController.SelectIncapacitatedHeroAndUseAbility(httc));
+            RunCoroutine(this.GameController.SelectIncapacitatedHeroAndUseAbility(hccc));
         }
 
         protected void PrintReplays()

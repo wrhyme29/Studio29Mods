@@ -11,7 +11,7 @@ namespace Studio29.TheTamer
 
         public BalancingActCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
         {
-            SpecialStringMaker.ShowNumberOfCardsInPlay(new LinqCardCriteria((Card c) => IsLion(c), "lion"));
+            SpecialStringMaker.ShowNumberOfCardsInPlay(new LinqCardCriteria((Card c) => c.IsLion(), "lion"));
             SpecialStringMaker.ShowNumberOfCardsInPlay(new LinqCardCriteria((Card c) => IsVillainTarget(c),useCardsSuffix: false, singular: "villain target", plural: "villain targets"));
         }
 
@@ -57,18 +57,18 @@ namespace Studio29.TheTamer
 
                     List<SelectCardDecision> selectCards = new List<SelectCardDecision>();
                     List<DealDamageAction> storedDamage = new List<DealDamageAction>();
-                    coroutine = base.GameController.SelectTargetsAndDealDamage(this.DecisionMaker, new DamageSource(GameController, lionSource), 1, DamageType.Melee, 1, false, 0,
+                    coroutine = GameController.SelectTargetsAndDealDamage(this.DecisionMaker, new DamageSource(GameController, lionSource), 1, DamageType.Melee, 1, false, 0,
                         additionalCriteria: c => c.IsTarget && c.IsInPlayAndHasGameText,
                         storedResultsDecisions: selectCards,
                         storedResultsDamage: storedDamage,
                         cardSource: GetCardSource());
-                    if (base.UseUnityCoroutines)
+                    if (UseUnityCoroutines)
                     {
-                        yield return base.GameController.StartCoroutine(coroutine);
+                        yield return GameController.StartCoroutine(coroutine);
                     }
                     else
                     {
-                        base.GameController.ExhaustCoroutine(coroutine);
+                        GameController.ExhaustCoroutine(coroutine);
 
                     }
                     if (DidDealDamage(storedDamage))
@@ -100,8 +100,8 @@ namespace Studio29.TheTamer
                     if (selectCardDecision != null)
                     {
                         Card damageSource = GetSelectedCard(storedResults);
-                        coroutine2 = base.GameController.SelectTargetsAndDealDamage(this.DecisionMaker, new DamageSource(GameController, damageSource), 2, DamageType.Melee, 1, false, 1,
-                            additionalCriteria: c => IsLion(c) && c.IsInPlayAndHasGameText, cardSource: GetCardSource());
+                        coroutine2 = GameController.SelectTargetsAndDealDamage(this.DecisionMaker, new DamageSource(GameController, damageSource), 2, DamageType.Melee, 1, false, 1,
+                            additionalCriteria: c => c.IsLion() && c.IsInPlayAndHasGameText, cardSource: GetCardSource());
                         if (UseUnityCoroutines)
                         {
                             yield return GameController.StartCoroutine(coroutine2);
@@ -115,7 +115,7 @@ namespace Studio29.TheTamer
                
             } else
             {
-                IEnumerator coroutine3 = base.GameController.SendMessageAction("There are not more Lions than Villain targets in play. No damage will be dealt.", Priority.Medium, GetCardSource());
+                IEnumerator coroutine3 = GameController.SendMessageAction("There are not more Lions than Villain targets in play. No damage will be dealt.", Priority.Medium, GetCardSource());
                 if (UseUnityCoroutines)
                 {
                     yield return GameController.StartCoroutine(coroutine3);
@@ -131,7 +131,7 @@ namespace Studio29.TheTamer
 
         private int GetNumberOfVillainTargetsInPlay()
         {
-            return base.FindCardsWhere(c => c.IsInPlayAndHasGameText && c.IsVillainTarget).Count();
+            return FindCardsWhere(c => c.IsInPlayAndHasGameText && c.IsVillainTarget).Count();
 
         }
 

@@ -3,7 +3,7 @@ using Handelabra.Sentinels.Engine.Model;
 
 namespace Studio29.TheDeliOfDisaster
 {
-    public class YoureSmokedMeatCardController : TheDeliOfDisasterCardController
+    public class YoureSmokedMeatCardController : CardController
     {
 
         public YoureSmokedMeatCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)

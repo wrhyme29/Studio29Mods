@@ -18,7 +18,7 @@ namespace Studio29.TheTamer
         {
             //You may discard a card...
             List<DiscardCardAction> storedResults = new List<DiscardCardAction>();
-            IEnumerator coroutine = SelectAndDiscardCards(base.HeroTurnTakerController, new int?(1), requiredDecisions: new int?(0), storedResults: storedResults);
+            IEnumerator coroutine = SelectAndDiscardCards(HeroTurnTakerController, new int?(1), requiredDecisions: new int?(0), storedResults: storedResults);
             if (UseUnityCoroutines)
             {
                 yield return GameController.StartCoroutine(coroutine);
@@ -64,18 +64,18 @@ namespace Studio29.TheTamer
 
                     List<SelectCardDecision> selectCards = new List<SelectCardDecision>();
                     List<DealDamageAction> storedDamage = new List<DealDamageAction>();
-                    coroutine = base.GameController.SelectTargetsAndDealDamage(this.DecisionMaker, new DamageSource(GameController, lionSource), 1, DamageType.Melee, 1, false, 1,
+                    coroutine = GameController.SelectTargetsAndDealDamage(this.DecisionMaker, new DamageSource(GameController, lionSource), 1, DamageType.Melee, 1, false, 1,
                         additionalCriteria: c => c.IsTarget && c.IsInPlayAndHasGameText,
                         storedResultsDecisions: selectCards,
                         storedResultsDamage: storedDamage,
                         cardSource: GetCardSource());
-                    if (base.UseUnityCoroutines)
+                    if (UseUnityCoroutines)
                     {
-                        yield return base.GameController.StartCoroutine(coroutine);
+                        yield return GameController.StartCoroutine(coroutine);
                     }
                     else
                     {
-                        base.GameController.ExhaustCoroutine(coroutine);
+                        GameController.ExhaustCoroutine(coroutine);
 
                     }
                 }

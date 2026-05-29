@@ -22,29 +22,29 @@ namespace Studio29.BirthdayBoy
 
             List<SelectCardsDecision> storedResults = new List<SelectCardsDecision>();
             IEnumerator coroutine = GameController.SelectCardsAndStoreResults(HeroTurnTakerController, SelectionType.MoveCard, c=> presentsList.Contains(c),numberOfCards: presentsList.Count(), storedResults: storedResults, optional: false, requiredDecisions: 0, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
             if (DidSelectCards(storedResults))
             {
                 TurnTaker tt;
                 foreach(Card selectedCard in GetSelectedCards(storedResults))
                 {
-                    tt = GetOriginalOwner(selectedCard);
+                    tt = this.GetOriginalOwner(selectedCard);
                     GameController.ChangeCardOwnership(selectedCard, tt);
                     coroutine = GameController.ModifyKeywords("present", addingOrRemoving: false, affectedCards: selectedCard.ToEnumerable().ToList(), cardSource: GetCardSource());
-                    if (base.UseUnityCoroutines)
+                    if (UseUnityCoroutines)
                     {
-                        yield return base.GameController.StartCoroutine(coroutine);
+                        yield return GameController.StartCoroutine(coroutine);
                     }
                     else
                     {
-                        base.GameController.ExhaustCoroutine(coroutine);
+                        GameController.ExhaustCoroutine(coroutine);
                     }
 
                     Location destination = tt.PlayArea;
@@ -54,13 +54,13 @@ namespace Studio29.BirthdayBoy
                     }
 
                     coroutine = GameController.MoveCard(TurnTakerController, selectedCard, destination, playCardIfMovingToPlayArea: !selectedCard.Location.IsPlayArea, showMessage: true, cardSource: GetCardSource()); ;
-                    if (base.UseUnityCoroutines)
+                    if (UseUnityCoroutines)
                     {
-                        yield return base.GameController.StartCoroutine(coroutine);
+                        yield return GameController.StartCoroutine(coroutine);
                     }
                     else
                     {
-                        base.GameController.ExhaustCoroutine(coroutine);
+                        GameController.ExhaustCoroutine(coroutine);
                     }
                 }
 
@@ -71,14 +71,14 @@ namespace Studio29.BirthdayBoy
             {
                 new MoveCardDestination(HeroTurnTaker.Hand)
             };
-            coroutine = base.GameController.SelectCardsFromLocationAndMoveThem(HeroTurnTakerController, TurnTaker.Trash, 0, X, new LinqCardCriteria((Card c) => true), destinations, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            coroutine = GameController.SelectCardsFromLocationAndMoveThem(HeroTurnTakerController, TurnTaker.Trash, 0, X, new LinqCardCriteria((Card c) => true), destinations, cardSource: GetCardSource());
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 

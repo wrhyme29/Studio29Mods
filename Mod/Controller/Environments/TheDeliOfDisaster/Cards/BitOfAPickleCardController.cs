@@ -5,7 +5,7 @@ using System.Collections;
 
 namespace Studio29.TheDeliOfDisaster
 {
-    public class BitOfAPickleCardController : TheDeliOfDisasterCardController
+    public class BitOfAPickleCardController : CardController
     {
 
         public BitOfAPickleCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
@@ -15,7 +15,7 @@ namespace Studio29.TheDeliOfDisaster
 
         public override bool AskIfCardIsIndestructible(Card card)
         {
-            return card == base.Card || card.Location == base.Card.UnderLocation;
+            return card == Card || card.Location == Card.UnderLocation;
         }
 
         public override void AddTriggers()
@@ -32,22 +32,22 @@ namespace Studio29.TheDeliOfDisaster
         private IEnumerator CancelActionProxy(GameOverAction action)
         {
             IEnumerator coroutine = GameController.SendMessageAction($"But wait! {TurnTaker.Name} is still open for business... Play on!", Priority.Critical, GetCardSource(), showCardSource: true);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
             coroutine = CancelAction(action);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
 
@@ -55,22 +55,22 @@ namespace Studio29.TheDeliOfDisaster
         {
             
             IEnumerator coroutine = GameController.MoveCard(TurnTakerController, Card, TurnTaker.Deck, evenIfIndestructible: true, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
             coroutine = GameController.ShuffleLocation(TurnTaker.Deck, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
     }

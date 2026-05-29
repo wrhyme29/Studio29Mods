@@ -53,16 +53,16 @@ namespace Studio29.CovenOfWitches
 
             List<SelectCardDecision> selectCardResults = new List<SelectCardDecision>();
 
-            IEnumerator selectCardRoutine = base.GameController.SelectCardAndStoreResults(HeroTurnTakerController, SelectionType.SelectTargetNoDamage, cardCriteria:
+            IEnumerator selectCardRoutine = GameController.SelectCardAndStoreResults(HeroTurnTakerController, SelectionType.SelectTargetNoDamage, cardCriteria:
                 new LinqCardCriteria(c => c.IsTarget && c.IsInPlayAndHasGameText, "targets in play", false), selectCardResults, optional: false, cardSource: GetCardSource());
 
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(selectCardRoutine);
+                yield return GameController.StartCoroutine(selectCardRoutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(selectCardRoutine);
+                GameController.ExhaustCoroutine(selectCardRoutine);
             }
 
             if (!DidSelectCard(selectCardResults))
@@ -126,9 +126,9 @@ namespace Studio29.CovenOfWitches
                 TurnTaker selectedTurnTaker = GetSelectedTurnTaker(selectHero);
                     if (selectedTurnTaker.IsHero)
                     {
-                        HeroTurnTakerController httc = FindHeroTurnTakerController(selectedTurnTaker.ToHero());
+                        HeroTurnTakerController hccc = FindHeroTurnTakerController(selectedTurnTaker.ToHero());
                         List<DiscardCardAction> storedDiscards = new List<DiscardCardAction>();
-                        IEnumerator coroutine2 = GameController.SelectAndDiscardCards(httc, 2, optional: false, requiredDiscards: 2, storedResults: storedDiscards, cardSource: GetCardSource());
+                        IEnumerator coroutine2 = GameController.SelectAndDiscardCards(hccc, 2, optional: false, requiredDiscards: 2, storedResults: storedDiscards, cardSource: GetCardSource());
                         if (UseUnityCoroutines)
                         {
                             yield return GameController.StartCoroutine(coroutine2);

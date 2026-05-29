@@ -4,8 +4,8 @@ using System.Collections;
 
 namespace Studio29.TheTamer
 {
-    public class RoadShowTamerCharacterCardController : TheTamerSubCharacterCardController
-	{
+    public class RoadShowTamerCharacterCardController : HeroCharacterCardController
+    {
 		public RoadShowTamerCharacterCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
 		{
 		}
@@ -13,40 +13,20 @@ namespace Studio29.TheTamer
 		{
 			//Reveal cards from the top of {TheTamer}'s deck until a Lion card is revealed. Put that card into play. Shuffle the other revealed cards into {TheTamer}'s deck."
 
-			IEnumerator coroutine = RevealCards_MoveMatching_ReturnNonMatchingCards(HeroTurnTakerController, TurnTaker.Deck, playMatchingCards: true, putMatchingCardsIntoPlay: true, moveMatchingCardsToHand: false, cardCriteria: new LinqCardCriteria(c => IsLion(c), "lion"), numberOfMatches: 1, shuffleSourceAfterwards: true, showMessage: true);
-			if (base.UseUnityCoroutines)
+			IEnumerator coroutine = RevealCards_MoveMatching_ReturnNonMatchingCards(HeroTurnTakerController, TurnTaker.Deck, playMatchingCards: true, putMatchingCardsIntoPlay: true, moveMatchingCardsToHand: false, cardCriteria: new LinqCardCriteria(c => c.IsLion(), "lion"), numberOfMatches: 1, shuffleSourceAfterwards: true, showMessage: true);
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 		}
 
-		public override IEnumerator UseIncapacitatedAbility(int index)
-		{
-			switch (index)
-			{
-				case 0:
-					{
-						
-						yield break;
-					}
-				case 1:
-					{
-						
-						yield break;
-					}
-				case 2:
-					{
-						
-						yield break;
-					}
-			}
-			yield break;
-		}
-
-		
-	}
+        public override IEnumerator UseIncapacitatedAbility(int index)
+        {
+            yield return this.StandardPowerPlayDrawIncapacitatedAbility(index);
+        }
+    }
 }

@@ -33,13 +33,13 @@ namespace Studio29.BirthdayBoy
 			{
 				coroutine = GameController.SendMessageAction($"{TurnTaker.Name} already owns 40 cards! Let's not go overboard with the presents!", Priority.High, GetCardSource(), showCardSource: true);
 			}
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 			yield break;
 		}
@@ -47,16 +47,16 @@ namespace Studio29.BirthdayBoy
 		private IEnumerator MoveCardsToOwnHand()
 		{
 			//{BirthdayBoy} may move any hero ongoing, hero equipment, or hero target with max 5 HP or fewer in another player's hand to your hand. Any card moved this way now belongs to {BirthdayBoy} (when it is destroyed, shuffle into the deck of {BirthdayBoy}). Any card moved this way gains the keyword “Present”
-			LinqCardCriteria criteria = new LinqCardCriteria((Card c) => c.Owner != base.TurnTaker && c.IsInHand && c.IsHero && (c.IsOngoing || IsEquipment(c) || (c.IsTarget && c.MaximumHitPoints <= 5)), "hero ongoing, hero equipment, or hero target with max 5hp");
+			LinqCardCriteria criteria = new LinqCardCriteria((Card c) => c.Owner != TurnTaker && c.IsInHand && c.IsHero && (c.IsOngoing || IsEquipment(c) || (c.IsTarget && c.MaximumHitPoints <= 5)), "hero ongoing, hero equipment, or hero target with max 5hp");
 			List<SelectCardDecision> storedResults = new List<SelectCardDecision>();
-			IEnumerator coroutine = GameController.MoveCards(base.HeroTurnTakerController, criteria, (Card c) => base.HeroTurnTaker.Hand, numberOfCards: new int?(1), requiredDecisions: new int?(0), playIfMovingToPlayArea: false, storedResults: storedResults, cardSource: GetCardSource());
-			if (base.UseUnityCoroutines)
+			IEnumerator coroutine = GameController.MoveCards(HeroTurnTakerController, criteria, (Card c) => HeroTurnTaker.Hand, numberOfCards: new int?(1), requiredDecisions: new int?(0), playIfMovingToPlayArea: false, storedResults: storedResults, cardSource: GetCardSource());
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 
 			if (DidSelectCard(storedResults))
@@ -68,25 +68,25 @@ namespace Studio29.BirthdayBoy
 				GameController.ChangeCardOwnership(movedCard, TurnTaker);
 
 				Log.Debug("New owner: " + movedCard.Owner.Identifier);
-				Log.Debug("Original owner: " + GetOriginalOwner(movedCard).Identifier);
+				Log.Debug("Original owner: " + this.GetOriginalOwner(movedCard).Identifier);
 
 				coroutine = GameController.ModifyKeywords("present", addingOrRemoving: true, affectedCards: movedCard.ToEnumerable().ToList(), cardSource: GetCardSource());
-				if (base.UseUnityCoroutines)
+				if (UseUnityCoroutines)
 				{
-					yield return base.GameController.StartCoroutine(coroutine);
+					yield return GameController.StartCoroutine(coroutine);
 				}
 				else
 				{
-					base.GameController.ExhaustCoroutine(coroutine);
+					GameController.ExhaustCoroutine(coroutine);
 				}
-				coroutine = GameController.SendMessageAction($"{movedCard.Title} is now a Present belonging to { base.CharacterCard.AlternateTitleOrTitle}", Priority.High, GetCardSource());
-				if (base.UseUnityCoroutines)
+				coroutine = GameController.SendMessageAction($"{movedCard.Title} is now a Present belonging to { CharacterCard.AlternateTitleOrTitle}", Priority.High, GetCardSource());
+				if (UseUnityCoroutines)
 				{
-					yield return base.GameController.StartCoroutine(coroutine);
+					yield return GameController.StartCoroutine(coroutine);
 				}
 				else
 				{
-					base.GameController.ExhaustCoroutine(coroutine);
+					GameController.ExhaustCoroutine(coroutine);
 				}
 
 				

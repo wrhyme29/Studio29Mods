@@ -1,39 +1,17 @@
 ﻿using Handelabra.Sentinels.Engine.Controller;
 using Handelabra.Sentinels.Engine.Model;
 using NUnit.Framework;
+using Studio29;
 using Studio29.TheTamer;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace Studio29Tests
 {
     [TestFixture()]
     public class TheTamerTests : CustomBaseTest
     {
-        #region TheTamerHelperFunctions
-        private void SetupIncap(TurnTakerController villain)
-        {
-            SetHitPoints(tamer.CharacterCard, 1);
-            DealDamage(villain, tamer, 2, DamageType.Melee);
-        }
-
-        private bool IsLion(Card card)
-        {
-            return card.DoKeywordsContain("lion");
-        }
-
-        protected void AddImmuneToDamageTrigger(TurnTakerController ttc, bool heroesImmune, bool villainsImmune, bool charactersImmune)
-        {
-            ImmuneToDamageStatusEffect immuneToDamageStatusEffect = new ImmuneToDamageStatusEffect();
-            immuneToDamageStatusEffect.TargetCriteria.IsHero = new bool?(heroesImmune);
-            immuneToDamageStatusEffect.TargetCriteria.IsCharacter = new bool?(charactersImmune);
-            immuneToDamageStatusEffect.TargetCriteria.IsVillain = new bool?(villainsImmune);
-            immuneToDamageStatusEffect.UntilStartOfNextTurn(ttc.TurnTaker);
-            this.RunCoroutine(this.GameController.AddStatusEffect(immuneToDamageStatusEffect, true, new CardSource(ttc.CharacterCardController)));
-        }
-
-
-        #endregion
 
         [Test()]
         public void TestTheTamerLoads()
@@ -63,7 +41,7 @@ namespace Studio29Tests
 
         [Test()]
         [Sequential]
-        public void DecklistTestLion_IsLion([Values("PhileonTheDestroyer", "LingorthTheLighthearted", "MotherOfThePack", "GildeasTheGood")] string lion)
+        public void DecklistTestLion_IsLion([Values("BeoninTheBraggert", "ClemanataTheEldest", "DavilTheDashing", "MacmilliusTheMenacing", "PhileonTheDestroyer", "BorealiaTheBrilliant", "LingorthTheLighthearted", "MotherOfThePack", "GildeasTheGood")] string lion)
         {
             SetupGameController("BaronBlade", "Studio29.TheTamer", "Megalopolis");
             StartGame();
@@ -77,7 +55,7 @@ namespace Studio29Tests
 
         [Test()]
         [Sequential]
-        public void DecklistTestOngoing_IsOngoing([Values("GrandFinale", "ThreeRings", "KittyGloves")] string ongoing)
+        public void DecklistTestOngoing_IsOngoing([Values("ThreeRings", "KittyGloves")] string ongoing)
         {
             SetupGameController("BaronBlade", "Studio29.TheTamer", "Megalopolis");
             StartGame();
@@ -91,7 +69,7 @@ namespace Studio29Tests
 
         [Test()]
         [Sequential]
-        public void DecklistTestLimited_IsLimited([Values("ChairOfConfusion", "GrandFinale", "ThreeRings", "NemeanCoat")] string limited)
+        public void DecklistTestLimited_IsLimited([Values("ChairOfConfusion", "ThreeRings", "NemeanCoat")] string limited)
         {
             SetupGameController("BaronBlade", "Studio29.TheTamer", "Megalopolis");
             StartGame();
@@ -105,7 +83,7 @@ namespace Studio29Tests
 
         [Test()]
         [Sequential]
-        public void DecklistTestOneShot_IsOneShot([Values("ElementalWhip", "TapOut", "SendInTheClowns", "HereKittyKitty", "RingOfFire", "Catsnack", "BalancingAct", "WhippingWhiskers")] string oneshot)
+        public void DecklistTestOneShot_IsOneShot([Values("ElementalWhip", "TapOut", "HereKittyKitty", "RingOfFire", "Catsnack", "BalancingAct", "WhippingWhiskers", "OpenTheCages")] string oneshot)
         {
             SetupGameController("BaronBlade", "Studio29.TheTamer", "Megalopolis");
             StartGame();
@@ -201,8 +179,7 @@ namespace Studio29Tests
 
             DestroyNonCharacterVillainCards();
 
-
-            SetupIncap(baron);
+            SetupIncap(baron, tamer.CharacterCard);
             AssertIncapacitated(tamer);
 
             Card crest = PlayCard("CosmicCrest");
@@ -223,22 +200,43 @@ namespace Studio29Tests
             SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
             StartGame();
 
-            DestroyCard(GetCardInPlay("MobileDefensePlatform"), baron.CharacterCard);
+            DestroyNonCharacterVillainCards();
 
-            IEnumerable<Card> lions = FindCardsWhere((Card c) => IsLion(c)).Take(3);
+            Card bladeBattlion = PlayCard("BladeBattalion");
+
+            Card clemanataTheEldest = FindCard(c => c.Identifier == "ClemanataTheEldest");
+            Card davilTheDashing = FindCard(c => c.Identifier == "DavilTheDashing");
+            Card motherOfThePack = FindCard(c => c.Identifier == "MotherOfThePack");
+
+            IEnumerable<Card> lions = [clemanataTheEldest, davilTheDashing, motherOfThePack];
             PlayCards(lions);
 
-            //If there are more Lions than villain targets in play, each Lion may deal one target 1 melee damage
-            //One target dealt damage this way deals one Lion 2 melee damage
+            // If there are more Lions than villain targets in play,
+            //   each Lion may deal one target 1 melee damage
+            // One target dealt damage this way deals 1 Lion 2 melee damage.
 
-            DecisionSelectCards = new Card[] { lions.ElementAt(0), baron.CharacterCard, lions.ElementAt(1), ra.CharacterCard, baron.CharacterCard, baron.CharacterCard,  lions.ElementAt(2)};
-            DecisionYesNo = true;
-            QuickHPStorage(baron.CharacterCard, ra.CharacterCard, lions.ElementAt(2));
+            Card firstLionDamageSource = clemanataTheEldest;
+            Card firstLionDamageTarget = baron.CharacterCard;
+            Card secondLionDamageSource = davilTheDashing;
+            Card secondLionDamageTarget = ra.CharacterCard;
+            // no thirdLionDamageSource is needed as it is last and will be auto selected
+            Card thirdLionDamageTarget = bladeBattlion;
+            Card reactingDamageSource = baron.CharacterCard;
+            Card reactingDamageTarget = motherOfThePack;
+
+            // we specifically make mother of the pack the reacting target
+            // to avoid triggering any subsequent damage
+
+            DecisionSelectCards = [
+                firstLionDamageSource, firstLionDamageTarget,
+                secondLionDamageSource, secondLionDamageTarget,
+                thirdLionDamageTarget,
+                reactingDamageSource, reactingDamageTarget
+            ];
+
+            QuickHPStorage(firstLionDamageTarget, secondLionDamageTarget, thirdLionDamageTarget, reactingDamageTarget);
             PlayCard("BalancingAct");
-            QuickHPCheck(-2, -1, -2);
-
-
-
+            QuickHPCheck(-1, -1, -1, -2);
         }
 
         [Test()]
@@ -247,13 +245,12 @@ namespace Studio29Tests
             SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
             StartGame();
 
-            IEnumerable<Card> lions = FindCardsWhere((Card c) => IsLion(c)).Take(1);
+            IEnumerable<Card> lions = FindCardsWhere((Card c) => c.IsLion()).Take(1);
             PlayCards(lions);
 
-            //If there are more Lions than villain targets in play, each Lion may deal one target 1 melee damage
-            //One target dealt damage this way deals one Lion 2 melee damage
+            // If there are more Lions than villain targets in play, each Lion may deal one target 1 melee damage
+            // One target dealt damage this way deals one Lion 2 melee damage
 
-            DecisionYesNo = true;
             QuickHPStorage(baron.CharacterCard, ra.CharacterCard, lions.ElementAt(0));
             PlayCard("BalancingAct");
             QuickHPCheck(0,0,0);
@@ -261,22 +258,125 @@ namespace Studio29Tests
         }
 
         [Test()]
-        public void TestCatsnack_Discard()
+        public void TestBalancingAct_SpecialStrings_1VillainTargetInPlay()
         {
             SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
             StartGame();
 
-            GoToPlayCardPhase(tamer);
-            Card catsnack = PutInTrash("Catsnack");
-            IEnumerable<Card> lions = FindCardsWhere((Card c) => IsLion(c)).Take(3);
+            DestroyNonCharacterVillainCards();
+
+            Card balancingAct = FindCard(c => c.Identifier == "BalancingAct");
+            AssertNumberOfCardSpecialStrings(balancingAct, 2);
+            string numberOfVillainTargetsInPlay = "There is 1 villain target in play.";
+            AssertCardSpecialString(balancingAct, 1, numberOfVillainTargetsInPlay);
+        }
+
+        [Test()]
+        public void TestBalancingAct_SpecialStrings_2VillainTargetsInPlay()
+        {
+            SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
+            StartGame();
+
+            Card balancingAct = FindCard(c => c.Identifier == "BalancingAct");
+            AssertNumberOfCardSpecialStrings(balancingAct, 2);
+            string numberOfVillainTargetsInPlay = "There are 2 villain targets in play.";
+            AssertCardSpecialString(balancingAct, 1, numberOfVillainTargetsInPlay);
+        }
+
+        [Test()]
+        public void TestBalancingAct_SpecialStrings_NoLionsInPlay()
+        {
+            SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
+            StartGame();
+
+            Card balancingAct = FindCard(c => c.Identifier == "BalancingAct");
+            AssertNumberOfCardSpecialStrings(balancingAct, 2);
+            string numberOfLionsInPlaySpecialString = "There are no lion cards in play.";
+         
+            AssertCardSpecialString(balancingAct, 0, numberOfLionsInPlaySpecialString);
+        }
+
+        [Test()]
+        public void TestBalancingAct_SpecialStrings_1LionInPlay()
+        {
+            SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
+            StartGame();
+
+            Card clemanataTheEldest = FindCard(c => c.Identifier == "ClemanataTheEldest");
+            IEnumerable<Card> lions = [clemanataTheEldest];
             PlayCards(lions);
-            //Discard a card. If you do, each Lion in play deals 1 target 1 melee damage.
-            DecisionSelectCard = tamer.HeroTurnTaker.Hand.TopCard;
-            DecisionSelectTarget = haka.CharacterCard;
-            DecisionAutoDecide = SelectionType.CardToDealDamage;
-            QuickHPStorage(baron, tamer, haka, ra);
+
+            Card balancingAct = FindCard(c => c.Identifier == "BalancingAct");
+            AssertNumberOfCardSpecialStrings(balancingAct, 2);
+            string numberOfLionsInPlaySpecialString = "There is 1 lion card in play.";
+
+            AssertCardSpecialString(balancingAct, 0, numberOfLionsInPlaySpecialString);
+        }
+
+        [Test()]
+        public void TestBalancingAct_SpecialStrings_2LionsInPlay()
+        {
+            SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
+            StartGame();
+
+            Card clemanataTheEldest = FindCard(c => c.Identifier == "ClemanataTheEldest");
+            Card davilTheDashing = FindCard(c => c.Identifier == "DavilTheDashing");
+
+            IEnumerable<Card> lions = [clemanataTheEldest, davilTheDashing];
+            PlayCards(lions);
+
+            Card balancingAct = FindCard(c => c.Identifier == "BalancingAct");
+            AssertNumberOfCardSpecialStrings(balancingAct, 2);
+            string numberOfLionsInPlaySpecialString = "There are 2 lion cards in play.";
+
+            AssertCardSpecialString(balancingAct, 0, numberOfLionsInPlaySpecialString);
+        }
+
+        [Test()]
+        public void TestCatsnack_Discard()
+        {
+            SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
+            StartGame();
+            GoToStartOfTurn(tamer);
+
+            DestroyNonCharacterVillainCards();
+
+            Card bladeBattlion = PlayCard("BladeBattalion");
+
+            Card clemanataTheEldest = FindCard(c => c.Identifier == "ClemanataTheEldest");
+            Card davilTheDashing = FindCard(c => c.Identifier == "DavilTheDashing");
+            Card motherOfThePack = FindCard(c => c.Identifier == "MotherOfThePack");
+
+            IEnumerable<Card> lions = [clemanataTheEldest, davilTheDashing, motherOfThePack];
+            PlayCards(lions);
+
+
+            Card catsnack = PutInHand("Catsnack");
+            Card balancingAct = PutInHand("BalancingAct");
+
+            GoToPlayCardPhase(tamer);
+
+            // You may discard a card.
+            // If you do, each Lion in play deals 1 target 1 melee damage.
+
+            Card cardToDiscard = balancingAct;
+            Card firstLionDamageSource = clemanataTheEldest;
+            Card firstLionDamageTarget = baron.CharacterCard;
+            Card secondLionDamageSource = davilTheDashing;
+            Card secondLionDamageTarget = haka.CharacterCard;
+            // no thirdLionDamageSource is needed as it is last and will be auto selected
+            Card thirdLionDamageTarget = bladeBattlion;
+
+            DecisionSelectCards = [
+                cardToDiscard,
+                firstLionDamageSource, firstLionDamageTarget,
+                secondLionDamageSource, secondLionDamageTarget,
+                thirdLionDamageTarget
+            ];
+
+            QuickHPStorage(baron.CharacterCard, bladeBattlion, tamer.CharacterCard, haka.CharacterCard, ra.CharacterCard);
             PlayCard(catsnack);
-            QuickHPCheck(0, 0, -3, 0);
+            QuickHPCheck(-1, -1, 0, -1, 0);
             
         }
 
@@ -287,44 +387,136 @@ namespace Studio29Tests
             SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
             StartGame();
 
-            GoToPlayCardPhase(tamer);
-            Card catsnack = PutInTrash("Catsnack");
-            IEnumerable<Card> lions = FindCardsWhere((Card c) => IsLion(c)).Take(3);
-            PlayCards(lions);
-            //Discard a card. If you do, each Lion in play deals 1 target 1 melee damage.
-            DecisionDoNotSelectCard = SelectionType.DiscardCard;
-            DecisionSelectTarget = haka.CharacterCard;
-            QuickHPStorage(baron, tamer, haka, ra);
-            PlayCard(catsnack);
-            QuickHPCheck(0, 0, 0, 0);
+            StartGame();
+            GoToStartOfTurn(tamer);
 
+            DestroyNonCharacterVillainCards();
+
+            Card bladeBattlion = PlayCard("BladeBattalion");
+
+            Card clemanataTheEldest = FindCard(c => c.Identifier == "ClemanataTheEldest");
+            Card davilTheDashing = FindCard(c => c.Identifier == "DavilTheDashing");
+            Card motherOfThePack = FindCard(c => c.Identifier == "MotherOfThePack");
+
+            IEnumerable<Card> lions = [clemanataTheEldest, davilTheDashing, motherOfThePack];
+            PlayCards(lions);
+
+            Card catsnack = PutInHand("Catsnack");
+
+            GoToPlayCardPhase(tamer);
+
+            // You may discard a card.
+            // If you do, each Lion in play deals 1 target 1 melee damage.
+
+            DecisionDoNotSelectCard = SelectionType.DiscardCard;
+            AssertNoDecision(SelectionType.SelectTarget);
+            QuickHPStorage(baron.CharacterCard, bladeBattlion, tamer.CharacterCard, haka.CharacterCard, ra.CharacterCard);
+            PlayCard(catsnack);
+            QuickHPCheckZero();
         }
 
         [Test()]
-        public void TestChairOfConfusion()
+        public void TestChairOfConfusion_DamageGreaterThan1FromVillianToLion_ReducesTo1()
         {
             SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
             StartGame();
 
             GoToPlayCardPhase(tamer);
+            DestroyNonCharacterVillainCards();
             Card chair = PlayCard("ChairOfConfusion");
-            Card phileon = PlayCard("PhileonTheDestroyer");
+            Card mother = PlayCard("MotherOfThePack");
 
-            //Reduce damage dealt to {TheTamer} by Lions by 1.
-            QuickHPStorage(tamer);
-            DealDamage(phileon, tamer, 2, DamageType.Melee);
+            // Whenever a lion would be dealt damage, reduce that damage to 1.
+            QuickHPStorage(mother);
+            DealDamage(baron, mother, 5, DamageType.Melee);
             QuickHPCheck(-1);
+        }
 
-            //check only for the tamer
-            QuickHPStorage(ra);
-            DealDamage(phileon, ra, 2, DamageType.Melee);
-            QuickHPCheck(-2);
+        [Test()]
+        public void TestChairOfConfusion_DamageEqualTo1FromVillianToLion_Remains1()
+        {
+            SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
+            StartGame();
 
-            //check only from lions
+            GoToPlayCardPhase(tamer);
+            DestroyNonCharacterVillainCards();
+            Card chair = PlayCard("ChairOfConfusion");
+            Card mother = PlayCard("MotherOfThePack");
+
+            // Whenever a lion would be dealt damage, reduce that damage to 1.
+            QuickHPStorage(mother);
+            DealDamage(baron, mother, 1, DamageType.Melee);
+            QuickHPCheck(-1);
+        }
+
+        [Test()]
+        public void TestChairOfConfusion_DamageEqualTo0FromVillianToLion_Remains0()
+        {
+            SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
+            StartGame();
+
+            GoToPlayCardPhase(tamer);
+            DestroyNonCharacterVillainCards();
+            Card chair = PlayCard("ChairOfConfusion");
+            Card mother = PlayCard("MotherOfThePack");
+
+            // Whenever a lion would be dealt damage, reduce that damage to 1.
+            QuickHPStorage(mother);
+            DealDamage(baron, mother, 0, DamageType.Melee);
+            QuickHPCheck(0);
+        }
+
+        [Test()]
+        public void TestChairOfConfusion_DamageGreaterThan1FromHeroToLion_ReducesTo1()
+        {
+            SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
+            StartGame();
+
+            GoToPlayCardPhase(tamer);
+            DestroyNonCharacterVillainCards();
+            Card chair = PlayCard("ChairOfConfusion");
+            Card mother = PlayCard("MotherOfThePack");
+
+            // Whenever a lion would be dealt damage, reduce that damage to 1.
+            QuickHPStorage(mother);
+            DealDamage(tamer, mother, 5, DamageType.Melee);
+            QuickHPCheck(-1);
+        }
+
+        [Test()]
+        public void TestChairOfConfusion_DamageGreaterThan1FromVillianToHero_DoesNotReduce()
+        {
+            SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
+            StartGame();
+
+            GoToPlayCardPhase(tamer);
+            DestroyNonCharacterVillainCards();
+            Card chair = PlayCard("ChairOfConfusion");
+            Card mother = PlayCard("MotherOfThePack");
+
+            // Whenever a lion would be dealt damage, reduce that damage to 1.
             QuickHPStorage(tamer);
-            DealDamage(ra, tamer, 2, DamageType.Fire);
-            QuickHPCheck(-2);
+            DealDamage(baron, tamer, 5, DamageType.Melee);
+            QuickHPCheck(-5);
+        }
 
+        [Test()]
+        public void TestChairOfConfusion_MultipleDamageGreaterThan1FromVillianToLion_AllReducesTo1()
+        {
+            SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
+            StartGame();
+
+            GoToPlayCardPhase(tamer);
+            DestroyNonCharacterVillainCards();
+            Card chair = PlayCard("ChairOfConfusion");
+            Card mother = PlayCard("MotherOfThePack");
+
+            // Whenever a lion would be dealt damage, reduce that damage to 1.
+            
+            QuickHPStorage(mother);
+            DealDamage(baron, mother, 5, DamageType.Melee);
+            DealDamage(baron, mother, 5, DamageType.Melee);
+            QuickHPCheck(-2);
         }
 
         [Test()]
@@ -334,19 +526,28 @@ namespace Studio29Tests
             StartGame();
 
             GoToPlayCardPhase(tamer);
-            IEnumerable<Card> lions = FindCardsWhere((Card c) => IsLion(c)).Take(3);
+            Card whip = PutInTrash("ElementalWhip");
+
+            // when dealt 1, scout 1 card from villain deck
+            Card clemanataTheEldest = FindCard(c => c.Identifier == "ClemanataTheEldest");
+            // when dealt 1, draw a card
+            Card gildeasTheGood = FindCard(c => c.Identifier == "GildeasTheGood");
+            // when dealt 1, destroy 1 ongoing
+            Card macmilliusTheMenacing = FindCard(c => c.Identifier == "MacmilliusTheMenacing");
+
+            IEnumerable<Card> lions = [clemanataTheEldest, gildeasTheGood, macmilliusTheMenacing];
             PlayCards(lions);
 
             AddImmuneToDamageTrigger(tamer, true, false, true);
 
-            //Deal each Lion card in play 1 energy damage.
-            QuickHPStorage(lions.Concat(FindCardsWhere((Card c) => c.IsCharacter && !c.IsIncapacitatedOrOutOfGame)).ToArray());
+            // Deal each Lion card in play 1 energy damage.
+            // If no lions were dealt damage this way,
+            //  The Tamer deals himself 2 energy damage and draws 2 cards.
+            QuickHPStorage(clemanataTheEldest, gildeasTheGood, macmilliusTheMenacing, tamer.CharacterCard);
+            QuickHandStorage(tamer);
             PlayCard("ElementalWhip");
-            QuickHPCheck(-1, -1, -1, 0, 0, 0, 0);
-
-            //If no lions were dealt damage this way, {Tamer} deals himself 1 energy damage and draws 2 cards.
-
-
+            QuickHPCheck(-1, -1, -1, 0);
+            QuickHandCheck(1); // from gildeas  
         }
 
         [Test()]
@@ -358,19 +559,18 @@ namespace Studio29Tests
             GoToPlayCardPhase(tamer);
             Card whip = PutInTrash("ElementalWhip");
 
-            //Deal each Lion card in play 1 energy damage.
+            // Deal each Lion card in play 1 energy damage.
+            // If no lions were dealt damage this way,
+            //  The Tamer deals himself 2 energy damage and draws 2 cards.            QuickHPStorage(tamer);
             QuickHPStorage(tamer);
             QuickHandStorage(tamer);
             PlayCard(whip);
-
-            //If no lions were dealt damage this way, {Tamer} deals himself 1 energy damage and draws 2 cards.
-            QuickHPCheck(-1);
+            QuickHPCheck(-2);
             QuickHandCheck(2);
-
         }
 
         [Test()]
-        public void TestGildeasTheGood()
+        public void TestGildeasTheGood_DealtExactly1Damage()
         {
             SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
             StartGame();
@@ -379,33 +579,14 @@ namespace Studio29Tests
             
             Card gildeas = PlayCard("GildeasTheGood");
 
-            //When this card is dealt damage, it deals {TheTamer} 1 melee damage. Then, draw a card.
-
+            // When this card is dealt exactly 1 damage, draw a card.",
+            // When this card is dealt more than 1 damage, it deals each non-lion target 1 melee damage."
             QuickHPStorage(baron, tamer, haka, ra);
             QuickHandStorage(tamer);
             DealDamage(baron, gildeas, 2, DamageType.Fire);
             QuickHPCheck(0, -1, 0, 0);
             QuickHandCheck(1);
 
-
-        }
-
-        [Test()]
-        public void TestGrandFinale()
-        {
-            SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
-            StartGame();
-            DestroyNonCharacterVillainCards();
-
-            int hp = tamer.CharacterCard.HitPoints.Value;
-            Card gildeas = PlayCard("GildeasTheGood");
-
-            PlayCard("GrandFinale");
-            DecisionYesNo = true;
-            DecisionSelectTarget = baron.CharacterCard;
-            QuickHPStorage(baron);
-            DealDamage(gildeas, tamer, hp, DamageType.Fire);
-            QuickHPCheck(-10);
 
         }
 
@@ -417,7 +598,7 @@ namespace Studio29Tests
 
             DestroyCard(GetCardInPlay("MobileDefensePlatform"), baron.CharacterCard);
 
-            Card lionToPlay = FindCardsWhere((Card c) => IsLion(c) && tamer.TurnTaker.Deck.HasCard(c)).First();
+            Card lionToPlay = FindCardsWhere((Card c) => c.IsLion() && tamer.TurnTaker.Deck.HasCard(c)).First();
             Card handCard = PutInHand("GildeasTheGood");
             DecisionSelectCards = new Card[] { lionToPlay, handCard };
             PlayCard("HereKittyKitty");
@@ -435,7 +616,7 @@ namespace Studio29Tests
 
             DestroyCard(GetCardInPlay("MobileDefensePlatform"), baron.CharacterCard);
 
-            Card lionToPlay = FindCardsWhere((Card c) => IsLion(c) && tamer.TurnTaker.Deck.HasCard(c)).First();
+            Card lionToPlay = FindCardsWhere((Card c) => c.IsLion() && tamer.TurnTaker.Deck.HasCard(c)).First();
             Card handCard = PutInHand("GildeasTheGood");
             DecisionSelectCards = new Card[] { lionToPlay, null };
             PlayCard("HereKittyKitty");
@@ -453,7 +634,7 @@ namespace Studio29Tests
 
             DestroyCard(GetCardInPlay("MobileDefensePlatform"), baron.CharacterCard);
 
-            IEnumerable<Card> lionsToTrash = FindCardsWhere((Card c) => IsLion(c) && tamer.TurnTaker.Deck.HasCard(c));
+            IEnumerable<Card> lionsToTrash = FindCardsWhere((Card c) => c.IsLion() && tamer.TurnTaker.Deck.HasCard(c));
             PutInTrash(lionsToTrash);
             Card handCard = PutInHand("GildeasTheGood");
             DecisionSelectCard = handCard;
@@ -656,39 +837,6 @@ namespace Studio29Tests
         }
 
         [Test()]
-        public void TestSendInTheClowns_Draw()
-        {
-            SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
-            StartGame();
-            DestroyNonCharacterVillainCards();
-            GoToPlayCardPhase(tamer);
-
-            Card clowns = PutInHand("SendInTheClowns");
-            //Draw 2 cards. You may play a Lion.
-            QuickHandStorage(tamer);
-            DecisionDoNotSelectCard = SelectionType.PlayCard;
-            PlayCard(clowns);
-            //-1 from playing card, +2 from draw
-            QuickHandCheck(1);
-        }
-
-        [Test()]
-        public void TestSendInTheClowns_Play()
-        {
-            SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
-            StartGame();
-            DestroyNonCharacterVillainCards();
-            GoToPlayCardPhase(tamer);
-
-            Card clowns = PutInHand("SendInTheClowns");
-            Card lion = PutInHand("MotherOfThePack");
-            //Draw 2 cards. You may play a Lion.
-            DecisionSelectCard = lion;
-            PlayCard(clowns);
-            AssertInPlayArea(tamer, lion);
-        }
-
-        [Test()]
         public void TestTapOut_Destroy3()
         {
             SetupGameController("BaronBlade", "Studio29.TheTamer", "Haka", "Ra", "Megalopolis");
@@ -698,7 +846,7 @@ namespace Studio29Tests
 
             SetHitPoints(tamer, 10);
 
-            IEnumerable<Card> lions = FindCardsWhere((Card c) => IsLion(c) && tamer.TurnTaker.Deck.HasCard(c)).Take(3);
+            IEnumerable<Card> lions = FindCardsWhere((Card c) => c.IsLion() && tamer.TurnTaker.Deck.HasCard(c)).Take(3);
             PlayCards(lions);
 
             //Destroy all Lions in play. {TheTamer} regains 1 HP for each Lion destroyed this way.

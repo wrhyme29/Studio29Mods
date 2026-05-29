@@ -10,15 +10,6 @@ namespace Studio29Tests
     [TestFixture()]
     public class LoreTests : CustomBaseTest
     {
-        #region LoreHelperFunctions
-        private void SetupIncap(TurnTakerController villain)
-        {
-            SetHitPoints(lore.CharacterCard, 1);
-            DealDamage(villain, lore, 2, DamageType.Melee);
-        }
-
-        #endregion
-
         [Test()]
         public void TestLoreLoads()
         {
@@ -64,7 +55,7 @@ namespace Studio29Tests
             StartGame();
             DestroyNonCharacterVillainCards();
 
-            SetupIncap(baron);
+            SetupIncap(baron, lore.CharacterCard);
             AssertIncapacitated(lore);
             GoToUseIncapacitatedAbilityPhase(lore);
             Card discardCard = GetRandomCardFromHand(haka);
@@ -84,7 +75,7 @@ namespace Studio29Tests
             StartGame();
             DestroyNonCharacterVillainCards();
 
-            SetupIncap(baron);
+            SetupIncap(baron, lore.CharacterCard);
             AssertIncapacitated(lore);
             GoToUseIncapacitatedAbilityPhase(lore);
             Card mere = PutInHand("Mere");
@@ -109,7 +100,7 @@ namespace Studio29Tests
             StartGame();
             DestroyNonCharacterVillainCards();
 
-            SetupIncap(baron);
+            SetupIncap(baron, lore.CharacterCard);
             AssertIncapacitated(lore);
             GoToUseIncapacitatedAbilityPhase(lore);
 

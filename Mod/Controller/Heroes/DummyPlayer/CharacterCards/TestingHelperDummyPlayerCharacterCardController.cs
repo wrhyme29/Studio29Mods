@@ -20,28 +20,28 @@ namespace Studio29.DummyPlayer
 				case 0:
 					{
 						List<SelectCardsDecision> selectedCards = new List<SelectCardsDecision>();
-						IEnumerator coroutine2 = base.GameController.SelectCardsAndStoreResults(DecisionMaker, SelectionType.MoveCard, (Card c) => IsVillain(c) && (c.IsInDeck || c.IsInTrash), Game.H, storedResults: selectedCards, false, requiredDecisions: 0, cardSource: GetCardSource());
+						IEnumerator coroutine2 = GameController.SelectCardsAndStoreResults(DecisionMaker, SelectionType.MoveCard, (Card c) => IsVillain(c) && (c.IsInDeck || c.IsInTrash), Game.H, storedResults: selectedCards, false, requiredDecisions: 0, cardSource: GetCardSource());
 
-						if (base.UseUnityCoroutines)
+						if (UseUnityCoroutines)
 						{
-							yield return base.GameController.StartCoroutine(coroutine2);
+							yield return GameController.StartCoroutine(coroutine2);
 						}
 						else
 						{
-							base.GameController.ExhaustCoroutine(coroutine2);
+							GameController.ExhaustCoroutine(coroutine2);
 						}
 
 						if (DidSelectCards(selectedCards))
 						{
 							IEnumerable<Card> cards = GetSelectedCards(selectedCards);
 							coroutine2 = GameController.MoveCards(TurnTakerController, cards, (Card c) => new MoveCardDestination(c.Owner.Deck), cardSource: GetCardSource());
-							if (base.UseUnityCoroutines)
+							if (UseUnityCoroutines)
 							{
-								yield return base.GameController.StartCoroutine(coroutine2);
+								yield return GameController.StartCoroutine(coroutine2);
 							}
 							else
 							{
-								base.GameController.ExhaustCoroutine(coroutine2);
+								GameController.ExhaustCoroutine(coroutine2);
 							}
 						}
 						break;
@@ -49,28 +49,28 @@ namespace Studio29.DummyPlayer
 				case 1:
 					{
 						List<SelectCardsDecision> selectedCards = new List<SelectCardsDecision>();
-                        IEnumerator coroutine2 = base.GameController.SelectCardsAndStoreResults(DecisionMaker, SelectionType.MoveCardToHand, (Card c) => c.IsHero && (c.IsInDeck || c.IsInTrash), Game.H, storedResults: selectedCards, false, requiredDecisions: 0, cardSource: GetCardSource(), ignoreBattleZone: true);
+                        IEnumerator coroutine2 = GameController.SelectCardsAndStoreResults(DecisionMaker, SelectionType.MoveCardToHand, (Card c) => c.IsHero && (c.IsInDeck || c.IsInTrash), Game.H, storedResults: selectedCards, false, requiredDecisions: 0, cardSource: GetCardSource(), ignoreBattleZone: true);
 
-						if (base.UseUnityCoroutines)
+						if (UseUnityCoroutines)
 						{
-							yield return base.GameController.StartCoroutine(coroutine2);
+							yield return GameController.StartCoroutine(coroutine2);
 						}
 						else
 						{
-							base.GameController.ExhaustCoroutine(coroutine2);
+							GameController.ExhaustCoroutine(coroutine2);
 						}
 
 						if(DidSelectCards(selectedCards))
                         {
 							IEnumerable<Card> cards = GetSelectedCards(selectedCards);
 							coroutine2 = GameController.MoveCards(TurnTakerController, cards, (Card c) => new MoveCardDestination(c.Owner.ToHero().Hand), cardSource: GetCardSource());
-							if (base.UseUnityCoroutines)
+							if (UseUnityCoroutines)
 							{
-								yield return base.GameController.StartCoroutine(coroutine2);
+								yield return GameController.StartCoroutine(coroutine2);
 							}
 							else
 							{
-								base.GameController.ExhaustCoroutine(coroutine2);
+								GameController.ExhaustCoroutine(coroutine2);
 							}
 						}
 						break;
@@ -78,28 +78,28 @@ namespace Studio29.DummyPlayer
 				case 2:
 					{
 						List<SelectCardsDecision> selectedCards = new List<SelectCardsDecision>();
-						IEnumerator coroutine2 = base.GameController.SelectCardsAndStoreResults(DecisionMaker, SelectionType.MoveCard, (Card c) => c.IsEnvironment && (c.IsInDeck || c.IsInTrash), Game.H, storedResults: selectedCards, false, requiredDecisions: 0, cardSource: GetCardSource());
+						IEnumerator coroutine2 = GameController.SelectCardsAndStoreResults(DecisionMaker, SelectionType.MoveCard, (Card c) => c.IsEnvironment && (c.IsInDeck || c.IsInTrash), Game.H, storedResults: selectedCards, false, requiredDecisions: 0, cardSource: GetCardSource());
 
-						if (base.UseUnityCoroutines)
+						if (UseUnityCoroutines)
 						{
-							yield return base.GameController.StartCoroutine(coroutine2);
+							yield return GameController.StartCoroutine(coroutine2);
 						}
 						else
 						{
-							base.GameController.ExhaustCoroutine(coroutine2);
+							GameController.ExhaustCoroutine(coroutine2);
 						}
 
 						if (DidSelectCards(selectedCards))
 						{
 							IEnumerable<Card> cards = GetSelectedCards(selectedCards);
 							coroutine2 = GameController.MoveCards(TurnTakerController, cards, (Card c) => new MoveCardDestination(c.Owner.Deck), cardSource: GetCardSource());
-							if (base.UseUnityCoroutines)
+							if (UseUnityCoroutines)
 							{
-								yield return base.GameController.StartCoroutine(coroutine2);
+								yield return GameController.StartCoroutine(coroutine2);
 							}
 							else
 							{
-								base.GameController.ExhaustCoroutine(coroutine2);
+								GameController.ExhaustCoroutine(coroutine2);
 							}
 						}
 						break;
@@ -107,39 +107,39 @@ namespace Studio29.DummyPlayer
 				case 3:
                     {
 						IEnumerator coroutine = GameController.SelectHeroToSelectTargetAndDealDamage(DecisionMaker, 10000, DamageType.Radiant, cardSource: GetCardSource());
-						if (base.UseUnityCoroutines)
+						if (UseUnityCoroutines)
 						{
-							yield return base.GameController.StartCoroutine(coroutine);
+							yield return GameController.StartCoroutine(coroutine);
 						}
 						else
 						{
-							base.GameController.ExhaustCoroutine(coroutine);
+							GameController.ExhaustCoroutine(coroutine);
 						}
 						break;
                     }
 				case 4:
                     {
 						List<SelectTurnTakerDecision> storedResults3 = new List<SelectTurnTakerDecision>();
-						IEnumerator coroutine4 = base.GameController.SelectTurnTaker(DecisionMaker, SelectionType.MoveDeckToTrash, storedResults3, optional: false, allowAutoDecide: false, null, null, null, checkExtraTurnTakersInstead: false, canBeCancelled: true, ignoreBattleZone: false, GetCardSource());
-						if (base.UseUnityCoroutines)
+						IEnumerator coroutine4 = GameController.SelectTurnTaker(DecisionMaker, SelectionType.MoveDeckToTrash, storedResults3, optional: false, allowAutoDecide: false, null, null, null, checkExtraTurnTakersInstead: false, canBeCancelled: true, ignoreBattleZone: false, GetCardSource());
+						if (UseUnityCoroutines)
 						{
-							yield return base.GameController.StartCoroutine(coroutine4);
+							yield return GameController.StartCoroutine(coroutine4);
 						}
 						else
 						{
-							base.GameController.ExhaustCoroutine(coroutine4);
+							GameController.ExhaustCoroutine(coroutine4);
 						}
 						SelectTurnTakerDecision selectTurnTakerDecision2 = storedResults3.FirstOrDefault();
 						if (selectTurnTakerDecision2 != null)
 						{
-							coroutine4 = base.GameController.BulkMoveCards(base.TurnTakerController, selectTurnTakerDecision2.SelectedTurnTaker.Deck.Cards, selectTurnTakerDecision2.SelectedTurnTaker.Trash, toBottom: false, performBeforeDestroyActions: true, DecisionMaker.TurnTaker, isDiscard: false, GetCardSource());
-							if (base.UseUnityCoroutines)
+							coroutine4 = GameController.BulkMoveCards(TurnTakerController, selectTurnTakerDecision2.SelectedTurnTaker.Deck.Cards, selectTurnTakerDecision2.SelectedTurnTaker.Trash, toBottom: false, performBeforeDestroyActions: true, DecisionMaker.TurnTaker, isDiscard: false, GetCardSource());
+							if (UseUnityCoroutines)
 							{
-								yield return base.GameController.StartCoroutine(coroutine4);
+								yield return GameController.StartCoroutine(coroutine4);
 							}
 							else
 							{
-								base.GameController.ExhaustCoroutine(coroutine4);
+								GameController.ExhaustCoroutine(coroutine4);
 							}
 						}
 						break;
@@ -148,13 +148,13 @@ namespace Studio29.DummyPlayer
                     {
 
 						IEnumerator coroutine = SelectAndRemoveEnvironment();
-						if (base.UseUnityCoroutines)
+						if (UseUnityCoroutines)
 						{
-							yield return base.GameController.StartCoroutine(coroutine);
+							yield return GameController.StartCoroutine(coroutine);
 						}
 						else
 						{
-							base.GameController.ExhaustCoroutine(coroutine);
+							GameController.ExhaustCoroutine(coroutine);
 						}
 						
 						break;
@@ -166,13 +166,13 @@ namespace Studio29.DummyPlayer
 						IEnumerator coroutine = GameController.SelectADeck(this.DecisionMaker, SelectionType.RevealCardsFromDeck,
 							location => location.IsDeck && location.IsRealDeck && GameController.IsLocationVisibleToSource(location, GetCardSource()), locationResults);
 
-						if (base.UseUnityCoroutines)
+						if (UseUnityCoroutines)
 						{
-							yield return base.GameController.StartCoroutine(coroutine);
+							yield return GameController.StartCoroutine(coroutine);
 						}
 						else
 						{
-							base.GameController.ExhaustCoroutine(coroutine);
+							GameController.ExhaustCoroutine(coroutine);
 						}
 						
 						if(!DidSelectLocation(locationResults))
@@ -183,13 +183,13 @@ namespace Studio29.DummyPlayer
 						Location deck = GetSelectedLocation(locationResults);
 
 						coroutine = RevealCards_PutSomeIntoPlay_DiscardRemaining(DecisionMaker, deck, deck.NumberOfCards, new LinqCardCriteria(c => true));
-						if (base.UseUnityCoroutines)
+						if (UseUnityCoroutines)
 						{
-							yield return base.GameController.StartCoroutine(coroutine);
+							yield return GameController.StartCoroutine(coroutine);
 						}
 						else
 						{
-							base.GameController.ExhaustCoroutine(coroutine);
+							GameController.ExhaustCoroutine(coroutine);
 						}
 						break;
 					}
@@ -198,13 +198,13 @@ namespace Studio29.DummyPlayer
 
                         List<SelectCardsDecision> storedResults = new List<SelectCardsDecision>();
                         IEnumerator coroutine = GameController.SelectCardsAndStoreResults(DecisionMaker, SelectionType.HeroToDealDamage, c => c.IsInPlayAndHasGameText && !c.IsIncapacitatedOrOutOfGame, 1, storedResults, false, cardSource: GetCardSource());
-						if (base.UseUnityCoroutines)
+						if (UseUnityCoroutines)
 						{
-							yield return base.GameController.StartCoroutine(coroutine);
+							yield return GameController.StartCoroutine(coroutine);
 						}
 						else
 						{
-							base.GameController.ExhaustCoroutine(coroutine);
+							GameController.ExhaustCoroutine(coroutine);
 						}
 						if(!DidSelectCards(storedResults))
                         {
@@ -212,26 +212,26 @@ namespace Studio29.DummyPlayer
                         }
 						Card selectedSource = GetSelectedCards(storedResults).First();
 						coroutine = GameController.SelectTargetsAndDealDamage(DecisionMaker, new DamageSource(GameController, selectedSource), 2, DamageType.Melee, 1, false, 1, cardSource: GetCardSource());
-						if (base.UseUnityCoroutines)
+						if (UseUnityCoroutines)
 						{
-							yield return base.GameController.StartCoroutine(coroutine);
+							yield return GameController.StartCoroutine(coroutine);
 						}
 						else
 						{
-							base.GameController.ExhaustCoroutine(coroutine);
+							GameController.ExhaustCoroutine(coroutine);
 						}
 						break;
                     }
 				case 8:
                     {
 						IEnumerator coroutine = DoActionToEachTurnTakerInTurnOrder(ttc => !ttc.IsIncapacitatedOrOutOfGame, ttc => DiscardCardsFromTopOfDeck(ttc, 5, showMessage: true));
-						if (base.UseUnityCoroutines)
+						if (UseUnityCoroutines)
 						{
-							yield return base.GameController.StartCoroutine(coroutine);
+							yield return GameController.StartCoroutine(coroutine);
 						}
 						else
 						{
-							base.GameController.ExhaustCoroutine(coroutine);
+							GameController.ExhaustCoroutine(coroutine);
 						}
 						break;
                     }
@@ -241,19 +241,19 @@ namespace Studio29.DummyPlayer
 
 		public IEnumerator EnvironmentRemoval(TurnTakerController env)
 		{
-			IEnumerator coroutine = base.GameController.RemoveAllCardsFromGame(env, base.TurnTakerController);
-			if (base.UseUnityCoroutines)
+			IEnumerator coroutine = GameController.RemoveAllCardsFromGame(env, TurnTakerController);
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 			IEnumerable<Card> cardsToMove = from c in env.TurnTaker.PlayArea.Cards.Concat(env.TurnTaker.Deck.Cards).Concat(env.TurnTaker.Trash.Cards)
 											where c.Owner != env.TurnTaker
 											select c;
-			coroutine = base.GameController.MoveCards(base.TurnTakerController, cardsToMove, delegate (Card c)
+			coroutine = GameController.MoveCards(TurnTakerController, cardsToMove, delegate (Card c)
 			{
 				MoveCardDestination trashDestination = FindCardController(c).GetTrashDestination();
 				if (trashDestination.Location == env.TurnTaker.Trash)
@@ -261,73 +261,73 @@ namespace Studio29.DummyPlayer
 					trashDestination.Location = (c.Definition.ParentDeck.IsSubDeck ? c.Owner.FindSubTrash(c.Definition.ParentDeck.Identifier) : c.Owner.Trash);
 				}
 				return trashDestination;
-			}, toBottom: false, isPutIntoPlay: false, playIfMovingToPlayArea: true, base.TurnTaker, showIndividualMessages: false, isDiscard: false, GetCardSource());
-			if (base.UseUnityCoroutines)
+			}, toBottom: false, isPutIntoPlay: false, playIfMovingToPlayArea: true, TurnTaker, showIndividualMessages: false, isDiscard: false, GetCardSource());
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
-			if (base.TurnTakerController.BattleZone != env.BattleZone)
+			if (TurnTakerController.BattleZone != env.BattleZone)
 			{
-				coroutine = base.GameController.SwitchBattleZone(base.TurnTakerController, GetCardSource());
-				if (base.UseUnityCoroutines)
+				coroutine = GameController.SwitchBattleZone(TurnTakerController, GetCardSource());
+				if (UseUnityCoroutines)
 				{
-					yield return base.GameController.StartCoroutine(coroutine);
+					yield return GameController.StartCoroutine(coroutine);
 				}
 				else
 				{
-					base.GameController.ExhaustCoroutine(coroutine);
+					GameController.ExhaustCoroutine(coroutine);
 				}
 			}
 			string message = $"{env.Name} has been removed from existence by Dummy Player!";
-			coroutine = base.GameController.SendMessageAction(message, Priority.High, GetCardSource(), null, showCardSource: true);
-			if (base.UseUnityCoroutines)
+			coroutine = GameController.SendMessageAction(message, Priority.High, GetCardSource(), null, showCardSource: true);
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
-			if (base.Game.ExtraTurnTakers.Where((TurnTaker tt) => tt.IsEnvironment).Any())
+			if (Game.ExtraTurnTakers.Where((TurnTaker tt) => tt.IsEnvironment).Any())
 			{
 				List<SelectTurnTakerDecision> storedResults = new List<SelectTurnTakerDecision>();
-				coroutine = base.GameController.SelectTurnTaker(DecisionMaker, SelectionType.EnvironmentDeck, storedResults, optional: false, allowAutoDecide: false, null, null, null, checkExtraTurnTakersInstead: true, canBeCancelled: true, ignoreBattleZone: true, GetCardSource());
-				if (base.UseUnityCoroutines)
+				coroutine = GameController.SelectTurnTaker(DecisionMaker, SelectionType.EnvironmentDeck, storedResults, optional: false, allowAutoDecide: false, null, null, null, checkExtraTurnTakersInstead: true, canBeCancelled: true, ignoreBattleZone: true, GetCardSource());
+				if (UseUnityCoroutines)
 				{
-					yield return base.GameController.StartCoroutine(coroutine);
+					yield return GameController.StartCoroutine(coroutine);
 				}
 				else
 				{
-					base.GameController.ExhaustCoroutine(coroutine);
+					GameController.ExhaustCoroutine(coroutine);
 				}
 				SelectTurnTakerDecision selectTurnTakerDecision = storedResults.FirstOrDefault();
 				if (selectTurnTakerDecision != null && selectTurnTakerDecision.SelectedTurnTaker != null)
 				{
-					coroutine = base.GameController.ReplaceTurnTaker(env.TurnTaker, selectTurnTakerDecision.SelectedTurnTaker, keepTurnTakerController: false, keepCards: false, null, GetCardSource());
-					if (base.UseUnityCoroutines)
+					coroutine = GameController.ReplaceTurnTaker(env.TurnTaker, selectTurnTakerDecision.SelectedTurnTaker, keepTurnTakerController: false, keepCards: false, null, GetCardSource());
+					if (UseUnityCoroutines)
 					{
-						yield return base.GameController.StartCoroutine(coroutine);
+						yield return GameController.StartCoroutine(coroutine);
 					}
 					else
 					{
-						base.GameController.ExhaustCoroutine(coroutine);
+						GameController.ExhaustCoroutine(coroutine);
 					}
 				}
 			}
 			else
 			{
-				coroutine = base.GameController.GameOver(EndingResult.AlternateDefeat, "The Multiverse has been destroyed.", showEndingTextAsMessage: true, null, null, GetCardSource());
-				if (base.UseUnityCoroutines)
+				coroutine = GameController.GameOver(EndingResult.AlternateDefeat, "The Multiverse has been destroyed.", showEndingTextAsMessage: true, null, null, GetCardSource());
+				if (UseUnityCoroutines)
 				{
-					yield return base.GameController.StartCoroutine(coroutine);
+					yield return GameController.StartCoroutine(coroutine);
 				}
 				else
 				{
-					base.GameController.ExhaustCoroutine(coroutine);
+					GameController.ExhaustCoroutine(coroutine);
 				}
 			}
 			
@@ -336,14 +336,14 @@ namespace Studio29.DummyPlayer
 		private IEnumerator SelectAndRemoveEnvironment()
         {
 			List<SelectTurnTakerDecision> storedResults = new List<SelectTurnTakerDecision>();
-			IEnumerator coroutine = base.GameController.SelectTurnTaker(DecisionMaker, SelectionType.RemoveEnvironmentFromGame, storedResults, optional: false, allowAutoDecide: false, additionalCriteria: tt => tt.IsEnvironment, null, null, checkExtraTurnTakersInstead: false, canBeCancelled: true, ignoreBattleZone: true, GetCardSource());
-			if (base.UseUnityCoroutines)
+			IEnumerator coroutine = GameController.SelectTurnTaker(DecisionMaker, SelectionType.RemoveEnvironmentFromGame, storedResults, optional: false, allowAutoDecide: false, additionalCriteria: tt => tt.IsEnvironment, null, null, checkExtraTurnTakersInstead: false, canBeCancelled: true, ignoreBattleZone: true, GetCardSource());
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 			if (!DidSelectTurnTaker(storedResults))
 			{
@@ -352,24 +352,24 @@ namespace Studio29.DummyPlayer
 
 			TurnTakerController selectedEnv = FindTurnTakerController(GetSelectedTurnTaker(storedResults));
 			coroutine = EnvironmentRemoval(selectedEnv);
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 
 			YesNoDecision yesNo = new YesNoDecision(GameController, DecisionMaker, SelectionType.Custom, cardSource: GetCardSource());
 			coroutine = GameController.MakeDecisionAction(yesNo);
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 
 			if(!DidPlayerAnswerYes(yesNo))
@@ -378,13 +378,13 @@ namespace Studio29.DummyPlayer
             }
 
 			coroutine = SelectAndRemoveEnvironment();
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 
 		}

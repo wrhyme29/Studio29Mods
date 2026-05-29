@@ -13,21 +13,14 @@ namespace Studio29.TheTamer
 
         }
 
-        public static readonly string LionKeyword = "lion";
-
-        protected bool IsLion(Card card)
-        {
-            return card.DoKeywordsContain(LionKeyword);
-        }
-
         protected int GetNumberOfLionsInPlay()
         {
-            return base.FindCardsWhere(c => c.IsInPlayAndHasGameText && this.IsLion(c)).Count();
+            return FindCardsWhere(c => c.IsInPlayAndHasGameText && c.IsLion()).Count();
         }
 
         protected IEnumerable<Card> FindLionsInPlay()
         {
-            return base.FindCardsWhere(c => c.IsInPlayAndHasGameText && this.IsLion(c));
+            return FindCardsWhere(c => c.IsInPlayAndHasGameText && c.IsLion());
         }
 
     }

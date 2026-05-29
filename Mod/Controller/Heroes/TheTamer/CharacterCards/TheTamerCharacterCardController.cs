@@ -7,8 +7,8 @@ using System.Linq;
 
 namespace Studio29.TheTamer
 {
-	public class TheTamerCharacterCardController : TheTamerSubCharacterCardController
-	{
+	public class TheTamerCharacterCardController : HeroCharacterCardController
+    {
 		public TheTamerCharacterCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
 		{
 		}
@@ -21,17 +21,17 @@ namespace Studio29.TheTamer
 			effect.UntilStartOfNextTurn(TurnTaker);
 			effect.TargetCriteria.IsSpecificCard = Card;
 			effect.DamageAmountCriteria.EqualTo = 1;
-			effect.RedirectableTargets.HasAnyOfTheseKeywords = new List<string>() { LionKeyword };
+			effect.RedirectableTargets.HasAnyOfTheseKeywords = new List<string>() { "lion" };
 			effect.IsOptional = true;
 
 			IEnumerator coroutine = AddStatusEffect(effect);
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(coroutine);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(coroutine);
 			}
 		}
 
@@ -41,45 +41,61 @@ namespace Studio29.TheTamer
 			switch (index)
 			{
 				case 0:
+				{
+					//One non-character hero target deals 1 target 2 radiant damage.
+					IEnumerable<Card> choices = FindCardsWhere((Card c) => c.IsInPlayAndHasGameText && c.IsHero && !c.IsCharacter);
+					List<SelectCardDecision> storedResults = new List<SelectCardDecision>();
+					IEnumerator coroutine = GameController.SelectCardAndStoreResults(DecisionMaker, SelectionType.CardToDealDamage, new LinqCardCriteria((Card c) => c.IsInPlayAndHasGameText && c.IsHero && !c.IsCharacter, "non-character hero target"), storedResults, false, cardSource: GetCardSource());
+					if (UseUnityCoroutines)
 					{
-						//One non-character hero target deals 1 target 2 radiant damage.
-						IEnumerable<Card> choices = FindCardsWhere((Card c) => c.IsInPlayAndHasGameText && c.IsHero && !c.IsCharacter);
-						List<SelectCardDecision> storedResults = new List<SelectCardDecision>();
-						IEnumerator coroutine = GameController.SelectCardAndStoreResults(DecisionMaker, SelectionType.CardToDealDamage, new LinqCardCriteria((Card c) => c.IsInPlayAndHasGameText && c.IsHero && !c.IsCharacter, "non-character hero target"), storedResults, false, cardSource: GetCardSource());
-						if (base.UseUnityCoroutines)
+						yield return GameController.StartCoroutine(coroutine);
+					}
+					else
+					{
+						GameController.ExhaustCoroutine(coroutine);
+					}
+					if (DidSelectCard(storedResults))
+					{
+						Card source = GetSelectedCard(storedResults);
+						coroutine = GameController.SelectTargetsAndDealDamage(DecisionMaker, new DamageSource(GameController, source), 2, DamageType.Radiant, new int?(1), false, new int?(1), cardSource: GetCardSource());
+						if (UseUnityCoroutines)
 						{
-							yield return base.GameController.StartCoroutine(coroutine);
+							yield return GameController.StartCoroutine(coroutine);
 						}
 						else
 						{
-							base.GameController.ExhaustCoroutine(coroutine);
+							GameController.ExhaustCoroutine(coroutine);
 						}
-						if (DidSelectCard(storedResults))
-						{
-							Card source = GetSelectedCard(storedResults);
-							coroutine = GameController.SelectTargetsAndDealDamage(DecisionMaker, new DamageSource(GameController, source), 2, DamageType.Radiant, new int?(1), false, new int?(1), cardSource: GetCardSource());
-							if (base.UseUnityCoroutines)
-							{
-								yield return base.GameController.StartCoroutine(coroutine);
-							}
-							else
-							{
-								base.GameController.ExhaustCoroutine(coroutine);
-							}
-						}
+					}
 
-						break;
-					}
+					break;
+				}
 				case 1:
-					{
-						
-						yield break;
-					}
+				{
+					IEnumerator coroutine = DoNothing();
+                    if (UseUnityCoroutines)
+                    {
+                        yield return GameController.StartCoroutine(coroutine);
+                    }
+                    else
+                    {
+                        GameController.ExhaustCoroutine(coroutine);
+                    }
+                    yield break;
+				}
 				case 2:
-					{
-						
-						yield break;
-					}
+				{
+                    IEnumerator coroutine = DoNothing();
+                    if (UseUnityCoroutines)
+                    {
+                        yield return GameController.StartCoroutine(coroutine);
+                    }
+                    else
+                    {
+                        GameController.ExhaustCoroutine(coroutine);
+                    }
+                    yield break;
+                }
 			}
 			yield break;
 		}

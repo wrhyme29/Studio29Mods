@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Studio29.TheDeliOfDisaster
 {
-    public class OrderUpCardController : TheDeliOfDisasterCardController
+    public class OrderUpCardController : CardController
     {
 
         public OrderUpCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
@@ -18,7 +18,7 @@ namespace Studio29.TheDeliOfDisaster
         {
             //At the start of the environment turn, reveal cards from the environment deck until a dish card is revealed. Put the dish card into play. Shuffle the remaining cards back into the environment deck.
             AddStartOfTurnTrigger(tt => TurnTaker == tt,
-                pca => RevealCards_MoveMatching_ReturnNonMatchingCards(TurnTakerController, TurnTaker.Deck, playMatchingCards: true, putMatchingCardsIntoPlay: true, moveMatchingCardsToHand: false, cardCriteria: new LinqCardCriteria(c => IsDish(c), "dish"), numberOfMatches: 1, shuffleSourceAfterwards: true, showMessage: true),
+                pca => RevealCards_MoveMatching_ReturnNonMatchingCards(TurnTakerController, TurnTaker.Deck, playMatchingCards: true, putMatchingCardsIntoPlay: true, moveMatchingCardsToHand: false, cardCriteria: new LinqCardCriteria(c => c.IsDish(), "dish"), numberOfMatches: 1, shuffleSourceAfterwards: true, showMessage: true),
                 new TriggerType[] { TriggerType.RevealCard, TriggerType.PutIntoPlay, TriggerType.ShuffleDeck });
             //At the end of the environment turn, any player with fewer than 4 cards in their hand may discard a card to draw 2 cards.
             AddEndOfTurnTrigger(tt => TurnTaker == tt, EndOfTurnResponse, new TriggerType[] { TriggerType.DiscardCard, TriggerType.DrawCard });
@@ -32,16 +32,16 @@ namespace Studio29.TheDeliOfDisaster
 
         private IEnumerator DiscardToDraw2CardsResponse(TurnTaker tt)
         {
-            HeroTurnTakerController httc = FindHeroTurnTakerController(tt.ToHero());
+            HeroTurnTakerController hccc = FindHeroTurnTakerController(tt.ToHero());
             List<DiscardCardAction> storedResults = new List<DiscardCardAction>();
-            IEnumerator coroutine = GameController.SelectAndDiscardCards(httc, 1, false, 0, storedResults: storedResults, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            IEnumerator coroutine = GameController.SelectAndDiscardCards(hccc, 1, false, 0, storedResults: storedResults, cardSource: GetCardSource());
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             if(!DidDiscardCards(storedResults))
@@ -49,14 +49,14 @@ namespace Studio29.TheDeliOfDisaster
                 yield break;
             }
 
-            coroutine = DrawCards(httc, 2);
-            if (base.UseUnityCoroutines)
+            coroutine = DrawCards(hccc, 2);
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
     }

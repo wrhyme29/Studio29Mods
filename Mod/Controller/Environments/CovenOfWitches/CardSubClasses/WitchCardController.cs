@@ -7,7 +7,7 @@ using Studio29;
 
 namespace Studio29.CovenOfWitches
 {
-    public class WitchCardController : CovenOfWitchesCardController
+    public class WitchCardController : CardController
     {
 
         public string RelatedCurseIdentifier { get; set; }
@@ -20,7 +20,7 @@ namespace Studio29.CovenOfWitches
 
         public override IEnumerator Play()
         {
-            // When this card enters play, summon the related curse. "
+            // When this card enters play, summon the related curse.
             IEnumerator coroutine = this.Summon(RelatedCurseIdentifier);
             if (UseUnityCoroutines)
             {

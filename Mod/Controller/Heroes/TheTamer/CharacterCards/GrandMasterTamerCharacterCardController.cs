@@ -5,18 +5,28 @@ using System.Collections.Generic;
 
 namespace Studio29.TheTamer
 {
-    public class GrandMasterTamerCharacterCardController : TheTamerSubCharacterCardController
-	{
+    public class GrandMasterTamerCharacterCardController : HeroCharacterCardController
+    {
 		public GrandMasterTamerCharacterCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
 		{
 		}
 		public override IEnumerator UsePower(int index = 0)
 		{
-			// Deal 1 Lion 1 sonic damage. If no damage is dealt this way, draw a card.
-			int target = GetPowerNumeral(0, 1);
-			int amount = GetPowerNumeral(1, 1);
+            // {TheTamer} deals 1 sonic damage to a target in the {TheTamer}'s play area.
+            int sonicDamageAmount = GetPowerNumeral(0, 1);
+			int numCardsToDraw = GetPowerNumeral(1, 2);
             List<DealDamageAction> storedResults = new List<DealDamageAction>();
-            IEnumerator coroutine = GameController.SelectTargetsAndDealDamage(base.HeroTurnTakerController, new DamageSource(GameController, base.Card), amount, DamageType.Sonic, new int?(target), false, new int?(target), additionalCriteria: (Card c) => IsLion(c), storedResultsDamage: storedResults, cardSource: GetCardSource());
+            IEnumerator coroutine = GameController.SelectTargetsAndDealDamage(
+				HeroTurnTakerController, 
+				new DamageSource(GameController, Card),
+				sonicDamageAmount, 
+				DamageType.Sonic, 
+				numberOfTargets: 1,
+				optional: false,
+				requiredTargets: 1,
+				additionalCriteria: (Card c) => c.Location.IsPlayAreaOf(TurnTaker), 
+				storedResultsDamage: storedResults, 
+				cardSource: GetCardSource());
 			if (UseUnityCoroutines)
 			{
 				yield return GameController.StartCoroutine(coroutine);
@@ -26,9 +36,10 @@ namespace Studio29.TheTamer
 				GameController.ExhaustCoroutine(coroutine);
 			}
 
-			if(!DidDealDamage(storedResults))
+            // If {TheTamer} is dealt damage this way, draw 2 cards.
+            if (DidDealDamage(storedResults, toSpecificTarget: Card))
             {
-				coroutine = DrawCard();
+				coroutine = DrawCards(HeroTurnTakerController, 2);
 				if (UseUnityCoroutines)
 				{
 					yield return GameController.StartCoroutine(coroutine);
@@ -44,25 +55,7 @@ namespace Studio29.TheTamer
 
 		public override IEnumerator UseIncapacitatedAbility(int index)
 		{
-			switch (index)
-			{
-				case 0:
-					{
-						
-						yield break;
-					}
-				case 1:
-					{
-						
-						yield break;
-					}
-				case 2:
-					{
-						
-						yield break;
-					}
-			}
-			yield break;
-		}
+			yield return this.StandardPowerPlayDrawIncapacitatedAbility(index);
+        }
 	}
 }

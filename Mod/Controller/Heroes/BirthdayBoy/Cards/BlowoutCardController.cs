@@ -21,13 +21,13 @@ namespace Studio29.BirthdayBoy
             LinqCardCriteria cardCriteria = new LinqCardCriteria((Card c) => c.IsInPlayAndHasGameText && c.IsTarget && c.HitPoints.HasValue && c.HitPoints.Value <= 5, "target with 5 or fewer HP", useCardsSuffix: false, singular: "target with 5 or fewer HP",  plural: "targets with 5 or fewer HP") ;
             List<SelectCardDecision> storedResults = new List<SelectCardDecision>();
             IEnumerator coroutine = GameController.SelectCardAndStoreResults(HeroTurnTakerController, SelectionType.Custom, cardCriteria, storedResults, false, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             if(!DidSelectCard(storedResults))
@@ -43,24 +43,24 @@ namespace Studio29.BirthdayBoy
             //{BirthdayBoy} deals another target in the same play area as the selected target 5 - X fire damage, where X is the HP of the selected target.
             //TODO: Currently this is giving an error during Damage Preview. Figure out why that is the case
             coroutine = GameController.SelectTargetsAndDealDamage(HeroTurnTakerController, new DamageSource(GameController, CharacterCard), 5 - X, DamageType.Fire, 1, false, 1, additionalCriteria: c => c.Location == selectedPlayArea && c != selectedCard, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             //Destroy the selected target
             coroutine = GameController.DestroyCard(HeroTurnTakerController, selectedCard, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
 

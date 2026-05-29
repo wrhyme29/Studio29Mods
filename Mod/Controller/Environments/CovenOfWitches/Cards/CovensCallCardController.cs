@@ -8,7 +8,7 @@ using Studio29;
 
 namespace Studio29.CovenOfWitches
 {
-    public class CovensCallCardController : CovenOfWitchesCardController
+    public class CovensCallCardController : CardController
     {
 
         public CovensCallCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
@@ -21,15 +21,13 @@ namespace Studio29.CovenOfWitches
         {
             // At the end of the Environment turn, destroy this card.
             AddEndOfTurnTrigger(tt => tt == TurnTaker, DestroyThisCardResponse, TriggerType.DestroySelf);
-
-           
         }
 
         
         public override IEnumerator Play()
         {
             // When this card enters play, discover 2 witch cards
-            IEnumerator coroutine = this.Discover(TurnTakerController, TurnTaker.Deck, new LinqCardCriteria((Card c) => IsWitch(c), "witch"), Game.H - 2, shuffleTrashIntoDeckFirst: true);
+            IEnumerator coroutine = this.Discover(TurnTakerController, TurnTaker.Deck, new LinqCardCriteria((Card c) => c.IsWitch(), "witch"), Game.H - 2, shuffleTrashIntoDeckFirst: true);
             if (UseUnityCoroutines)
             {
                 yield return GameController.StartCoroutine(coroutine);

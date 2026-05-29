@@ -18,7 +18,7 @@ namespace Studio29.TheTamer
         public override void AddTriggers()
         {
             //You may redirect any damage dealt to other lion cards to this card. If this card was dealt damage this way, this card deals the source of that damage 3 melee damage.
-            AddTrigger((DealDamageAction dd) => IsLion(dd.Target) && dd.Target != Card && (dd.BattleZone == null || dd.BattleZone == Card.BattleZone), RedirectDamageResponse, new TriggerType[] { TriggerType.RedirectDamage, TriggerType.DealDamage }, TriggerTiming.Before);
+            AddTrigger((DealDamageAction dd) => dd.Target.IsLion() && dd.Target != Card && (dd.BattleZone == null || dd.BattleZone == Card.BattleZone), RedirectDamageResponse, new TriggerType[] { TriggerType.RedirectDamage, TriggerType.DealDamage }, TriggerTiming.Before);
             AddTrigger((DealDamageAction dd) => dd.DidDealDamage && dd.Target == Card && dd.DamageSource != null && dd.DamageSource.IsCard && GetCardPropertyJournalEntryBoolean(MarkForRetaliationKey) != null && GetCardPropertyJournalEntryBoolean(MarkForRetaliationKey).Value == true, RetaliationResponse, TriggerType.DealDamage, TriggerTiming.After);
         }
 

@@ -23,25 +23,25 @@ namespace Studio29.TheDeliOfDisaster
         private IEnumerator EndOfTurnResponse(PhaseChangeAction pca)
         {
             //each character card gains 2 hp.
-            IEnumerator coroutine = base.GameController.GainHP(DecisionMaker, (Card c) => c.IsCharacter, 2, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            IEnumerator coroutine = GameController.GainHP(DecisionMaker, (Card c) => c.IsCharacter, 2, cardSource: GetCardSource());
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
             //Each player may discard 1 card. If fewer than {H - 1} cards are discarded this way, destroy this card.
             List<DiscardCardAction> storedResults = new List<DiscardCardAction>();
             coroutine = GameController.EachPlayerDiscardsCards(0, 1, storedResultsDiscard: storedResults,  showCounter: true, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
             int numberOfCardsDiscarded = GetNumberOfCardsDiscarded(storedResults);
             if(numberOfCardsDiscarded >= Game.H - 1)
@@ -49,13 +49,13 @@ namespace Studio29.TheDeliOfDisaster
                 yield break;
             }
             coroutine = DestroyThisCardResponse(pca);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
         }
     }

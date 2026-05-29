@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Studio29.TheDeliOfDisaster
 {
-    public class LoxxedUpCardController : TheDeliOfDisasterCardController
+    public class LoxxedUpCardController : CardController
     {
 
         public LoxxedUpCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
@@ -32,13 +32,13 @@ namespace Studio29.TheDeliOfDisaster
             //the hero target with the lowest HP deals the villain target with the highest HP 2 energy damage.
             List<Card> storedResults = new List<Card>();
             IEnumerator coroutine = GameController.FindTargetWithLowestHitPoints(1, (Card c) => c.IsHero, storedResults, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             Card card = storedResults.FirstOrDefault();
@@ -48,13 +48,13 @@ namespace Studio29.TheDeliOfDisaster
             }
 
             IEnumerator coroutine2 = DealDamageToHighestHP(card, 1, (Card c) => IsVillainTarget(c), (Card c) => 2, DamageType.Energy);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine2);
+                yield return GameController.StartCoroutine(coroutine2);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine2);
+                GameController.ExhaustCoroutine(coroutine2);
             }
         }
 
@@ -62,14 +62,14 @@ namespace Studio29.TheDeliOfDisaster
         {
             //the villain target with the lowest HP deals the hero target with the highest HP 2 toxic damage.
             List<Card> storedResults = new List<Card>();
-            IEnumerator coroutine = base.GameController.FindTargetWithLowestHitPoints(1, (Card c) => IsVillainTarget(c), storedResults, cardSource: GetCardSource());
-            if (base.UseUnityCoroutines)
+            IEnumerator coroutine = GameController.FindTargetWithLowestHitPoints(1, (Card c) => IsVillainTarget(c), storedResults, cardSource: GetCardSource());
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine);
+                yield return GameController.StartCoroutine(coroutine);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine);
+                GameController.ExhaustCoroutine(coroutine);
             }
 
             Card card = storedResults.FirstOrDefault();
@@ -79,13 +79,13 @@ namespace Studio29.TheDeliOfDisaster
             }
 
             IEnumerator coroutine2 = DealDamageToHighestHP(card, 1, (Card c) => c.IsHero, (Card c) => 2, DamageType.Toxic);
-            if (base.UseUnityCoroutines)
+            if (UseUnityCoroutines)
             {
-                yield return base.GameController.StartCoroutine(coroutine2);
+                yield return GameController.StartCoroutine(coroutine2);
             }
             else
             {
-                base.GameController.ExhaustCoroutine(coroutine2);
+                GameController.ExhaustCoroutine(coroutine2);
             }
             
         }

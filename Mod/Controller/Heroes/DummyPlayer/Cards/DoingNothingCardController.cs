@@ -19,13 +19,13 @@ namespace Studio29.DummyPlayer
            foreach(ITrigger trig in trigs)
             {
                 IEnumerator coroutine = trig.ActionPerformed(null);
-                if (base.UseUnityCoroutines)
+                if (UseUnityCoroutines)
                 {
-                    yield return base.GameController.StartCoroutine(coroutine);
+                    yield return GameController.StartCoroutine(coroutine);
                 }
                 else
                 {
-                    base.GameController.ExhaustCoroutine(coroutine);
+                    GameController.ExhaustCoroutine(coroutine);
                 }
             }
             yield break;

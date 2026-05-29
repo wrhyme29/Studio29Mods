@@ -53,7 +53,7 @@ namespace Studio29
             // && IsGameOverVictory(action)
             if (HasFlagBeenSetToTrue(DefenderLoreUnlockCondition1))
             {
-                IsUnlocked = FindCardsPlayedThisGame((Card c) => IsStory(c) && c.Owner.Identifier == "Lore").Distinct().Count() >= 1;
+                IsUnlocked = FindCardsPlayedThisGame((Card c) => c.IsStory() && c.Owner.Identifier == "Lore").Distinct().Count() >= 1;
                 IsUnlocked = true;
                 Log.Debug(LogName.PromoCards, "The heroes have won a game where Lore played every Story card!");
             }

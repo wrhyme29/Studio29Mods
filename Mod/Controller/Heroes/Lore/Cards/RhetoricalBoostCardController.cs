@@ -4,7 +4,7 @@ using System.Collections;
 
 namespace Studio29.Lore
 {
-    public class RhetoricalBoostCardController : LoreCardController
+    public class RhetoricalBoostCardController : CardController
     {
 
         public RhetoricalBoostCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
@@ -18,7 +18,7 @@ namespace Studio29.Lore
             AddIncreaseDamageTrigger((DealDamageAction dd) => dd.DamageSource != null && dd.DamageSource.IsSameCard(CharacterCard), 1);
 
 			//Whenever a story card enters play, draw a card
-			AddTrigger((CardEntersPlayAction cep) => IsStory(cep.CardEnteringPlay) && cep.IsSuccessful, DrawCardResponse, TriggerType.DrawCard, TriggerTiming.After);
+			AddTrigger((CardEntersPlayAction cep) => cep.CardEnteringPlay.IsStory() && cep.IsSuccessful, DrawCardResponse, TriggerType.DrawCard, TriggerTiming.After);
 
 			//If this card has negative HP, reduce damage dealt to {Lore} by 1 for each HP below zero.
 			AddReduceDamageTrigger((DealDamageAction dd) => Card.HitPoints.Value < 0 && dd.Target == CharacterCard, dd => -1 * Card.HitPoints.Value);
@@ -30,15 +30,15 @@ namespace Studio29.Lore
 			IEnumerator drawCard = DrawCard();
 			string message = $"{Card.Title} allows {TurnTaker.Name} to draw a card.";
 			IEnumerator coroutine = GameController.SendMessageAction(message, Priority.Medium, GetCardSource(), showCardSource: true);
-			if (base.UseUnityCoroutines)
+			if (UseUnityCoroutines)
 			{
-				yield return base.GameController.StartCoroutine(coroutine);
-				yield return base.GameController.StartCoroutine(drawCard);
+				yield return GameController.StartCoroutine(coroutine);
+				yield return GameController.StartCoroutine(drawCard);
 			}
 			else
 			{
-				base.GameController.ExhaustCoroutine(coroutine);
-				base.GameController.ExhaustCoroutine(drawCard);
+				GameController.ExhaustCoroutine(coroutine);
+				GameController.ExhaustCoroutine(drawCard);
 			}
 		}
 

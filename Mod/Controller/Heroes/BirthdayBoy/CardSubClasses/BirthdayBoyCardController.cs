@@ -11,31 +11,18 @@ namespace Studio29.BirthdayBoy
 
         public BirthdayBoyCardController(Card card, TurnTakerController turnTakerController) : base(card, turnTakerController)
         {
-
         }
-
-        public static readonly string PresentKeyword = "present";
 
         //Find Presents in play
 
-        protected bool IsPresent(Card card)
-        {
-            return GameController.DoesCardContainKeyword(card, PresentKeyword);
-        }
-
         protected IEnumerable<Card> GetPresentsInPlay()
         {
-            return base.FindCardsWhere(c => c.IsInPlayAndHasGameText && IsPresent(c));
+            return FindCardsWhere(c => c.IsInPlayAndHasGameText && c.IsPresent());
         }
 
         protected IEnumerable<Card> GetAllPresents()
         {
-            return base.FindCardsWhere(c => !c.IsOffToTheSide && !c.IsOutOfGame && IsPresent(c));
-        }
-
-        protected TurnTaker GetOriginalOwner(Card c)
-        {
-            return (FindTurnTakersWhere((TurnTaker tt) => tt.Identifier == c.ParentDeck.Identifier)).FirstOrDefault();
+            return FindCardsWhere(c => !c.IsOffToTheSide && !c.IsOutOfGame && c.IsPresent());
         }
 
         protected int NumberOfCardsBirthdayBoyOwns => TurnTaker.GetAllCards().Where(c => !c.IsOffToTheSide && !c.IsOutOfGame && !c.IsCharacter).Count();
